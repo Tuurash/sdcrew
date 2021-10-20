@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    x:Class="sdcrew.Views.ViewHelpers.Themes.defaultTheme"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+
+    <Color x:Key="PrimaryTintColor">#003D5B</Color>
+    <Color x:Key="NavigationBarColor">#003D5B</Color>
+
+    <Style x:Key="PageStyle" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="#e2e2e2e2" />
+    </Style>
+
+
+    <!--  Implicit Styles  -->
+    <Style BaseResourceKey="LabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="#2C2C2C" />
+    </Style>
+
+    <!--<Style TargetType="Entry">
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+        <Setter Property="TextColor" Value="#2C2C2C" />
+    </Style>-->
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="BorderRadius" Value="5" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BackgroundColor" Value="#0076C0" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="Medium" />
+    </Style>
+
+
+    <!--<Style TargetType="Switch">
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+        <Setter Property="BackgroundColor" Value="White" />
+    </Style>-->
+
+
+
+    <Style x:Key="StackStyle" TargetType="StackLayout">
+        <Setter Property="Padding">
+            <Setter.Value>
+                <OnPlatform
+                    x:TypeArguments="Thickness"
+                    Android="8, 8, 8, 8"
+                    iOS="10, 10, 10, 10" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

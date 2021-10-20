@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.supportPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Support"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Icon="icoSettings.png" Text="Search" />
+    </ContentPage.ToolbarItems>-->
+
+
+    <ContentPage.Content>
+
+        <StackLayout Margin="0,25,0,0">
+            <ScrollView>
+
+                <Grid>
+
+                    <StackLayout
+                        x:Name="mainView"
+                        Margin="5,0,5,0"
+                        Orientation="Vertical">
+
+
+                        <!--  Support Number & Mail Start  -->
+                        <StackLayout
+                            Margin="20,0,20,20"
+                            HorizontalOptions="FillAndExpand"
+                            Orientation="Horizontal">
+
+                            <!--  2 Horizontal Cards Start  -->
+
+                            <Grid HorizontalOptions="FillAndExpand">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Support Number Card  -->
+                                <Frame
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="0,0,5,0"
+                                    BackgroundColor="{StaticResource CardBGColor}"
+                                    CornerRadius="9"
+                                    HorizontalOptions="FillAndExpand">
+                                    <StackLayout Orientation="Vertical">
+                                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+
+                                            <Label
+                                                FontSize="18"
+                                                HorizontalOptions="End"
+                                                Text="Support"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                            <Image
+                                                Margin="0,4,0,0"
+                                                Aspect="AspectFit"
+                                                HorizontalOptions="Start"
+                                                Source="icoPhone.png"
+                                                VerticalOptions="StartAndExpand" />
+
+                                        </StackLayout>
+                                        <StackLayout Margin="0,10,0,10">
+                                            <Label
+                                                FontSize="14"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Text="Support Number:"
+                                                TextColor="{StaticResource SubTitleColor}" />
+                                            <Label
+                                                Margin="0,-5,0,0"
+                                                FontSize="18"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Text="1-321-777-3236"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+
+                                <!--  Support Mail  -->
+                                <Frame
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    BackgroundColor="{StaticResource CardBGColor}"
+                                    CornerRadius="9"
+                                    HorizontalOptions="FillAndExpand">
+
+                                    <StackLayout Orientation="Vertical">
+                                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+
+                                            <Label
+                                                FontSize="18"
+                                                HorizontalOptions="End"
+                                                Text="Support"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                            <Image
+                                                Margin="0,4,0,0"
+                                                Aspect="AspectFit"
+                                                HorizontalOptions="Start"
+                                                Source="icoMail.png"
+                                                VerticalOptions="StartAndExpand" />
+
+                                        </StackLayout>
+                                        <StackLayout Margin="0,10,0,10">
+                                            <Label
+                                                FontSize="14"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Text="Support Email:"
+                                                TextColor="{StaticResource SubTitleColor}" />
+                                            <Label
+                                                Margin="0,5,0,0"
+                                                FontSize="10"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Opacity=".6"
+                                                Text="support@satcomdirtect.com"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                </Frame>
+
+                            </Grid>
+
+
+                        </StackLayout>
+                        <!--  Support Number & Mail End  -->
+
+                        <!--  Support Number & Mail Start  -->
+                        <StackLayout
+                            Margin="20,0,20,20"
+                            HorizontalOptions="FillAndExpand"
+                            Orientation="Horizontal">
+
+                            <!--  Anywhere & 2nd Email Cards Start  -->
+
+                            <Grid HorizontalOptions="FillAndExpand">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Support Anywhere  -->
+                                <Frame
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="0,0,5,0"
+                                    BackgroundColor="{StaticResource CardBGColor}"
+                                    CornerRadius="9"
+                                    HorizontalOptions="FillAndExpand">
+                                    <StackLayout Orientation="Vertical">
+                                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+
+                                            <Label
+                                                FontSize="18"
+                                                HorizontalOptions="End"
+                                                HorizontalTextAlignment="Center"
+                                                Text="Support Anywhere"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                            <Image
+                                                Margin="0,10,0,0"
+                                                Aspect="AspectFit"
+                                                HorizontalOptions="Start"
+                                                Source="icoContact.png"
+                                                VerticalOptions="StartAndExpand" />
+
+                                        </StackLayout>
+                                        <StackLayout Margin="0,10,0,10">
+                                            <Label
+                                                FontSize="14"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Opacity=".6"
+                                                Text="Find Your closest"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                            <Label
+                                                Margin="0,-5,0,0"
+                                                FontSize="14"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Opacity=".6"
+                                                Text="field service engineer"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+
+                                <!--  2nd Support Mail  -->
+                                <Frame
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    BackgroundColor="{StaticResource CardBGColor}"
+                                    CornerRadius="9"
+                                    HorizontalOptions="FillAndExpand">
+
+                                    <StackLayout Orientation="Vertical">
+                                        <StackLayout
+                                            Margin="0,10,0,0"
+                                            HorizontalOptions="Center"
+                                            Orientation="Horizontal">
+
+                                            <Label
+                                                FontSize="18"
+                                                HorizontalOptions="End"
+                                                Text="Support"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                            <Image
+                                                Margin="0,4,0,0"
+                                                Aspect="AspectFit"
+                                                HorizontalOptions="Start"
+                                                Source="icoMail.png"
+                                                VerticalOptions="StartAndExpand" />
+
+                                        </StackLayout>
+                                        <StackLayout Margin="0,10,0,10">
+                                            <Label
+                                                FontSize="14"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Text="Support Email:"
+                                                TextColor="{StaticResource SubTitleColor}" />
+                                            <Label
+                                                Margin="0,5,0,0"
+                                                FontSize="10"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Opacity=".6"
+                                                Text="support@satcomdirtect.com"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                </Frame>
+
+                            </Grid>
+
+
+                        </StackLayout>
+                        <!--  Support Number & Mail End  -->
+
+
+                        <!--  ServiceNotification Start  -->
+                        <Frame
+                            Margin="20,0,20,20"
+                            Padding="0"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="9"
+                            HeightRequest="140">
+                            <StackLayout>
+                                <StackLayout>
+                                    <StackLayout
+                                        Margin="20,30,20,0"
+                                        HorizontalOptions="Center"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            FontSize="18"
+                                            HorizontalOptions="End"
+                                            Text="Service notifications"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Image
+                                            Margin="0,4,0,0"
+                                            Aspect="AspectFit"
+                                            HorizontalOptions="Start"
+                                            Source="icoBell.png"
+                                            VerticalOptions="StartAndExpand" />
+                                    </StackLayout>
+                                    <StackLayout
+                                        Margin="20,20,20,0"
+                                        HorizontalOptions="Center"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            FontSize="16"
+                                            HorizontalTextAlignment="Center"
+                                            Opacity=".6"
+                                            Text="View current outges and maintaince notifications"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            VerticalTextAlignment="Center" />
+                                    </StackLayout>
+
+                                    <StackLayout VerticalOptions="FillAndExpand">
+                                        <!--  Graph  -->
+                                        <StackLayout x:Name="stack1">
+
+                                            <!--  Something goes here  -->
+
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </StackLayout>
+                        </Frame>
+                        <!--  ServiceNotification End  -->
+
+                        <!--  SD Pro Support Documents Start  -->
+                        <Frame
+                            Margin="20,0,20,20"
+                            Padding="0"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="9"
+                            HeightRequest="140">
+                            <StackLayout>
+                                <StackLayout>
+                                    <StackLayout
+                                        Margin="20,30,20,0"
+                                        HorizontalOptions="Center"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            FontSize="18"
+                                            HorizontalOptions="End"
+                                            Text="SD Pro Support Documents"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Image
+                                            Margin="0,4,0,0"
+                                            Aspect="AspectFit"
+                                            HorizontalOptions="Start"
+                                            Source="icoArrow.png"
+                                            VerticalOptions="StartAndExpand" />
+                                    </StackLayout>
+                                    <StackLayout
+                                        Margin="20,20,20,0"
+                                        HorizontalOptions="Center"
+                                        Orientation="Vertical">
+                                        <Label
+                                            FontSize="16"
+                                            HorizontalTextAlignment="Center"
+                                            Opacity=".6"
+                                            Text="SILs, TILs, Service Bulletins, etc."
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            VerticalTextAlignment="Center" />
+                                        <Label
+                                            FontSize="16"
+                                            HorizontalTextAlignment="Center"
+                                            Text="(SD Pro login required)"
+                                            TextColor="{StaticResource SubTitleColor}"
+                                            VerticalTextAlignment="Center" />
+                                    </StackLayout>
+
+
+                                </StackLayout>
+
+                            </StackLayout>
+                        </Frame>
+                        <!--  SD Pro Support Documents End  -->
+
+
+
+                    </StackLayout>
+
+                </Grid>
+
+            </ScrollView>
+        </StackLayout>
+
+    </ContentPage.Content>
+
+</ContentPage>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application
+    x:Class="sdcrew.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Application.Resources>
+        <ResourceDictionary Source="Views\ViewHelpers\Themes\defaultBlueTheme.xaml" />
+
+
+        <OnPlatform x:Key="customfonts" x:TypeArguments="x:String">
+            <On Platform="iOS" Value="customfonts" />
+            <On Platform="Android" Value="customfonts.ttf#fontello" />
+        </OnPlatform>
+
+        <Style TargetType="NavigationPage">
+            <Setter Property="BarBackgroundColor" Value="{StaticResource BarBackgroundColor}" />
+            <Setter Property="BarTextColor" Value="{StaticResource PrimaryTextColor}" />
+        </Style>
+
+    </Application.Resources>
+</Application>

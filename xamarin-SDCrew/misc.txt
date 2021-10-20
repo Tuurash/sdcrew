@@ -1,0 +1,50 @@
+try
+                                {
+                                    int customerId = flight.customerId;
+                                    int aircraftId = flight.aircraftId;
+
+                                    DateTime date = flight.date;
+
+                                    bool isToday = flight.isToday;
+                                    bool isWeekend = flight.isWeekend;
+                                    bool postFlightOverridden = flight.postFlightOverridden;
+
+                                    //from leg
+                                    DateTime startDateTimeUtc = DateTime.Parse(leg.startDateTimeUtc);
+                                    DateTime endDateTimeUtc = DateTime.Parse(leg.endDateTimeUtc);
+                                    DateTime startDateTimeLocal = DateTime.Parse(leg.startDateTimeLocal);
+                                    DateTime endDateTimeLocal = DateTime.Parse(leg.endDateTimeLocal);
+
+                                    int scheduledFlightId = leg.scheduledFlightId;
+
+                                    int flightId = leg.flightId;
+                                    int scheduledAircraftTripId = leg.scheduledAircraftTripId;
+
+                                    bool tentativeEta = leg.tentativeEta;
+                                    bool tentativeEtd = leg.tentativeEtd;
+
+                                    string ete = leg.ete;
+                                    string crewInitials = leg.crewInitials;
+
+                                    int legCount = leg.legCount;
+                                    int legNumber = leg.legNumber;
+                                    int passengerLegCount = leg.passengerLegCount;
+                                    string customTripId = leg.customTripId;
+
+                                    string departureAirportIcao = leg.departure;
+                                    string arrivalAirportIcao = leg.arrival;
+                                    string tailNumber = leg.tailNumber;
+
+                                    string DeparturefboHandlerName = leg.departureFbo.fboHandlerName ?? "NA";
+                                    string ArrvailfboHandlerName = leg.arrivalFbo.fboHandlerName ?? "NA";
+
+
+                                    string DeparturelocalPhone = leg.departureFbo.localPhone ?? "NA";
+                                    string ArrivallocalPhone = leg.arrivalFbo.localPhone ?? "NA";
+                                    string DepartureserviceEmailAddress = leg.departureFbo.serviceEmailAddress ?? "NA";
+                                    string ArrivalserviceEmailAddress = leg.arrivalFbo.serviceEmailAddress ?? "NA";
+
+                                }catch(Exception exc)
+                                {
+                                    Console.Write(exc);
+                                }

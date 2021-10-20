@@ -1,0 +1,676 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Settings.settingsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:CI="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:fontawesome="clr-namespace:sdcrew.Utils"
+    xmlns:viewModels="clr-namespace:sdcrew.ViewModels"
+    Title="Settings"
+    BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentPage.BindingContext>
+        <viewModels:SettingsViewModel />
+    </ContentPage.BindingContext>
+
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="icoRefresh.png" Text="Synced" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <ScrollView VerticalOptions="Start">
+
+            <Grid RowSpacing="20" VerticalOptions="Start">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!--  User  -->
+                <StackLayout Grid.Row="0" Margin="15,0,15,0">
+
+                    <!--  Account Information  -->
+                    <Grid
+                        Margin="15,5,15,15"
+                        Padding="15"
+                        ColumnSpacing="20"
+                        HorizontalOptions="CenterAndExpand"
+                        RowSpacing="10"
+                        VerticalOptions="CenterAndExpand">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <CI:CircleImage
+                            x:Name="imgUser"
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            HeightRequest="85"
+                            HorizontalOptions="FillAndExpand"
+                            Source="{Binding CurrentUser.ImageUri}" />
+                        <!--  Source="{Binding Source={x:Static model:User.UserImage}}"  -->
+                        <Label
+                            x:Name="lblUserName"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            HorizontalOptions="Start"
+                            Text="{Binding CurrentUser.Name}"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="EndAndExpand" />
+                        <!--  Text="{Binding Source={x:Static model:User.FullName}}"  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Opacity=".7"
+                            Text="SD Pro Demo"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <!--  Text="{Binding Source={x:Static model:User.Rating}, StringFormat='{0} ★'}"  -->
+
+                        <Label
+                            x:Name="lblUserEmail"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Opacity=".7"
+                            Text="{Binding CurrentUser.Email}"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                    </Grid>
+
+                </StackLayout>
+
+                <!--  Application Settings  -->
+                <StackLayout
+                    Grid.Row="1"
+                    Margin="15,0,15,0"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="APPLICATION SETTINGS"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  RefreshRate  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Refresh Rate"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Picker
+                            x:Name="RefreshTimePicker"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="16"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="CenterAndExpand" />
+
+                        <!--  Show My Flights/Events only  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Show My Flights/Events only"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+                        <!--  Notifications  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Notifications"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+                        <!--  Send Crash Reports  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Send Crash Reports"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  APPEARANCE  -->
+                <StackLayout
+                    Grid.Row="2"
+                    Margin="15,0,15,0"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="APPEARANCE"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  System Theme  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Use System Light/Dark Mode"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+                        <!--  Theme  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Theme"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Picker
+                            x:Name="ThemePicker"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontSize="16"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="CenterAndExpand" />
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  AirPorts  -->
+                <StackLayout
+                    Grid.Row="3"
+                    Margin="15,0,15,0"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="AIRPORTS"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Automatic Airport Updates  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Automatic Airport Updates"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+                        <!--  Last updated  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Text="Last updated:"
+                            TextColor="{StaticResource SubTitleColor}"
+                            VerticalOptions="Center" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="16"
+                            HorizontalOptions="End"
+                            Opacity=".7"
+                            Text="27 july 2021"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                            CornerRadius="6"
+                            FontAttributes="Bold"
+                            HorizontalOptions="End"
+                            ImageSource="icoRefresh.png"
+                            Text="Update"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  PREFLIGHT  -->
+                <StackLayout
+                    Grid.Row="4"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="PREFLIGHT"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Margin="15,0,0,0"
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Automatic Airport Updates  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Past Events"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Picker
+                            x:Name="PastEventPicker"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="16"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="CenterAndExpand" />
+
+                        <!--  Last updated  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Future Events"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Picker
+                            x:Name="FutureEventPicker"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontSize="16"
+                            HorizontalOptions="EndAndExpand"
+                            Opacity=".7"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="CenterAndExpand" />
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  PREFLIGHT VISIBILITY  -->
+                <StackLayout
+                    Grid.Row="5"
+                    Margin="15,-5,15,0"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="PREFLIGHT VISIBILITY"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Automatic Airport Updates  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Event Days Only"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  POSTFLIGHT  -->
+                <StackLayout
+                    Grid.Row="6"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="POSTFLIGHT"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Margin="15,0,0,0"
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  past Flights  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Past Flights"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Picker
+                            x:Name="PastFlightPicker"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="16"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="CenterAndExpand" />
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  POSTFLIGHT VISIBILITY  -->
+                <StackLayout
+                    Grid.Row="7"
+                    Margin="15,-5,15,0"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Label
+                        Margin="10,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        Text="POSTFLIGHT VISIBILITY"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Grid
+                        Padding="10"
+                        BackgroundColor="{DynamicResource PageBackgroundColor}"
+                        ColumnSpacing="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Scroll Sub Menus  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="16"
+                            Opacity=".7"
+                            Text="Scroll Sub Menus"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="Center" />
+
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            OnColor="{StaticResource SwitchOnColor}"
+                            ThumbColor="{StaticResource SwitchThumbColor}"
+                            VerticalOptions="Center" />
+
+                    </Grid>
+                </StackLayout>
+
+                <!--  Support Footer  -->
+                <StackLayout
+                    Grid.Row="8"
+                    BackgroundColor="{StaticResource FlyoutBG}"
+                    Spacing="5"
+                    VerticalOptions="Start">
+
+                    <Grid
+                        Margin="15,0,15,15"
+                        Padding="10"
+                        HorizontalOptions="FillAndExpand"
+                        Opacity=".6"
+                        RowSpacing="20"
+                        VerticalOptions="Start">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="1.2*" />
+                            <RowDefinition Height="1.2*" />
+                            <RowDefinition Height="1.4*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*" />
+                            <ColumnDefinition Width="0.75*" />
+                        </Grid.ColumnDefinitions>
+
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalOptions="Start"
+                            Text="SUPPORT"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <Image
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            Source="icoPhone.png" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontSize="16"
+                            Text="+1.321.777.3236"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <Image
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            HeightRequest="20"
+                            HorizontalOptions="Start"
+                            Source="icoMail.png" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            FontSize="16"
+                            HorizontalOptions="Start"
+                            Text="support@satcomdirect.com"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            FontSize="15"
+                            HorizontalOptions="End"
+                            Text="SD Crew v2.8.23"
+                            TextColor="{StaticResource TabbarForeGround}"
+                            VerticalOptions="End" />
+
+                    </Grid>
+                </StackLayout>
+
+            </Grid>
+
+        </ScrollView>
+
+    </ContentPage.Content>
+
+</ContentPage>

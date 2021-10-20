@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell
+    x:Class="sdcrew.Views.Dashboard.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:controls1="clr-namespace:sdcrew.Utils"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:sdcrew.Models"
+    xmlns:postflightViews="clr-namespace:sdcrew.Views.Postflight"
+    xmlns:preflightViews="clr-namespace:sdcrew.Views.Preflight"
+    xmlns:settingsViews="clr-namespace:sdcrew.Views.Settings"
+    xmlns:viewModels="clr-namespace:sdcrew.ViewModels"
+    xmlns:views="clr-namespace:sdcrew.Views"
+    BackgroundColor="{StaticResource FlyoutBG}"
+    FlyoutBackgroundColor="{StaticResource FlyoutBG}"
+    FlyoutHeaderBehavior="CollapseOnScroll"
+    FlyoutIcon="icoInvisibleMenu.png"
+    Navigating="Shell_Navigating"
+    Shell.BackgroundColor="{StaticResource BarBackgroundColor}"
+    Shell.FlyoutHeaderTemplate="{StaticResource FlyoutHeaderTemplate}"
+    Shell.ItemTemplate="{StaticResource FlyoutTemplateSelector}"
+    Shell.MenuItemTemplate="{StaticResource MenuTemplate}"
+    Shell.NavBarIsVisible="False"
+    mc:Ignorable="d">
+
+    <Shell.BindingContext>
+        <viewModels:AppShellViewModel />
+    </Shell.BindingContext>
+
+    <Shell.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource TabbarBg}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource TabbarForeGround}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TabBarUnselected}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource TabbarForeGround}" />
+            </Style>
+
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
+
+            <DataTemplate x:Key="FlyoutHeaderTemplate">
+
+                <!--  Padding="20,50,20,20"  -->
+                <Grid
+                    x:Name="gridFlyoutHeader"
+                    Padding="20,30,20,20"
+                    BackgroundColor="{StaticResource FlyoutBG}"
+                    ColumnSpacing="25"
+                    HorizontalOptions="FillAndExpand"
+                    RowSpacing="15"
+                    VerticalOptions="Start">
+
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+
+
+                    <controls:CircleImage
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Grid.Column="0"
+                        Aspect="AspectFill"
+                        BorderColor="{StaticResource TransparentColor}"
+                        BorderThickness="2"
+                        HeightRequest="78"
+                        HorizontalOptions="Center"
+                        Source="icoProfile.png"
+                        WidthRequest="78" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        Text="{Binding CurrentUserName}"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="EndAndExpand" />
+
+                    <Label
+                        x:Name="txtUserAirlines"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="SD Pro Demo"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+                    <!--  Text="{Binding Source={x:Static model:User.Rating}, StringFormat='{0} ★'}"  -->
+
+                    <Label
+                        x:Name="userEmail"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding CurrentUserEmail}"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                    <BoxView
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Margin="-20,10,-20,0"
+                        HeightRequest="3"
+                        HorizontalOptions="FillAndExpand"
+                        Opacity=".5"
+                        Color="{StaticResource PrimaryTextColor}" />
+
+                </Grid>
+
+
+            </DataTemplate>
+
+            <!--  Menus  -->
+            <DataTemplate x:Key="MenuTemplate">
+
+
+                <Grid Opacity=".8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.75*" />
+                    </Grid.ColumnDefinitions>
+                    <Image
+                        Grid.Column="0"
+                        Margin="0,15,0,15"
+                        HeightRequest="23"
+                        Source="{Binding Icon}" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,15,0,15"
+                        FontSize="16"
+                        Text="{Binding Title}"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalTextAlignment="Center" />
+                </Grid>
+
+
+            </DataTemplate>
+
+            <!--  itemHeader  -->
+            <DataTemplate x:Key="FlyoutItemTemplate">
+
+
+                <StackLayout
+                    BackgroundColor="{StaticResource FlyoutBG}"
+                    HorizontalOptions="FillAndExpand"
+                    Orientation="Horizontal">
+
+
+                    <Label
+                        Margin="16,0,0,0"
+                        FontSize="14"
+                        Opacity=".4"
+                        Text="{Binding Title}"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="Center" />
+                </StackLayout>
+
+
+            </DataTemplate>
+
+
+            <controls1:FlyoutItemTemplateSelector
+                x:Key="FlyoutTemplateSelector"
+                NavigationHeaderTemplate="{StaticResource FlyoutHeaderTemplate}"
+                NavigationItemTemplate="{StaticResource FlyoutItemTemplate}" />
+
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <FlyoutItem Route="flyout">
+
+        <Tab
+            Title="Menu"
+            Icon="icoMenu.png"
+            Route="ShowFlyout">
+            <ShellContent ContentTemplate="{DataTemplate views:supportPage}" />
+        </Tab>
+
+        <Tab
+            x:Name="Tab_Preflight"
+            Title="PREFLIGHT"
+            Icon="icoPreflight.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate preflightViews:preFlightPage}" Route="Preflight" />
+        </Tab>
+
+        <Tab
+            Title="POSTFLIGHT"
+            Icon="icoPostflight.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate postflightViews:postFlightPage}" Route="PostFlight" />
+        </Tab>
+
+        <!--<Tab
+            Title="SUPPORT"
+            Icon="icoSupport.png"
+            IsVisible="False"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate views:supportPage}" Route="Support" />
+        </Tab>-->
+
+        <Tab
+            Title="SETTINGS"
+            Icon="icoSettings.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate settingsViews:settingsPage}" Route="Settings" />
+        </Tab>
+
+
+
+    </FlyoutItem>
+
+    <ShellContent
+        Title="General"
+        IsEnabled="False"
+        Route="Header1" />
+
+    <MenuItem
+        Command="{Binding NavigateNotification}"
+        CommandParameter="Notification"
+        IconImageSource="icoBell.png"
+        Text="Notifications" />
+    <MenuItem
+        Command="{Binding NavigateSupport}"
+        CommandParameter="Support"
+        IconImageSource="icoSupport.png"
+        Text="Support" />
+
+    <ShellContent
+        Title="Flights"
+        IsEnabled="False"
+        Route="Header2" />
+
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="Preflight"
+        IconImageSource="icoPreflight.png"
+        Text="PREFLIGHT" />
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="PostFlight"
+        IconImageSource="icoPostflight.png"
+        Text="POSTFLIGHT" />
+
+    <ShellContent
+        Title="Prefereces"
+        IsEnabled="False"
+        Route="Header3" />
+
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="Settings"
+        IconImageSource="icoSettings.png"
+        Text="Settings" />
+    <MenuItem
+        Command="{Binding LogoutCommand}"
+        CommandParameter="Logout"
+        IconImageSource="icoLogout.png"
+        Text="Logout" />
+
+    <Shell.FlyoutFooterTemplate>
+
+        <DataTemplate>
+
+            <ContentView BackgroundColor="{StaticResource FlyoutFooter}" HeightRequest="120">
+
+                <Grid
+                    Margin="30,13,5,5"
+                    HorizontalOptions="FillAndExpand"
+                    Opacity=".6"
+                    VerticalOptions="Start">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="18" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="1.4*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.75*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="SUPPORT"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Image
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="20"
+                        HorizontalOptions="Start"
+                        Source="icoPhone.png" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="+1.321.777.3236"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Image
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="20"
+                        HorizontalOptions="Start"
+                        Source="icoMail.png" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontSize="16"
+                        HorizontalOptions="Start"
+                        Text="support@satcomdirect.com"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        FontSize="15"
+                        HorizontalOptions="End"
+                        Text="SD Crew v2.8.23"
+                        TextColor="{StaticResource TabbarForeGround}"
+                        VerticalOptions="End" />
+
+                </Grid>
+
+            </ContentView>
+
+        </DataTemplate>
+
+    </Shell.FlyoutFooterTemplate>
+
+</Shell>
