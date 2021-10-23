@@ -28,13 +28,19 @@ namespace sdcrew.Services.Data
 
         public async Task InsertDatas()
         {
-            var t1 = AddAircraftProfileDtos();
-            //var t2= AddStaffEventTypes();
+            var t1 = AddAircraftTnS();
+            var t2 = AddNotes();
             var t3 = AddPreflightACE();
             var t4 = AddPreflightSE();
-            var t5 = AddNotes();
 
-            await Task.WhenAll(t1, t3, t4, t5).ConfigureAwait(false);
+            await Task.WhenAll(t1, t2, t3, t4);
+
+            await Task.Run(async()=> 
+            {
+                //await AddAircraftProfileDtos();
+                await AddStaffEventTypes();
+            }).ConfigureAwait(false);
+
             //MessagingCenter.Send<string, string>("MyApp", "DBUpdated", "From AllpreflightViewModel");
         }
 
@@ -58,11 +64,49 @@ namespace sdcrew.Services.Data
             return Preflights;
         }
 
-        public IEnumerable<string> getTailnumbers()
+        public IEnumerable<AircraftTailWithSn> getTailnumbers()
         {
-            var TailNumbers = db.Table<PreflightVM>().Where(x => x.eventName == "Aircraft").GroupBy(x => x.tailNumber).Select(x => x.First().tailNumber);
-            return TailNumbers;
+            var tailNumbers = db.Table<AircraftTailWithSn>().ToList();
+            //var TailNumbers = db.Table<PreflightVM>().Where(x => x.eventName == "Aircraft").GroupBy(x => x.tailNumber).Select(x => x.First().tailNumber);
+            return tailNumbers;
         }
+
+        public async Task AddAircraftTnS()
+        {
+            AircraftTailWithSn aircraftTail = new AircraftTailWithSn();
+
+
+            if (getTailnumbers().Count() <1)
+            {
+                await Init();
+                var aircraftProfiles = await _preflightRepo.GetTailNumbers().ConfigureAwait(false);
+                if (aircraftProfiles != null)
+                {
+                    foreach (var aircraft in aircraftProfiles)
+                    {
+                        try
+                        {
+                            aircraftTail = new AircraftTailWithSn
+                            {
+                                tailNumber=aircraft.tailNumber,
+                                serialNumber=aircraft.serialNumber
+                            };
+
+                            try
+                            {
+                                db.Insert(aircraftTail);
+                            }
+                            catch (Exception exc) { Console.WriteLine(exc); }
+                        }
+                        catch (Exception exc)
+                        {
+                            Console.WriteLine(exc);
+                        }
+                    }
+                }
+            }
+        }
+
 
         #region Notes
 
@@ -596,12 +640,10 @@ namespace sdcrew.Services.Data
         public async Task AddAircraftProfileDtos()
         {
             AircraftProfileDto _aircraftProfileDto = new AircraftProfileDto();
-
-            
-            if(GetAircraftProfiles()==null)
+            if(db.Table<AircraftProfileDto>().Count()<1)
             {
                 await Init();
-                var aircraftProfiles = await _preflightRepo.GetAircraftProfileDtos().ConfigureAwait(false);
+                var aircraftProfiles = await _preflightRepo.GetAircraftProfileDtos();
                 if (aircraftProfiles != null)
                 {
                     foreach (var aircraft in aircraftProfiles)
@@ -647,8 +689,6 @@ namespace sdcrew.Services.Data
                     }
                 }
             }
-            
-
         }
 
         public async Task AddPreflightACE()
@@ -658,11 +698,11 @@ namespace sdcrew.Services.Data
             FlightPassenger flightPassenger = new FlightPassenger();
             FlightCrewMember flightCrewMember = new FlightCrewMember();
 
-
+            var dltStatusAircraft = db.Table<PreflightVM>().Delete(x => x.flightId != 0);
             var dltStatusCrew = db.Table<FlightCrewMember>().Delete(x => x.flightId != 0);
             var dltPassengers = db.Table<FlightPassenger>().Delete(x => x.flightId != 0);
 
-            string getTempArrivalICao="";
+            //string getTempArrivalICao="";
 
             await Init();
 
@@ -772,16 +812,8 @@ namespace sdcrew.Services.Data
 
                                 try
                                 {
-                                    var Exists = db.Table<PreflightVM>().Where(x => x.flightId == _preflightVM.flightId && x.customTripId == _preflightVM.customTripId).FirstOrDefault();
-                                    if (Exists != null)
-                                    {
-                                        Console.WriteLine("Skipped Aircraft Event PreflightID: " + Exists.flightId);
-                                    }
-                                    else
-                                    {
-                                        db.Insert(_preflightVM);
-                                        Console.WriteLine("Added Aircraft Event PreflightID: " + _preflightVM.PreflightvmID + " ; Flight ID: " + _preflightVM.flightId);
-                                    }
+                                    db.Insert(_preflightVM);
+                                    Console.WriteLine("Added Aircraft Event PreflightID: " + _preflightVM.PreflightvmID + " ; Flight ID: " + _preflightVM.flightId);
                                 }
                                 catch (Exception exc) { Console.WriteLine(exc); }
 
@@ -852,11 +884,7 @@ namespace sdcrew.Services.Data
                                         }
                                         catch (Exception exc) { Console.WriteLine(exc); }
 
-                                    }
-
-                                    Console.WriteLine("LegNumber----------" + leg.legNumber);
-
-                                    
+                                    }                            
                                 }
                                 catch (Exception ex)
                                 {
@@ -956,8 +984,8 @@ namespace sdcrew.Services.Data
         {
             _ = Init();
 
-            var AircraftEvents = db.Table<PreflightVM>().Where(x => x.eventName == "Staff").OrderBy(x => x.date);
-            return AircraftEvents;
+            var Events = db.Table<PreflightVM>().Where(x => x.eventName != "Aircraft").OrderBy(x => x.date);
+            return Events;
         }
 
         public async Task<IEnumerable<StaffEventTypes>> GetStaffEventTypes()

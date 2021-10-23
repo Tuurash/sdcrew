@@ -47,11 +47,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: Turash mim (QNS9238VMP)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>None</MtouchLink>
     <MtouchInterpreter>-all</MtouchInterpreter>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -74,6 +75,10 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <BundleResource Include="Resources\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </BundleResource>
+    <BundleResource Include="Resources\customfonts.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -146,6 +151,9 @@
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.0.0.12</Version>
     </PackageReference>
+    <PackageReference Include="SkiaSharp.Views.Forms">
+      <Version>2.80.3</Version>
+    </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.116</Version>
     </PackageReference>
@@ -154,9 +162,6 @@
     </PackageReference>
     <PackageReference Include="SQLitePCLRaw.bundle_sqlcipher">
       <Version>1.1.14</Version>
-    </PackageReference>
-    <PackageReference Include="SuaveControls.FloatingActionButton">
-      <Version>2018.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle">
       <Version>3.0.0.5</Version>
@@ -309,10 +314,15 @@
     <BundleResource Include="Resources\scheduleactual.png" />
     <BundleResource Include="Resources\scheduletentative.png" />
     <BundleResource Include="Resources\vector.png" />
-    <BundleResource Include="Resources\customfonts.ttf" />
     <BundleResource Include="Resources\icoEsigned.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\icoEllipsis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\icoSave.png" />
   </ItemGroup>
 </Project>

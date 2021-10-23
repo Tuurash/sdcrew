@@ -183,14 +183,14 @@
     <FlyoutItem Route="flyout">
 
         <Tab
-            Title="Menu"
+            Title="Menu" 
             Icon="icoMenu.png"
             Route="ShowFlyout">
             <ShellContent ContentTemplate="{DataTemplate views:supportPage}" />
         </Tab>
 
         <Tab
-            x:Name="Tab_Preflight"
+            x:Name="Tab_Preflight" 
             Title="PREFLIGHT"
             Icon="icoPreflight.png"
             Route="tab">

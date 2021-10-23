@@ -23,10 +23,10 @@ namespace sdcrew.ViewModels.Preflight
             //RefreshCommand = new Command(() => OnRefresh());
         }
 
-        //public List<PreflightGroup> preflightStaffEvents { get => getAllStaffeventsList(); }
-
         public ObservableCollection<PreflightGroup> getAllStaffeventsList()
         {
+            PreflightNote note = new PreflightNote();
+
             string selectedTimezone = Services.Settings.TimeZone;
             DateTime getStartDate = DateTime.MinValue;
             DateTime getEndDate = DateTime.MinValue;
@@ -35,17 +35,59 @@ namespace sdcrew.ViewModels.Preflight
             string getTripID = "";
             string getCardheaderIcon = "";
 
+            int getCalendarNoteId = 0;
+            DateTime getNoteDate = DateTime.MinValue;
+            string getNoteBody = "";
+            string getNoteIsVisible = "false";
+            string getNoteIsEnable = "false";
+
+            string getETE = "";
+            string getEventType = "";
+            string getEventTypeIsVisible = "false";
+            string getFlightIconIsVisible = "false";
+            string getHeaderTextBg = "";
+            string getHeaderTextColor = "";
+
+            Console.Write(getNoteDate.ToShortDateString());
+
+            bool flag_Note = true;
+
             PreflightVM _preflightVM = new PreflightVM();
 
             List<PreflightGroup> _preflightList = new List<PreflightGroup>();
 
-            IEnumerable<PreflightVM> PreflightSEs;
+            IEnumerable<PreflightVM> Preflights;
             List<PreflightVM> CustomList = new List<PreflightVM>();
 
-            PreflightSEs = _preflightServices.GetAllStaffPreflights();
+            Preflights = _preflightServices.GetAllStaffPreflights();
 
-            foreach (var item in PreflightSEs)
+            foreach (var item in Preflights)
             {
+                if (getNoteDate.Date != item.date.Date)
+                {
+                    flag_Note = true;
+                }
+
+
+                var getNote = _preflightServices.GetNoteByDate(item.date);
+
+                if (getNote != null & flag_Note == true)
+                {
+                    getCalendarNoteId = getNote.calendarNoteId;
+                    getNoteBody = getNote.note;
+                    getNoteDate = getNote.calendarDate;
+                    getNoteIsVisible = "true";
+                    getNoteIsEnable = "true";
+
+                    flag_Note = false;
+
+                }
+                else
+                {
+                    getNoteIsVisible = "false";
+                    getNoteIsEnable = "false";
+                }
+
                 if (item.tentativeEta == true || item.tentativeEtd == true)
                 {
                     getTimezoneIcon = "scheduletentative";
@@ -54,11 +96,13 @@ namespace sdcrew.ViewModels.Preflight
 
                 if (selectedTimezone != null || selectedTimezone == "")
                 {
-                    if (selectedTimezone == "Local")
+                    if (selectedTimezone == "AIRPORT")
                     {
-                        getStartDate = item.startDateTimeUtc;
-                        getEndDate = item.endDateTimeUtc;
-                        getCurrentTimezone = "LOCAL";
+
+
+                        getStartDate = item.startDateTimeLocal;
+                        getEndDate = item.endDateTimeLocal;
+                        getCurrentTimezone = "AIRPORT";
                     }
                     else
                     {
@@ -74,28 +118,92 @@ namespace sdcrew.ViewModels.Preflight
                     getCurrentTimezone = "UTC";
                 }
 
-                if (item.staffEventType.Contains("Maintenance"))
+                if (item.legCount != 0)
                 {
-                    getCardheaderIcon = "\uE80A";
+                    getTripID = "TRIP ID: " + item.customTripId + " - " + item.legNumber.ToString() + "/" + item.legCount.ToString();
                 }
-                else if (item.staffEventType.Contains("Hold"))
+                else { getTripID = ""; }
+
+                if (item.ete != null & item.ete != "")
                 {
-                    getCardheaderIcon = "\uE80B";
+                    getETE = "ETE - " + item.ete;
                 }
-                else if (item.staffEventType.Contains("Custom"))
+                else { getETE = ""; }
+
+                //Dinamic Font Resource => https://stackoverflow.com/questions/52274361/xamarin-fontawesome-not-working-from-code-behind
+                // &#xf11a; => \uf11a
+                if (item.eventName == "Aircraft")
                 {
-                    getCardheaderIcon = "\uE809";
+                    getCardheaderIcon = "\uE805";
+                    getFlightIconIsVisible = "true";
+                    getEventTypeIsVisible = "false";
+                    getEventType = "";
+
+                    getHeaderTextBg = "#0000ffff";
+                    getHeaderTextColor = item.color;
                 }
                 else
                 {
-                    getCardheaderIcon = item.abbreviation;
+                    getFlightIconIsVisible = "false";
+                    getEventTypeIsVisible = "true";
+
+                    if (item.staffEventType.Contains("Maintenance"))
+                    {
+                        getCardheaderIcon = "\uE80A";
+                        getEventType = "Maintenance";
+
+
+                        getHeaderTextBg = Color.Transparent.ToString();
+                        getHeaderTextColor = item.color;
+
+
+                    }
+                    else if (item.staffEventType.Contains("Hold"))
+                    {
+                        getCardheaderIcon = "\uE80B";
+                        getEventType = "Hold";
+
+                        getHeaderTextBg = Color.Transparent.ToString();
+                        getHeaderTextColor = item.color;
+                    }
+                    else if (item.staffEventType.Contains("Custom") || item.staffEventType.Contains("AOG"))
+                    {
+                        getCardheaderIcon = "\uE809";
+                        getEventType = item.staffEventType;
+
+                        getHeaderTextBg = Color.Transparent.ToString();
+                        getHeaderTextColor = item.color;
+                    }
+                    else
+                    {
+                        getCardheaderIcon = item.abbreviation;
+                        getEventType = item.staffEventType;
+
+                        getHeaderTextBg = item.color;
+                        getHeaderTextColor = "#FFFFFF";
+                    }
                 }
 
                 var customPreflight = new PreflightVM
                 {
+                    aircraftId = item.aircraftId,
                     CardheaderIcon = getCardheaderIcon,
                     tailNumber = item.tailNumber,
                     color = item.color,
+                    TripID = getTripID,
+                    legNumber = item.legNumber,
+                    flightId = item.scheduledFlightId,
+                    scheduledFlightId = item.scheduledFlightId,
+                    FID = item.FID,
+                    scheduledAircraftTripId = item.scheduledAircraftTripId,
+
+                    //fboInfo
+                    DeparturefboHandlerName = item.DeparturefboHandlerName,
+                    ArrvailfboHandlerName = item.ArrvailfboHandlerName,
+                    DeparturelocalPhone = item.DeparturelocalPhone,
+                    ArrivallocalPhone = item.ArrivallocalPhone,
+                    DepartureserviceEmailAddress = item.DepartureserviceEmailAddress,
+                    ArrivalserviceEmailAddress = item.ArrivalserviceEmailAddress,
 
                     departureAirportIcao = item.departureAirportIcao,
                     arrivalAirportIcao = item.arrivalAirportIcao,
@@ -107,10 +215,29 @@ namespace sdcrew.ViewModels.Preflight
                     CurrentTimezone = getCurrentTimezone,
 
                     crewInitials = item.crewInitials,
-                    ete = item.ete,
+                    ete = getETE,
                     passengerLegCount = item.passengerLegCount,
 
-                    date = item.date
+                    date = item.date,
+
+                    eventName = item.eventName,
+                    EventType = getEventType,
+                    EventTypeIsVisible = getEventTypeIsVisible,
+                    FlightIconIsVisible = getFlightIconIsVisible,
+
+                    HeadeTextBGColor = getHeaderTextBg,
+                    HeadeTextColor = getHeaderTextColor,
+
+                    //Note
+                    CalendarNoteId = getCalendarNoteId,
+                    NoteBody = getNoteBody,
+                    NoteDate = getNoteDate,
+                    NoteIsVisible = getNoteIsVisible,
+                    NoteIsEnable = getNoteIsEnable,
+
+
+                    //event notes
+                    notes = item.notes
                 };
 
                 CustomList.Add(customPreflight);

@@ -21,6 +21,7 @@ namespace sdcrew.ViewModels.Preflight
     public class AllPreFlightsViewModel : BaseViewModel, INotifyPropertyChanged
     {
         PreflightServices _preflightServices;
+
         public AllPreFlightsViewModel()
         {
             _preflightServices = new PreflightServices();
@@ -83,7 +84,7 @@ namespace sdcrew.ViewModels.Preflight
 
             foreach (var item in Preflights)
             {
-                if(getNoteDate.Date!=item.date.Date)
+                if (getNoteDate.Date != item.date.Date)
                 {
                     flag_Note = true;
                 }
@@ -91,7 +92,7 @@ namespace sdcrew.ViewModels.Preflight
 
                 var getNote = _preflightServices.GetNoteByDate(item.date);
 
-                if (getNote != null & flag_Note==true)
+                if (getNote != null & flag_Note == true)
                 {
                     getCalendarNoteId = getNote.calendarNoteId;
                     getNoteBody = getNote.note;
@@ -100,7 +101,7 @@ namespace sdcrew.ViewModels.Preflight
                     getNoteIsEnable = "true";
 
                     flag_Note = false;
-                    
+
                 }
                 else
                 {
@@ -144,7 +145,7 @@ namespace sdcrew.ViewModels.Preflight
                 }
                 else { getTripID = ""; }
 
-                if(item.ete!=null & item.ete!="")
+                if (item.ete != null & item.ete != "")
                 {
                     getETE = "ETE - " + item.ete;
                 }
@@ -171,7 +172,7 @@ namespace sdcrew.ViewModels.Preflight
                     {
                         getCardheaderIcon = "\uE80A";
                         getEventType = "Maintenance";
-                        
+
 
                         getHeaderTextBg = Color.Transparent.ToString();
                         getHeaderTextColor = item.color;
@@ -240,13 +241,13 @@ namespace sdcrew.ViewModels.Preflight
 
                     date = item.date,
 
-                    eventName=item.eventName,
-                    EventType=getEventType,
-                    EventTypeIsVisible=getEventTypeIsVisible,
-                    FlightIconIsVisible=getFlightIconIsVisible,
+                    eventName = item.eventName,
+                    EventType = getEventType,
+                    EventTypeIsVisible = getEventTypeIsVisible,
+                    FlightIconIsVisible = getFlightIconIsVisible,
 
-                    HeadeTextBGColor=getHeaderTextBg,
-                    HeadeTextColor=getHeaderTextColor,
+                    HeadeTextBGColor = getHeaderTextBg,
+                    HeadeTextColor = getHeaderTextColor,
 
                     //Note
                     CalendarNoteId = getCalendarNoteId,
@@ -257,7 +258,7 @@ namespace sdcrew.ViewModels.Preflight
 
 
                     //event notes
-                    notes=item.notes
+                    notes = item.notes
                 };
 
                 CustomList.Add(customPreflight);

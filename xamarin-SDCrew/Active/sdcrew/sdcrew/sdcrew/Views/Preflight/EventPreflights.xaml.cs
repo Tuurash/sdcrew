@@ -29,7 +29,7 @@ namespace sdcrew.Views.Preflight
         {
             InitializeComponent();
             BindingContext = viewModel = new EventPreflightsViewModel();
-
+            lblRefreshTime.Text = Services.Settings.GetRefreshTime;
             PopulateDate();
 
             #region MessagingCenter
@@ -93,6 +93,23 @@ namespace sdcrew.Views.Preflight
             }
 
             GroupedView.ItemsSource = _expandedGroups;
+        }
+
+        private async void FlightGetDetails_Tapped(object sender, EventArgs e)
+        {
+            Loader.IsVisible = true;
+            dynamic flightObj = ((TappedEventArgs)e).Parameter;
+
+            if (flightObj.eventName == "Aircraft")
+            {
+                await Navigation.PushAsync(new PreflightDetails(flightObj));
+            }
+            else
+            {
+                await Navigation.PushAsync(new EventDetails(flightObj));
+            }
+
+            Loader.IsVisible = false;
         }
 
         #region Refresh

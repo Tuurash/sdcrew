@@ -27,14 +27,16 @@ namespace sdcrew.Views.Preflight
         }
 
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             _preflightServices = new PreflightServices();
 
             base.OnAppearing();
             (allPreflights as AllPreflights)?.PageAppearing();
 
-   
+            Services.Settings.FilterItems = "";
+
+
 
         }
 

@@ -29,29 +29,30 @@ namespace sdcrew.Views.Preflight
         {
             InitializeComponent();
             BindingContext = viewModel = new FlightPreflightsViewModel();
-            PopulateDate();
+            lblRefreshTime.Text = Services.Settings.GetRefreshTime;
+            PopulateData();
 
             try
             {
                 MessagingCenter.Subscribe<App>((App)Application.Current, "OnFilterSelected", (sender) =>
                 {
-                    PopulateDate();
+                    PopulateData();
                 });
 
                 MessagingCenter.Subscribe<string, string>("MyApp", "DBUpdated", (sender, arg) =>
                 {
-                    PopulateDate();
+                    PopulateData();
                 });
 
                 MessagingCenter.Subscribe<string, string>("MyApp", "TimeZoneChanged", (sender, arg) =>
                 {
-                    PopulateDate();
+                    PopulateData();
                 });
             }
-            catch(Exception exc) { Debug.WriteLine(exc); }
+            catch (Exception exc) { Debug.WriteLine(exc); }
         }
 
-        private void PopulateDate()
+        private void PopulateData()
         {
             GroupedView.IsRefreshing = true;
             _allGroups = viewModel.getAllAircraftEventsList();
@@ -69,6 +70,23 @@ namespace sdcrew.Views.Preflight
             }
             catch (Exception exc) { }
 
+        }
+
+        private async void FlightGetDetails_Tapped(object sender, EventArgs e)
+        {
+            Loader.IsVisible = true;
+            dynamic flightObj = ((TappedEventArgs)e).Parameter;
+
+            if (flightObj.eventName == "Aircraft")
+            {
+                await Navigation.PushAsync(new PreflightDetails(flightObj));
+            }
+            else
+            {
+                await Navigation.PushAsync(new EventDetails(flightObj));
+            }
+
+            Loader.IsVisible = false;
         }
 
         private void UpdateListContent()
@@ -100,8 +118,8 @@ namespace sdcrew.Views.Preflight
         {
             await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
 
-            PopulateDate();
-
+            PopulateData();
+            lblRefreshTime.Text = Services.Settings.GetRefreshTime;
             GroupedView.EndRefresh();
 
         }
@@ -109,4 +127,5 @@ namespace sdcrew.Views.Preflight
         #endregion
 
     }
+
 }

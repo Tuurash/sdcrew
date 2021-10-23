@@ -2,7 +2,9 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
-    <SelectedDevice>Local Device</SelectedDevice>
-    <ActiveDebugProfile>Local Device</ActiveDebugProfile>
+    <SelectedDevice>iPhone7 😁</SelectedDevice>
+    <ActiveDebugProfile>iPhone7 😁</ActiveDebugProfile>
+    <DeveloperId>turasmimoo%40gmail.com</DeveloperId>
+    <DevelopmentTeamId>G62G4W7UGG</DevelopmentTeamId>
   </PropertyGroup>
 </Project>

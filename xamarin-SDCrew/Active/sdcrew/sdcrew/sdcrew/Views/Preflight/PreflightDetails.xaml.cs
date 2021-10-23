@@ -6,6 +6,7 @@ using sdcrew.ViewModels.Preflight;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ using Xamarin.Forms.Xaml;
 namespace sdcrew.Views.Preflight
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PreflightDetails : ContentPage
+    public partial class PreflightDetails : ContentPage, INotifyPropertyChanged
     {
         public List<Tab> AllTabs { get; set; }
         dynamic flight = new PreflightVM();
@@ -27,14 +28,19 @@ namespace sdcrew.Views.Preflight
 
         PreflightRepository preflightRepository = new PreflightRepository();
 
+
         public PreflightDetails(object flightObj)
         {
             InitializeComponent();
+            BindingContext = this;
+
+            AllTabs = new List<Tab>(Tabs.Get());
+            collectionViewListHorizontal.ItemsSource = AllTabs;
+
             flight = flightObj;
             preflightViewModel = new PreflightDetailsViewModel();
             preflightRepository = new PreflightRepository();
             svm = new PreflightServices();
-
 
             lstCrewIDs.Clear();
             lstBusinessPersonIds.Clear();
@@ -43,42 +49,81 @@ namespace sdcrew.Views.Preflight
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            AllTabs = new List<Tab>(Tabs.Get());
-            collectionViewListHorizontal.ItemsSource = AllTabs;
+
+
             FillAirport();
             FillFlightInfo();
             FillCrews();
             FillPassengers();
 
-            Task.Run(() => 
+            Task.Run(() =>
             {
-                //svm.AddPreflight_Checklists(flight.scheduledAircraftTripId, flight.legNumber, 1, flight.flightId);
                 svm.AddServices_Preflight(flight.scheduledAircraftTripId);
 
             }).ConfigureAwait(false);
         }
 
-
         public List<int> lstCrewIDs = new List<int>();
         public List<int> lstBusinessPersonIds = new List<int>();
 
+        #region dinamic Height
 
+        //Bug issue: https://github.com/xamarin/Xamarin.Forms/issues/5942
+        private int crewRowHeigtht;
+        public int CrewRowHeigtht
+        {
+            get { return crewRowHeigtht; }
+            set
+            {
+                crewRowHeigtht = value;
+                RaisePropertyChanged(nameof(crewRowHeigtht));
+            }
+        }
+
+        private int passengerRowHeigtht;
+        public int PassengerRowHeigtht
+        {
+            get { return passengerRowHeigtht; }
+            set
+            {
+                passengerRowHeigtht = value;
+                RaisePropertyChanged(nameof(passengerRowHeigtht));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+
+        #endregion
 
         //HeaderCollecionView
-        private async void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+        Frame LastTab=null;
+
+        private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
         {
             Frame tappedFrame = (sender as Frame);
             tappedFrame.BackgroundColor = Color.FromHex("#00AEEF");
-
+            if (LastTab != null)
+            {
+                LastTab.BackgroundColor = Color.FromHex("#192E48");
+                LastTab = tappedFrame;
+            }
+            else
+            {
+                LastTab = tappedFrame;
+            }
+            
             var param = ((TappedEventArgs)e).Parameter;
-
             var FrameName = this.FindByName<Frame>(param.ToString());
-            await DetailTabs.ScrollToAsync((Element)FrameName, position: ScrollToPosition.Center, animated:true);
-        }
-
-        private void HeaderItemFrame_Unfocused(object sender, FocusEventArgs e)
-        {
-            this.BackgroundColor = Color.FromHex("#00AEEF");
+            DetailTabs.ScrollToAsync((Element)FrameName, position: ScrollToPosition.Center, animated: true);
         }
 
         public void FillFlightInfo()
@@ -92,23 +137,27 @@ namespace sdcrew.Views.Preflight
             lblArrivalICAO.Text = vm.arrivalAirportIcao;
 
             lblDepartHeader.Text = vm.departureAirportIcao;
-            lblArrivalHeader.Text= vm.arrivalAirportIcao;
+            lblArrivalHeader.Text = vm.arrivalAirportIcao;
 
             lblDepartureDate.Text = vm.startDateTimeUtc.Date.ToString("MMMM yyyy");
             lblArrivalDate.Text = vm.endDateTimeUtc.Date.ToString("MMMM yyyy");
 
-            lblDepartureTime.Text= vm.startDateTimeUtc.ToString("H:mm") +" UTC";
-            lblArrivalTime.Text= vm.endDateTimeUtc.ToString("H:mm") + " UTC";
-            lblETE.Text ="ETE-"+vm.ete;
+            lblDepartureTime.Text = vm.startDateTimeUtc.ToString("H:mm") + " UTC";
+            lblArrivalTime.Text = vm.endDateTimeUtc.ToString("H:mm") + " UTC";
+            lblETE.Text = "ETE-" + vm.ete;
 
             iconFlight.TextColor = Color.FromHex(vm.color);
-            lblIconHeader.TextColor= Color.FromHex(vm.color);
+            lblIconHeader.TextColor = Color.FromHex(vm.color);
         }
 
         public void FillCrews()
         {
 
-            var lst = svm.GetCrewMembers(flight.aircraftId, flight.legNumber,flight.FID, flight.scheduledAircraftTripId);
+            var lst = svm.GetCrewMembers(flight.aircraftId, flight.legNumber, flight.FID, flight.scheduledAircraftTripId);
+
+            CrewRowHeigtht = lst.Count() * 50;
+            RaisePropertyChanged(nameof(CrewRowHeigtht));
+
             lblCrewCount.Text = lst.Count().ToString();
             CollectionCrew.ItemsSource = lst;
 
@@ -120,9 +169,13 @@ namespace sdcrew.Views.Preflight
 
         public void FillPassengers()
         {
-            var lst = svm.GetPassengers(flight.aircraftId,flight.legNumber,flight.FID, flight.scheduledAircraftTripId);
+            var lst = svm.GetPassengers(flight.aircraftId, flight.legNumber, flight.FID, flight.scheduledAircraftTripId);
+
+            PassengerRowHeigtht = lst.Count() * 100;
+            RaisePropertyChanged(nameof(PassengerRowHeigtht));
+
             lblPassengerCount.Text = lst.Count().ToString();
-            lblPassengerOnboardCount.Text= svm.GetPassengersOnboard(flight.scheduledAircraftTripId,flight.legNumber).ToString();
+            lblPassengerOnboardCount.Text = svm.GetPassengersOnboard(flight.scheduledAircraftTripId, flight.legNumber).ToString();
 
             CollectionPassenger.ItemsSource = lst;
 
@@ -134,18 +187,18 @@ namespace sdcrew.Views.Preflight
 
         public void FillAirport()
         {
-            
+
 
             lblAirportDepartICAO.Text = flight.departureAirportIcao;
             lblFboDepartHandlerName.Text = flight.DeparturefboHandlerName;
             lblFboDepartPhone.Text = flight.DeparturelocalPhone;
             lblFboDepartMail.Text = flight.DepartureserviceEmailAddress;
 
-            if (lblFboDepartPhone.Text=="" || lblFboDepartPhone.Text==null)
+            if (lblFboDepartPhone.Text == "" || lblFboDepartPhone.Text == null)
             {
                 lblFboDepartCallIcon.IsVisible = false;
             }
-            
+
             if (lblFboDepartMail.Text == "" || lblFboDepartMail.Text == null)
             {
                 lblFboDepartMailIcon.IsVisible = false;
@@ -160,7 +213,7 @@ namespace sdcrew.Views.Preflight
             {
                 lblFboArrivalCallIcon.IsVisible = false;
             }
-         
+
 
             if (lblFboArrivalMail.Text == "" || lblFboArrivalMail.Text == null)
             {
@@ -172,6 +225,7 @@ namespace sdcrew.Views.Preflight
         private void btnCheckList_Tapped(object sender, EventArgs e)
         {
             MainThread.BeginInvokeOnMainThread(() => Loader.IsVisible = true);
+
             Thread.Sleep(2000);
             Task.Run(() => PopupNavigation.Instance.PushAsync(new FlightCheckList(flight.scheduledAircraftTripId, flight.legNumber, flight.scheduledFlightId)));
 
@@ -195,12 +249,12 @@ namespace sdcrew.Views.Preflight
             string getType = await DisplayActionSheet("", "Cancel", null, "Crew", "PAX");
 
             int type = 1;
-         
-            if (getType=="Crew")
+
+            if (getType == "Crew")
             {
                 type = 1;
             }
-            else if(getType == "PAX") { type = 2; } else { return; }
+            else if (getType == "PAX") { type = 2; } else { return; }
 
             ArrayList CrewIDarrayList = new ArrayList(lstCrewIDs);
 
@@ -212,7 +266,7 @@ namespace sdcrew.Views.Preflight
             {
                 await Task.Run(async () => await preflightRepository.Fetch_Itineray(type, legNumber, CrewIDarrayList, BusinessPersonIdarrayList, flight.scheduledAircraftTripId));
             }
-            catch(Exception exc) { Debug.WriteLine(exc); }
+            catch (Exception exc) { Debug.WriteLine(exc); }
 
         }
 
@@ -222,46 +276,50 @@ namespace sdcrew.Views.Preflight
         public async Task MakeCall(string PhoneNumber)
         {
             string number = PhoneNumber;
-            await Task.Run(() => PhoneDialer.Open(number));
+            await Task.Delay(100);
+            MainThread.BeginInvokeOnMainThread(() => PhoneDialer.Open(number));
         }
 
         public async Task OpenInMail(string MailAddress)
         {
             var address = MailAddress;
-            await Task.Run(() => Launcher.TryOpenAsync(new Uri($"mailto:{address}")));
+
+            await Task.Delay(100);
+            MainThread.BeginInvokeOnMainThread(() => Launcher.TryOpenAsync(new Uri($"mailto:{address}")));
         }
 
-        
+
         private void crewMakeCall_Tapped(object sender, EventArgs e)
         {
             var PhoneNumber = ((TappedEventArgs)e).Parameter;
-            Task.Run(async () => await MakeCall(PhoneNumber.ToString()));
+            MainThread.BeginInvokeOnMainThread(async () => await MakeCall(PhoneNumber.ToString()));
+
         }
 
         private void AirportSendMail_Tapped(object sender, EventArgs e)
         {
-            Task.Run(async () => await OpenInMail(flight.ArrivalserviceEmailAddress)); //dummy
+            MainThread.BeginInvokeOnMainThread(async () => await OpenInMail(flight.ArrivalserviceEmailAddress));
+       
         }
 
         private void btnAirportDepurtureCall_Tapped(object sender, EventArgs e)
         {
-            Task.Run(async () => await MakeCall(flight.DeparturelocalPhone));
+            MainThread.BeginInvokeOnMainThread(async () => await MakeCall(flight.DeparturelocalPhone));
         }
 
         private void btnAirportDepurtureMail_Tapped(object sender, EventArgs e)
         {
-            Task.Run(async () => await OpenInMail(flight.DepartureserviceEmailAddress));
+            MainThread.BeginInvokeOnMainThread(async () => await OpenInMail(flight.DepartureserviceEmailAddress));
         }
 
         private void btnAirportArrivalCall_Tapped(object sender, EventArgs e)
         {
-            Task.Run(async () => await MakeCall(flight.ArrivallocalPhone));
-        } 
+            MainThread.BeginInvokeOnMainThread(async () => await MakeCall(flight.ArrivallocalPhone));
+        }
         #endregion
 
+        
     }
-
-
 
     public class Tab
     {

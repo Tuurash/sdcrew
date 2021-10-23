@@ -2,6 +2,7 @@
 using sdcrew.Views;
 using sdcrew.Views.Dashboard;
 using sdcrew.Views.Login;
+using sdcrew.Views.Preflight;
 using sdcrew.Views.ViewHelpers;
 using System;
 using Xamarin.Forms;

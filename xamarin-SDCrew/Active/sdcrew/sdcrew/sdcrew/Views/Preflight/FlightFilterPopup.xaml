@@ -27,9 +27,8 @@
             PositionOut="Bottom" />
     </popup:PopupPage.Animation>
 
-
     <pancakeview:PancakeView BackgroundColor="{StaticResource popupBG}" CornerRadius="0,0,17,17">
-        <Grid VerticalOptions="FillAndExpand">
+        <Grid Padding="10" VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -39,13 +38,13 @@
 
             <StackLayout
                 Grid.Row="1"
-                Margin="0,10,0,0"
+                Margin="0"
                 HorizontalOptions="Center"
                 Orientation="Vertical"
                 VerticalOptions="Center">
 
                 <StackLayout
-                    Margin="0,0,0,5"
+                    Margin="20,20,20,5"
                     HorizontalOptions="FillAndExpand"
                     Orientation="Horizontal"
                     VerticalOptions="FillAndExpand">
@@ -90,35 +89,40 @@
                     </Label>
                 </StackLayout>
 
-                <Frame BackgroundColor="{StaticResource FlyoutFooter}" CornerRadius="11">
+                <Frame
+                    BackgroundColor="{StaticResource FlyoutFooter}"
+                    CornerRadius="11"
+                    HasShadow="False">
                     <StackLayout
                         Grid.Row="2"
-                        Margin="-3,0,+3,0"
                         BackgroundColor="{StaticResource FlyoutFooter}"
                         HorizontalOptions="FillAndExpand"
                         Orientation="Vertical"
                         VerticalOptions="Center">
                         <Label
-                            HorizontalOptions="CenterAndExpand"
+                            FontSize="12"
+                            HorizontalOptions="StartAndExpand"
                             Text="Aircraft Search"
                             TextColor="{StaticResource SubTitleColor}" />
-                        <SearchBar
+                        <Entry
                             x:Name="txtSearchBar"
-                            CancelButtonColor="{StaticResource PrimaryTextColor}"
+                            BackgroundColor="{StaticResource FlyoutFooter}"
                             FontSize="Medium"
                             HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="Center"
+                            HorizontalTextAlignment="Start"
                             Placeholder="Search Here"
                             PlaceholderColor="{StaticResource SecondaryTextColor}"
                             TextChanged="SearchBar_TextChanged"
                             TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="CenterAndExpand" />
+                            VerticalOptions="CenterAndExpand"
+                            VerticalTextAlignment="Start"
+                            WidthRequest="300" />
                         <Label
-                            FontSize="13"
+                            FontSize="12"
                             HorizontalOptions="CenterAndExpand"
                             Text="Search by Tail Number"
                             TextColor="{StaticResource SecondaryTextColor}"
-                            VerticalOptions="StartAndExpand" />
+                            VerticalOptions="Start" />
 
                     </StackLayout>
                 </Frame>
@@ -128,59 +132,75 @@
 
 
 
-            <ListView
-                x:Name="MultiSelectListView"
-                Grid.Row="3"
-                HasUnevenRows="True"
-                HorizontalOptions="FillAndExpand"
-                ItemsSource="{Binding FilteredTailNumbers}"
-                SelectionMode="None"
-                SeparatorColor="{StaticResource popupBG}"
-                SeparatorVisibility="None"
-                VerticalOptions="FillAndExpand"
-                VerticalScrollBarVisibility="Default">
+            <StackLayout Grid.Row="3" BackgroundColor="{StaticResource FilterListBG}">
 
-                <ListView.Header>
-                    <StackLayout>
-                        <Button
-                            x:Name="btnSelectAll"
-                            BackgroundColor="{StaticResource TransparentColor}"
-                            Clicked="btnSelectAll_Clicked"
-                            FontSize="15"
-                            HorizontalOptions="EndAndExpand"
-                            Text="Select All"
-                            TextColor="{StaticResource ButtonBackgroundColor}"
-                            VerticalOptions="CenterAndExpand" />
-                    </StackLayout>
-                </ListView.Header>
+                <ListView
+                    x:Name="MultiSelectListView"
+                    Margin="10"
+                    BackgroundColor="{StaticResource TransparentColor}"
+                    HasUnevenRows="True"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding FilteredTailNumbers}"
+                    SelectionMode="None"
+                    SeparatorVisibility="None"
+                    VerticalOptions="FillAndExpand"
+                    VerticalScrollBarVisibility="Default">
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout
-                                x:Name="tailStack"
-                                BackgroundColor="{StaticResource FilterListBG}"
-                                HorizontalOptions="FillAndExpand"
-                                VerticalOptions="Start">
+                    <ListView.Header>
+                        <StackLayout>
+                            <Button
+                                x:Name="btnSelectAll"
+                                BackgroundColor="{StaticResource TransparentColor}"
+                                Clicked="btnSelectAll_Clicked"
+                                FontSize="15"
+                                HorizontalOptions="EndAndExpand"
+                                Text="Select All"
+                                TextColor="{StaticResource ButtonBackgroundColor}"
+                                VerticalOptions="CenterAndExpand" />
+                        </StackLayout>
+                    </ListView.Header>
 
-                                <input:CheckBox
-                                    Margin="10"
-                                    BorderColor="{StaticResource CheckboxColor}"
-                                    CheckChanged="CheckBox_CheckChanged"
-                                    IconColor="{StaticResource PrimaryTextColor}"
-                                    IsChecked="{Binding isChecked, Mode=TwoWay}"
-                                    LabelPosition="Before"
-                                    Text="{Binding TailNumber}"
-                                    TextColor="{StaticResource PrimaryTextColor}"
-                                    TextFontSize="16"
-                                    Type="Check" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout
+                                    x:Name="tailStack"
+                                    HorizontalOptions="FillAndExpand"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="StartAndExpand">
 
-            </ListView>
+                                    <StackLayout
+                                        Margin="5"
+                                        HorizontalOptions="StartAndExpand"
+                                        VerticalOptions="StartAndExpand">
+                                        <Label
+                                            FontSize="15"
+                                            Text="{Binding TailNumber}"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Label
+                                            FontSize="11"
+                                            Text="{Binding serialNumber}"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+                                    </StackLayout>
+
+
+                                    <CheckBox
+                                        Margin="10"
+                                        CheckedChanged="CheckBox_CheckedChanged"
+                                        HorizontalOptions="EndAndExpand"
+                                        IsChecked="{Binding isChecked, Mode=TwoWay}"
+                                        VerticalOptions="StartAndExpand"
+                                        Color="{StaticResource CheckboxColor}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+
+            </StackLayout>
 
         </Grid>
     </pancakeview:PancakeView>
+
 </popup:PopupPage>

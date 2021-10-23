@@ -27,7 +27,7 @@ namespace sdcrew.Repositories.PreflightRepos
         {
             var url = _preflightEndpoints.PRE_FLIGHT_PROFILE_REQUEST_URL + _preflightEndpoints.FETCH_AIRCRAFT_PROFILE_DTOS;
 
-            var Jsonresult =await _requestService.GetAsyncJsonResult(url);
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
             string JString = Jsonresult.ToString();
 
             var APDTOs = new List<AircraftProfileDto>();
@@ -47,7 +47,7 @@ namespace sdcrew.Repositories.PreflightRepos
         {
             var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.FETCH_STAFF_EVENT_TYPES;
 
-            var Jsonresult =await _requestService.GetAsyncJsonResult(url);
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
             string JString = Jsonresult.ToString();
 
             var _staffEventTypes = new List<StaffEventTypes>();
@@ -63,13 +63,33 @@ namespace sdcrew.Repositories.PreflightRepos
             return _staffEventTypes;
         }
 
+        public async Task<IEnumerable<AircraftTailWithSn>> GetTailNumbers()
+        {
+            var url = _preflightEndpoints.PRE_FLIGHT_PROFILE_REQUEST_URL + _preflightEndpoints.FETCH_AIRCRAFT_PROFILES;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var aircraftprofiles = new List<AircraftTailWithSn>();
+            try
+            {
+                aircraftprofiles = JsonConvert.DeserializeObject<IEnumerable<AircraftTailWithSn>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
+
+            return aircraftprofiles;
+        }
+
         #region AircraftEvents
         public async Task<IEnumerable<PreFlight>> GetPreflightAircraftEvents()
         {
 
             string getStartDate = DateTime.Today.AddDays(-3).ToShortDateString();
             string getEndDate = DateTime.Today.AddDays(+3).ToShortDateString();
-         
+
 
             string getInAirportLocalTime = "true";
             string getshowCanceled = "false";
@@ -78,7 +98,7 @@ namespace sdcrew.Repositories.PreflightRepos
             var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.PRE_FLIGHT_AIRCRAFT_EVENT + "?startDateTime=" + getStartDate + "&endDateTime=" + getEndDate + "&inAirportLocalTime=" + getInAirportLocalTime + "&showCanceled=" + getshowCanceled;
 
 
-            var Jsonresult =await _requestService.GetAsyncJsonResult(url);
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
             string JString = Jsonresult.ToString();
 
             var PreFlights = new List<PreFlight>();
@@ -109,10 +129,10 @@ namespace sdcrew.Repositories.PreflightRepos
             string getInAirportLocalTime = "false";
 
             //sd-profile-api.satcomdirect.com/preflight/api/MobileCalendar/GetCalendarDaysByDateRange?startDateTime=2020-08-03&endDateTime=2021-08-03&inAirportLocalTime=false&showCanceled=false
-            var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.PRE_FLIGHT_STUFF_EVENT + "?startDateTime=" + getStartDate + "&endDateTime=" + getEndDate + "&inAirportLocalTime=" + getInAirportLocalTime+ "&showCanceled=false";
+            var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.PRE_FLIGHT_STUFF_EVENT + "?startDateTime=" + getStartDate + "&endDateTime=" + getEndDate + "&inAirportLocalTime=" + getInAirportLocalTime + "&showCanceled=false";
 
 
-            var Jsonresult =await _requestService.GetAsyncJsonResult(url);
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
             string JString = Jsonresult.ToString();
 
             var PreFlights = new List<PreFlight>();
@@ -221,7 +241,7 @@ namespace sdcrew.Repositories.PreflightRepos
 
             try
             {
-               await requestsService.PostAsyncPDF(url,requestBody);
+                await requestsService.PostAsyncPDF(url, requestBody);
 
             }
             catch (Exception exc)
@@ -252,7 +272,7 @@ namespace sdcrew.Repositories.PreflightRepos
             string checklistTypeId = "1";
             //https://sd-profile-api.satcomdirect.com/preflight/api/ScheduledAircraftTrip/GetAppliedChecklists/1/15117 
 
-            var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.FETCH_CHECKLIST +"/"+ checklistTypeId+"/"+_aircraftId.ToString();
+            var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.FETCH_CHECKLIST + "/" + checklistTypeId + "/" + _aircraftId.ToString();
 
             var Jsonresult = await _requestService.GetAsyncJsonResult(url);
             string JString = Jsonresult.ToString();
@@ -278,7 +298,8 @@ namespace sdcrew.Repositories.PreflightRepos
             {
                 var r = await requestsService.Post_Custom(Checklist, url);
                 return true;
-            }catch(Exception exc)
+            }
+            catch (Exception exc)
             {
                 Console.Write(exc);
                 return false;
@@ -291,11 +312,11 @@ namespace sdcrew.Repositories.PreflightRepos
         {
             var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.POST_PREFLIGHT_CHECKED_CHECKLIST;
 
-            
+
 
             try
             {
-                var r= await requestsService.Post_Custom(maitenanceChecklist, url);
+                var r = await requestsService.Post_Custom(maitenanceChecklist, url);
                 return r;
             }
             catch (Exception exc)
@@ -351,21 +372,21 @@ namespace sdcrew.Repositories.PreflightRepos
 
             eSingBody = new ESingBody
             {
-                pinNumber=getEsignPin,
-                flightId= flightId,
-                checkListTypeId= checkListTypeId,
-                checklistRoleTypeId= checklistRoleTypeId,
-                checklistTasks= CheckListTasks
+                pinNumber = getEsignPin,
+                flightId = flightId,
+                checkListTypeId = checkListTypeId,
+                checklistRoleTypeId = checklistRoleTypeId,
+                checklistTasks = CheckListTasks
             };
 
             var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.ESIGN_CHECKLIST_PREFLIGHT;
 
             try
             {
-               var getESignStatus = requestsService.Post_Custom(eSingBody,url);
+                var getESignStatus = requestsService.Post_Custom(eSingBody, url);
                 return true;
             }
-            catch(Exception exc) { Debug.WriteLine(exc); return false; }
+            catch (Exception exc) { Debug.WriteLine(exc); return false; }
 
         }
 
@@ -406,5 +427,7 @@ namespace sdcrew.Repositories.PreflightRepos
 
 
     }
+
+    
 
 }

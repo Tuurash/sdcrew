@@ -17,16 +17,14 @@
         <viewModels:AllPreFlightsViewModel />
     </ContentView.BindingContext>-->
 
-    <ContentView.Content Margin="0,10,0,0">
-
-
+    <ContentView.Content Margin="0,10,0,50">
 
         <AbsoluteLayout>
 
 
-            <ListView SeparatorVisibility="None"
+            <ListView
                 x:Name="GroupedView"
-                Margin="0,0,0,2"
+                Margin="0,0,0,0"
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 CachingStrategy="RecycleElement"
@@ -38,54 +36,53 @@
                 IsRefreshing="{Binding IsBusy}"
                 Refreshing="GroupedView_Refreshing"
                 SelectionMode="None"
+                SeparatorVisibility="None"
                 VerticalOptions="FillAndExpand">
-
-
 
 
                 <ListView.Header>
                     <StackLayout
                         Margin="15"
-                        
                         Orientation="Horizontal"
                         Spacing="18"
                         VerticalOptions="CenterAndExpand">
 
                         <Label
-                            FontSize="12"
-                            Text="Last refreshed on" HorizontalOptions="Start"
+                            Margin="5,0,0,0"
+                            FontSize="11"
+                            HorizontalOptions="Start"
+                            Text="Last refreshed on"
                             TextColor="{StaticResource PrimaryTextColor}" />
 
                         <Label
-                            x:Name="lblRefreshTime" HorizontalOptions="StartAndExpand"
-                            FontSize="12"
-                            Text="{Binding RefreshTime, Mode=TwoWay}" 
+                            x:Name="lblRefreshTime"
+                            FontSize="11"
+                            HorizontalOptions="StartAndExpand"
+                            Text="{Binding RefreshTime, Mode=TwoWay}"
                             TextColor="{StaticResource PrimaryTextColor}"
                             TextTransform="Uppercase" />
 
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                        <StackLayout HorizontalOptions="EndAndExpand" Orientation="Horizontal">
                             <Label
-                            FontSize="12"
-                            HorizontalOptions="End"
-                            Text="Pull to refresh"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="End" />
-                        <Image
-                            Margin="-5,0,0,0"
-                            Aspect="AspectFit"
-                            HeightRequest="15"
-                            Source="icoRefresh"
-                            WidthRequest="11" />
+                                FontSize="11"
+                                Text="Pull to refresh"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="End" />
+                            <Image
+                                Margin="-5,0,0,0"
+                                Aspect="AspectFit"
+                                HeightRequest="15"
+                                Source="icoRefresh"
+                                WidthRequest="11" />
                         </StackLayout>
 
                     </StackLayout>
                 </ListView.Header>
 
-
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout 
+                            <StackLayout
                                 Margin="8"
                                 HorizontalOptions="FillAndExpand"
                                 Orientation="Horizontal"
@@ -125,7 +122,7 @@
 
                                 <StackLayout>
 
-                                    <!--Notes-->
+                                    <!--  Notes  -->
                                     <pv:PancakeView
                                         x:Name="NoteItem"
                                         Margin="5"
@@ -161,7 +158,6 @@
                                                             VerticalOptions="Center">
 
                                                             <Label
-                                                                FontAttributes="Bold"
                                                                 FontFamily="{StaticResource customfonts}"
                                                                 FontSize="24"
                                                                 HorizontalOptions="CenterAndExpand"
@@ -211,9 +207,10 @@
 
                                                         <Image
                                                             Margin="0,0,0,32"
+                                                            behaviors:IconTintColorEffect.TintColor="Aqua"
                                                             HeightRequest="12"
                                                             HorizontalOptions="Center"
-                                                            Source="icoRightArrow" behaviors:IconTintColorEffect.TintColor="Aqua"
+                                                            Source="icoRightArrow"
                                                             VerticalOptions="Center"
                                                             WidthRequest="70" />
                                                     </StackLayout>
@@ -234,11 +231,11 @@
                                                 NumberOfTapsRequired="1"
                                                 Tapped="GetNoteDetails_Tapped" />
                                         </pv:PancakeView.GestureRecognizers>
-                                        
+
 
                                     </pv:PancakeView>
 
-                                    <!--Events-->
+                                    <!--  Events  -->
                                     <pv:PancakeView
                                         x:Name="PancakeItem"
                                         Margin="5"
@@ -260,65 +257,75 @@
                                                 VerticalOptions="FillAndExpand"
                                                 WidthRequest="4" />
 
-                                            <behaviors:Expander Grid.Column="1" IsExpanded="True" >
-                                                <!--  Header  -->
-                                                <behaviors:Expander.Header>
-                                                    <Grid HorizontalOptions="FillAndExpand">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="1*" />
-                                                            <ColumnDefinition Width="1*" />
-                                                        </Grid.ColumnDefinitions>
+                                            <StackLayout Grid.Column="1">
 
-                                                        <!--  Header Left  -->
-                                                        <StackLayout
-                                                            Grid.Column="0"
-                                                            Margin="3"
-                                                            HorizontalOptions="Start"
-                                                            Orientation="Horizontal"
-                                                            VerticalOptions="Center">
+                                                <!--  header  -->
+                                                <Grid HorizontalOptions="FillAndExpand">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="1*" />
+                                                        <ColumnDefinition Width="1*" />
+                                                    </Grid.ColumnDefinitions>
 
-                                                            
-                                                            <pv:PancakeView CornerRadius="5" BackgroundColor="{Binding HeadeTextBGColor}">
-                                                                <Label Margin="2"
-                                                                FontAttributes="Bold"
+                                                    <!--  Header Left  -->
+                                                    <StackLayout
+                                                        Grid.Column="0"
+                                                        Margin="3"
+                                                        HorizontalOptions="Start"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="Center">
+
+
+                                                        <pv:PancakeView BackgroundColor="{Binding HeadeTextBGColor}" CornerRadius="5">
+                                                            <Label
+                                                                Margin="2"
+                                                                BackgroundColor="{Binding HeadeTextBGColor}"
                                                                 FontFamily="{StaticResource customfonts}"
                                                                 FontSize="17"
                                                                 HorizontalOptions="CenterAndExpand"
                                                                 Text="{Binding CardheaderIcon}"
                                                                 TextColor="{Binding HeadeTextColor}"
-                                                                BackgroundColor="{Binding HeadeTextBGColor}"
-                                                                VerticalOptions="CenterAndExpand" />
-                                                            </pv:PancakeView>
-                                                            
-
-                                                            <Label
-                                                                Margin="5,0,0,0"
-                                                                FontSize="15"
-                                                                HorizontalOptions="CenterAndExpand"
-                                                                Text="{Binding tailNumber}"
-                                                                TextColor="{StaticResource PrimaryTextColor}"
                                                                 VerticalOptions="CenterAndExpand" />
 
-                                                        </StackLayout>
+                                                            <!--<Label
+                                                                    FontFamily="{StaticResource customfonts}"
+                                                                    FontSize="20"
+                                                                    HorizontalOptions="CenterAndExpand"
+                                                                    IsVisible="{Binding FlightIconIsVisible}"
+                                                                    Text="&#xE806;"
+                                                                    TextColor="{Binding color}"
+                                                                    VerticalOptions="CenterAndExpand" />-->
 
-                                                        <!--  Header Right  -->
-                                                        <StackLayout
-                                                            Grid.Column="1"
-                                                            Margin="20"
-                                                            HorizontalOptions="Start"
-                                                            Orientation="Horizontal"
-                                                            VerticalOptions="Center">
-                                                            <Label
-                                                                Margin="0,-10,0,0"
-                                                                FontSize="12"
-                                                                HorizontalOptions="CenterAndExpand"
-                                                                Text="{Binding TripID}"
-                                                                TextColor="{StaticResource PrimaryTextColor}"
-                                                                VerticalOptions="CenterAndExpand" />
-                                                        </StackLayout>
+                                                        </pv:PancakeView>
 
-                                                    </Grid>
-                                                </behaviors:Expander.Header>
+
+                                                        <Label
+                                                            Margin="5,0,0,0"
+                                                            FontSize="15"
+                                                            HorizontalOptions="CenterAndExpand"
+                                                            Text="{Binding tailNumber}"
+                                                            TextColor="{StaticResource PrimaryTextColor}"
+                                                            VerticalOptions="CenterAndExpand" />
+
+                                                    </StackLayout>
+
+                                                    <!--  Header Right  -->
+                                                    <StackLayout
+                                                        Grid.Column="1"
+                                                        Margin="20"
+                                                        HorizontalOptions="Start"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="Center">
+                                                        <Label
+                                                            Margin="0,-10,0,0"
+                                                            FontSize="12"
+                                                            HorizontalOptions="CenterAndExpand"
+                                                            Text="{Binding TripID}"
+                                                            TextColor="{StaticResource PrimaryTextColor}"
+                                                            VerticalOptions="CenterAndExpand" />
+                                                    </StackLayout>
+
+                                                </Grid>
+
 
                                                 <!--  Body  -->
                                                 <Grid Margin="0,0,0,5" HorizontalOptions="FillAndExpand">
@@ -357,15 +364,17 @@
 
                                                             <Label
                                                                 Margin="5,0,0,0"
-                                                                FontSize="14" VerticalOptions="EndAndExpand"
+                                                                FontSize="14"
                                                                 Text="{Binding StartTime, StringFormat='{}{0:HH\\:mm}'}"
-                                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                                                TextColor="{StaticResource PrimaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
 
                                                             <Label
-                                                          
-                                                                FontSize="10" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand"
+                                                                FontSize="10"
+                                                                HorizontalOptions="StartAndExpand"
                                                                 Text="{Binding CurrentTimezone}"
-                                                                TextColor="{StaticResource SecondaryTextColor}" />
+                                                                TextColor="{StaticResource SecondaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
 
                                                         </StackLayout>
                                                         <!--  Text="{Binding startDateTimeUtc, StringFormat='{}{0:hh\\:mm tt}'}"  -->
@@ -403,17 +412,30 @@
 
                                                             <StackLayout IsVisible="{Binding EventTypeIsVisible}">
 
-                                                                <Label Text="Event Type:" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="10" TextColor="{StaticResource PrimaryTextColor}"/>
+                                                                <Label
+                                                                    FontSize="10"
+                                                                    HorizontalOptions="CenterAndExpand"
+                                                                    Text="Event Type:"
+                                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                                    VerticalOptions="CenterAndExpand" />
 
-                                                                <Label Text="{Binding EventType}" FontSize="15" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"  TextColor="{StaticResource PrimaryTextColor}"/>
+                                                                <Label
+                                                                    FontSize="15"
+                                                                    HorizontalOptions="CenterAndExpand"
+                                                                    Text="{Binding EventType}"
+                                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                                    VerticalOptions="CenterAndExpand" />
 
                                                             </StackLayout>
 
                                                             <Label
-                                                                FontFamily="{StaticResource customfonts}" IsVisible="{Binding FlightIconIsVisible}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
+                                                                FontFamily="{StaticResource customfonts}"
                                                                 FontSize="20"
+                                                                HorizontalOptions="CenterAndExpand"
+                                                                IsVisible="{Binding FlightIconIsVisible}"
                                                                 Text="&#xE806;"
-                                                                TextColor="{Binding color}" />
+                                                                TextColor="{Binding color}"
+                                                                VerticalOptions="CenterAndExpand" />
 
                                                             <StackLayout Orientation="Horizontal">
 
@@ -443,7 +465,7 @@
                                                             FontSize="10"
                                                             Text="{Binding EndTime, StringFormat='{0:dd MMM yyyy}'}"
                                                             TextColor="{StaticResource PrimaryTextColor}"
-                                                            TextTransform="Uppercase"/>
+                                                            TextTransform="Uppercase" />
 
                                                         <!--  Time Stamp  -->
                                                         <StackLayout Orientation="Horizontal">
@@ -455,15 +477,17 @@
 
                                                             <Label
                                                                 Margin="5,0,0,0"
-                                                                FontSize="14" VerticalOptions="EndAndExpand" 
+                                                                FontSize="14"
                                                                 Text="{Binding EndTime, StringFormat='{}{0:HH\\:mm}'}"
-                                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                                                TextColor="{StaticResource PrimaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
 
                                                             <Label
-                                                          
                                                                 FontSize="10"
-                                                                Text="{Binding CurrentTimezone}" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand"
-                                                                TextColor="{StaticResource SecondaryTextColor}" />
+                                                                HorizontalOptions="StartAndExpand"
+                                                                Text="{Binding CurrentTimezone}"
+                                                                TextColor="{StaticResource SecondaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
                                                         </StackLayout>
 
                                                         <StackLayout Orientation="Horizontal">
@@ -504,7 +528,7 @@
 
                                                 </Grid>
 
-                                            </behaviors:Expander>
+                                            </StackLayout>
 
                                         </Grid>
 
@@ -572,10 +596,8 @@
                 <!--  IsRunning="{Binding IsBusy, Mode=TwoWay}"  -->
 
             </Frame>
+
         </AbsoluteLayout>
 
-
-
     </ContentView.Content>
-
 </ContentView>

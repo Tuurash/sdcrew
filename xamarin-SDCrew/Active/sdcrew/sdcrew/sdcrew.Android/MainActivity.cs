@@ -5,6 +5,7 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using Xamarin.Forms;
+using System.IO;
 
 
 
@@ -22,6 +23,8 @@ namespace sdcrew.Droid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            //default font
+            
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;

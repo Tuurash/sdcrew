@@ -128,8 +128,9 @@ namespace sdcrew.ViewModels
 
             if (pass!=0)
             {
-                await _userServices.AddUser().ConfigureAwait(false);
-                MainThread.BeginInvokeOnMainThread(() => RedirectToDashboard());
+                
+                MainThread.BeginInvokeOnMainThread(async() =>await RedirectToDashboard());
+                //await Task.Run(() => RedirectToDashboard());
             }
 
             IsBusy = false;
@@ -162,8 +163,6 @@ namespace sdcrew.ViewModels
                 ClientSecret="",
                 PostLogoutRedirectUri = "sdcrew://logout",  //"sdcrew://logout",
                 ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect,
-                
-
         };
 
            return _client = new OidcClient(options);
@@ -534,16 +533,16 @@ namespace sdcrew.ViewModels
 
             if (CurrentUser != null)
             {
-                await _userServices.AddUser().ConfigureAwait(false);
-                _ = RedirectToDashboard();
+
+                await RedirectToDashboard();
                 IsBusy = false;
             }
         }
 
-        private Task RedirectToDashboard()
+        private async Task RedirectToDashboard()
         {
+            await _userServices.AddUser().ConfigureAwait(false);
             App.Current.MainPage = new AppShell();
-            return null;
         }
 
     }

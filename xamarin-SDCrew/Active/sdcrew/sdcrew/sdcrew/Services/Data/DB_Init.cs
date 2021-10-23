@@ -109,6 +109,7 @@ namespace sdcrew.Services.Data
                 #endregion
 
                 db.CreateTable<AircraftProfileDto>();
+                db.CreateTable<AircraftTailWithSn>();
                 db.CreateTable<Airport>();
                 db.CreateTable<MobileStaffEventBusinessPersonsDto>();
                 db.CreateTable<StaffEventTypes>();

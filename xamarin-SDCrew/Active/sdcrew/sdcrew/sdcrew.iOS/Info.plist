@@ -54,7 +54,8 @@
 	<string>Dark</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>customfont.ttf</string>
+		<string>customfonts.ttf</string>
+		<string>Roboto-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

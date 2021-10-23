@@ -9,11 +9,20 @@
     Title="PREFLIGHT"
     NavigationPage.HasNavigationBar="false">
 
+    <ContentPage.Resources>
+        <OnPlatform x:Key="customfonts" x:TypeArguments="x:String">
+            <On Platform="Android" Value="customfonts.ttf#fontello" />
+            <On Platform="iOS" Value="customfonts" />
+        </OnPlatform>
+    </ContentPage.Resources>
+
     <ContentPage.BindingContext>
         <viewModels:PreflightViewModel />
     </ContentPage.BindingContext>
 
     <StackLayout BackgroundColor="{StaticResource TabviewBg}">
+
+
 
         <!--  Custom NAvbar  -->
         <StackLayout
@@ -23,7 +32,7 @@
 
             <StackLayout.Margin>
                 <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="0,40,0,0"  />
+                    <On Platform="iOS" Value="0,40,0,0" />
                 </OnPlatform>
             </StackLayout.Margin>
 
@@ -44,10 +53,9 @@
                 HorizontalOptions="EndAndExpand"
                 VerticalOptions="CenterAndExpand">
                 <Label
-                    FontAttributes="Bold"
                     FontFamily="{StaticResource customfonts}"
                     FontSize="18"
-                    Text="  &#xE805;"
+                    Text=" &#xE805;"
                     TextColor="{StaticResource PrimaryToolbarButton}" />
                 <Label
                     FontFamily="{StaticResource customfonts}"
@@ -66,7 +74,6 @@
                 HorizontalOptions="End"
                 VerticalOptions="CenterAndExpand">
                 <Label
-                    FontAttributes="Bold"
                     FontFamily="{StaticResource customfonts}"
                     FontSize="18"
                     HorizontalOptions="CenterAndExpand"
@@ -78,7 +85,7 @@
                     FontSize="10"
                     Text="UTC"
                     TextColor="{StaticResource PrimaryToolbarButton}" />
-                <!--"{Binding Timezone, Mode=TwoWay}"-->
+                <!--  "{Binding Timezone, Mode=TwoWay}"  -->
 
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="toolTimezone_Clicked" />
@@ -91,7 +98,6 @@
                 HorizontalOptions="End"
                 VerticalOptions="CenterAndExpand">
                 <Label
-                    FontAttributes="Bold"
                     FontFamily="{StaticResource customfonts}"
                     FontSize="18"
                     HorizontalOptions="CenterAndExpand"
@@ -113,7 +119,10 @@
 
         <!--  Content  -->
         <xct:TabView
-            TabContentBackgroundColor="{StaticResource TabviewBg}" IsSwipeEnabled="False" IsTabStripVisible="True" IsTabTransitionEnabled="True"
+            IsSwipeEnabled="False"
+            IsTabStripVisible="True"
+            IsTabTransitionEnabled="True"
+            TabContentBackgroundColor="{StaticResource TabviewBg}"
             TabIndicatorColor="{StaticResource TabviewForeGround}"
             TabStripBackgroundColor="{StaticResource TabviewBg}"
             TabStripHeight="40">

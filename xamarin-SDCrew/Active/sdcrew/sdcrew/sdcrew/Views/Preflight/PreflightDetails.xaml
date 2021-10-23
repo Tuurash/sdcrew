@@ -4,7 +4,6 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:SegMentControl="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
-    xmlns:controls="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton"
     BackgroundColor="{StaticResource NavigationBarColor}">
 
     <ContentPage.Resources>
@@ -53,9 +52,6 @@
                 <Setter Property="Padding" Value="5" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="BorderColor" Value="{StaticResource TransparentColor}" />
-
-
-
             </Style>
 
             <Style x:Key="itemsInsideCardViewStackLayoutStyle" TargetType="StackLayout">
@@ -69,9 +65,6 @@
                 <Setter Property="Spacing" Value="8" />
             </Style>
 
-
-
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -83,22 +76,22 @@
             <StackLayout
                 x:Name="contentPage"
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
-                AbsoluteLayout.LayoutFlags="All"
-                >
-
-                
-
+                AbsoluteLayout.LayoutFlags="All">
 
                 <!--  Navbar  -->
                 <StackLayout
                     BackgroundColor="{StaticResource TabviewBg}"
                     HeightRequest="265"
                     Orientation="Horizontal"
-                    Spacing="10">
+                    Spacing="8">
 
-                    
 
-                    <Grid x:Name="PreflightDetailsNav" Margin="0,30,10,0" Padding="10" VerticalOptions="Center">
+
+                    <Grid
+                        x:Name="PreflightDetailsNav"
+                        Margin="0,30,10,0"
+                        Padding="10"
+                        VerticalOptions="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width=".6*" />
                             <ColumnDefinition Width="1.5*" />
@@ -108,12 +101,12 @@
                         </Grid.ColumnDefinitions>
 
                         <StackLayout
-                            Grid.Column="0" Margin="0,4,0,0"
+                            Grid.Column="0"
+                            Margin="0,4,0,0"
                             HorizontalOptions="CenterAndExpand"
                             VerticalOptions="Start">
 
-                            <Label 
-                                FontAttributes="Bold"
+                            <Label
                                 FontFamily="{StaticResource customfonts}"
                                 FontSize="18"
                                 HorizontalOptions="StartAndExpand"
@@ -138,16 +131,20 @@
                         <StackLayout Grid.Column="2" VerticalOptions="StartAndExpand">
 
                             <Label
-                            x:Name="lblIconHeader"
-                            
-                            FontFamily="{StaticResource customfonts}"
-                            FontSize="22"
-                            HorizontalOptions="CenterAndExpand"
-                            Text="&#xE806;"
-                            TextColor="{Binding color}"
-                            VerticalOptions="CenterAndExpand" />
+                                x:Name="lblIconHeader"
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="22"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="&#xE806;"
+                                TextColor="{Binding color}"
+                                VerticalOptions="CenterAndExpand" />
 
-                            <Label x:Name="lblAircraftTail" Text="TailNumber" TextColor="{StaticResource PrimaryTextColor}" FontSize="10" HorizontalOptions="CenterAndExpand"/>
+                            <Label
+                                x:Name="lblAircraftTail"
+                                FontSize="10"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="TailNumber"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
                         </StackLayout>
 
@@ -166,7 +163,6 @@
                             HorizontalOptions="EndAndExpand"
                             VerticalOptions="StartAndExpand">
                             <Label
-                                FontAttributes="Bold"
                                 FontFamily="{StaticResource customfonts}"
                                 FontSize="18"
                                 HorizontalOptions="CenterAndExpand"
@@ -175,7 +171,7 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontFamily="{StaticResource customfonts}"
-                                FontSize="10"
+                                FontSize="8"
                                 Text="Synced"
                                 TextColor="{StaticResource PrimaryToolbarButton}" />
                         </StackLayout>
@@ -186,6 +182,9 @@
                 </StackLayout>
 
 
+
+
+
                 <!--  HeaderCollectionView  -->
                 <StackLayout
                     Margin="0,-10,0,0"
@@ -193,57 +192,64 @@
                     HeightRequest="75"
                     VerticalOptions="StartAndExpand">
 
+
+                    <!--  Subnavbar  -->
                     <CollectionView
                         x:Name="collectionViewListHorizontal"
-                        Margin="0,5,0,5"
-                        HeightRequest="70"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="CenterAndExpand">
+                        Margin="0,10,0,10"
+                        BackgroundColor="{StaticResource TransparentColor}"
+                        FlexLayout.AlignSelf="Auto"
+                        HeightRequest="40"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalScrollBarVisibility="Never"
+                        ItemSizingStrategy="MeasureAllItems"
+                        SelectionMode="None"
+                        VerticalOptions="CenterAndExpand"
+                        VerticalScrollBarVisibility="Never">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Horizontal" />
+                            <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <StackLayout
-                                    Margin="0,15,0,15"
-                                    HorizontalOptions="EndAndExpand"
-                                    Spacing="8">
-                                    <Frame
-                                        x:Name="HeaderItemFrame"
+
+                                <Frame
+                                    x:Name="HeaderItemFrame"
+                                    Margin="30,15,20,15"
+                                    Padding="5"
+                                    BackgroundColor="{Binding TabColor}"
+                                    BorderColor="{StaticResource TransparentColor}"
+                                    CornerRadius="14"
+                                    HasShadow="True"
+                                    HeightRequest="25"
+                                    HorizontalOptions="FillAndExpand">
+
+                                    <StackLayout
                                         Margin="5"
-                                        Padding="5"
-                                        BackgroundColor="{Binding TabColor}"
-                                        BorderColor="{StaticResource TransparentColor}"
-                                        CornerRadius="17"
-                                        HasShadow="True"
-                                        HorizontalOptions="FillAndExpand"
-                                        Unfocused="HeaderItemFrame_Unfocused">
+                                        HorizontalOptions="CenterAndExpand"
+                                        Spacing="8">
 
-                                        <StackLayout
-                                            Margin="5"
-                                            HorizontalOptions="FillAndExpand"
-                                            Spacing="8">
-                                            <StackLayout>
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding TabHeader}"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+                                    </StackLayout>
 
-                                                <StackLayout>
-                                                    <Label Text="{Binding TabHeader}" TextColor="{StaticResource PrimaryTextColor}" />
-                                                </StackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            CommandParameter="{Binding TabHeader}"
+                                            NumberOfTapsRequired="1"
+                                            Tapped="TapGestureRecognizer_Tapped" />
 
-                                            </StackLayout>
-                                        </StackLayout>
+                                    </Frame.GestureRecognizers>
 
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                CommandParameter="{Binding TabHeader}"
-                                                NumberOfTapsRequired="1"
-                                                Tapped="TapGestureRecognizer_Tapped" />
-                                        </Frame.GestureRecognizers>
+                                </Frame>
 
-                                    </Frame>
-                                </StackLayout>
                             </DataTemplate>
+
+
                         </CollectionView.ItemTemplate>
+
                     </CollectionView>
 
                 </StackLayout>
@@ -592,7 +598,7 @@
 
                                 </StackLayout>
 
-                                <CollectionView x:Name="CollectionCrew" HeightRequest="350">
+                                <CollectionView x:Name="CollectionCrew" HeightRequest="{Binding CrewRowHeigtht}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
                                             <!--<ViewCell>-->
@@ -654,6 +660,7 @@
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
+
                             </StackLayout>
                         </Frame>
 
@@ -724,7 +731,8 @@
                                 <CollectionView
                                     x:Name="CollectionPassenger"
                                     Margin="3,0,0,10"
-                                    HeightRequest="500">
+                                    HeightRequest="{Binding PassengerRowHeigtht}"
+                                    VerticalOptions="Start">
                                     <CollectionView.ItemsLayout>
                                         <GridItemsLayout Orientation="Vertical" />
                                     </CollectionView.ItemsLayout>
@@ -1061,17 +1069,23 @@
 
             </StackLayout>
 
-            
-            <!--FabMenu-->
-            <ImageButton 
-                        x:Name="FABItenery" Aspect="AspectFit" Padding="20" Margin="0,0,0,40"
-                        AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".95,.97"
-                        BackgroundColor="{StaticResource ButtonBackgroundColor}"
-                        Clicked="FABItenery_Clicked"
-                        CornerRadius="32"
-                        Source="icoEllipsis.png" 
-                        VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand"
-                        WidthRequest="60" HeightRequest="60" />
+
+            <!--  FabMenu  -->
+            <ImageButton
+                x:Name="FABItenery"
+                Margin="0,0,0,40"
+                Padding="20"
+                AbsoluteLayout.LayoutBounds=".95,.97"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Aspect="AspectFit"
+                BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                Clicked="FABItenery_Clicked"
+                CornerRadius="32"
+                HeightRequest="60"
+                HorizontalOptions="EndAndExpand"
+                Source="icoEllipsis.png"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="60" />
 
             <!--  Activity Indicator/Loading animation  -->
             <Frame

@@ -9,7 +9,7 @@
 
         <OnPlatform x:Key="customfonts" x:TypeArguments="x:String">
             <On Platform="iOS" Value="customfonts" />
-            <On Platform="Android" Value="customfonts.ttf#fontello" />
+            <On Platform="Android" Value="customfonts.ttf#customfonts" />
         </OnPlatform>
 
         <Style TargetType="NavigationPage">

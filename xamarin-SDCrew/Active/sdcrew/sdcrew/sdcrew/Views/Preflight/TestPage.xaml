@@ -3,129 +3,182 @@
     x:Class="sdcrew.Views.Preflight.TestPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pancakeview="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     BackgroundColor="{StaticResource FlyoutBG}">
+
+
+
     <ContentPage.Content>
 
-
         <StackLayout>
-            <StackLayout Margin="15" Orientation="Horizontal">
-                <Label
-                    FontSize="20"
-                    HorizontalOptions="StartAndExpand"
-                    Text="PreFlight Checklists"
-                    TextColor="{StaticResource PrimaryTextColor}"
-                    VerticalOptions="CenterAndExpand" />
 
-                <Label
-                    FontSize="20"
-                    HorizontalOptions="EndAndExpand"
-                    Text="X"
-                    TextColor="{StaticResource PrimaryTextColor}"
-                    VerticalOptions="CenterAndExpand" />
-            </StackLayout>
+            <pancakeview:PancakeView BackgroundColor="{StaticResource popupBG}" CornerRadius="0,0,17,17">
+                <Grid
+                    Margin="20"
+                    Padding="10"
+                    VerticalOptions="FillAndExpand">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-            <xct:TabView
-                TabContentBackgroundColor="{StaticResource TabviewBg}"
-                TabIndicatorColor="{StaticResource TabviewForeGround}"
-                TabStripBackgroundColor="{StaticResource TabviewBg}"
-                TabStripHeight="40">
+                    <StackLayout
+                        Grid.Row="1"
+                        Margin="10"
+                        HorizontalOptions="Center"
+                        Orientation="Vertical"
+                        VerticalOptions="Center">
 
-                <xct:TabViewItem
-                    FontFamily="{StaticResource customfonts}"
-                    FontSize="13"
-                    IsSelected="True"
-                    Text="All &#xE800; "
-                    TextColor="White"
-                    TextColorSelected="{StaticResource TabviewForeGround}">
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <ListView>
-
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-
-                                    <ViewCell>
-                                        <ViewCell.View>
-
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="1*" />
-                                                    <ColumnDefinition Width="1*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <CheckBox Grid.Column="0" Color="{StaticResource CheckboxColor}" />
-
-                                                <Label
-                                                    Grid.Column="1"
-                                                    FontSize="13"
-                                                    HorizontalOptions="StartAndExpand"
-                                                    Text="Accept Aircraft"
-                                                    TextColor="{StaticResource PrimaryTextColor}"
-                                                    VerticalOptions="Center" />
-
-                                            </Grid>
-
-                                        </ViewCell.View>
-                                    </ViewCell>
+                        <StackLayout
+                            Margin="0,0,0,5"
+                            HorizontalOptions="FillAndExpand"
+                            Orientation="Horizontal"
+                            VerticalOptions="FillAndExpand">
+                            <Label
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="16"
+                                HorizontalOptions="StartAndExpand"
+                                Text="&#xE808; Cancel"
+                                TextColor="White"
+                                VerticalOptions="StartAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="btnCancelPop" NumberOfTapsRequired="1" />
+                                </Label.GestureRecognizers>
 
 
+                            </Label>
 
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="23"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Filters"
+                                TextColor="White"
+                                VerticalOptions="CenterAndExpand" />
 
-                        </ListView>
-                    </Grid>
-                </xct:TabViewItem>
+                            <Label
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="16"
+                                HorizontalOptions="EndAndExpand"
+                                Text="&#xE807; Filter"
+                                TextColor="White"
+                                VerticalOptions="StartAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="btnFilter" NumberOfTapsRequired="1" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
 
-                <xct:TabViewItem
-                    FontFamily="{StaticResource customfonts}"
-                    FontSize="13"
-                    Text="Flights &#xE802; "
-                    TextColor="White"
-                    TextColorSelected="{StaticResource TabviewForeGround}">
+                        <Frame BackgroundColor="{StaticResource FlyoutFooter}" CornerRadius="11">
+                            <StackLayout
+                                Grid.Row="2"
+                                Margin="-3,0,+3,0"
+                                BackgroundColor="{StaticResource FlyoutFooter}"
+                                HorizontalOptions="FillAndExpand"
+                                Orientation="Vertical"
+                                VerticalOptions="Center">
+                                <Label
+                                    HorizontalOptions="StartAndExpand"
+                                    Text="Aircraft Search"
+                                    TextColor="{StaticResource SubTitleColor}" />
+                                <Entry
+                                    x:Name="txtSearchBar"
+                                    BackgroundColor="{StaticResource FlyoutFooter}"
+                                    FontSize="Medium"
+                                    HorizontalOptions="FillAndExpand"
+                                    HorizontalTextAlignment="Start"
+                                    Placeholder="Search Here"
+                                    PlaceholderColor="{StaticResource SecondaryTextColor}"
+                                    TextChanged="SearchBar_TextChanged"
+                                    TextColor="{StaticResource PrimaryTextColor}"
+                                    VerticalOptions="CenterAndExpand"
+                                    VerticalTextAlignment="Start"
+                                    WidthRequest="300" />
+                                <Label
+                                    FontSize="12"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Text="Search by Tail Number"
+                                    TextColor="{StaticResource SecondaryTextColor}"
+                                    VerticalOptions="Start" />
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                            </StackLayout>
+                        </Frame>
 
-                        <Label
-                            Grid.Row="0"
-                            HorizontalOptions="CenterAndExpand"
-                            Text="TabContent1"
-                            VerticalOptions="CenterAndExpand" />
-                    </Grid>
 
-                </xct:TabViewItem>
+                    </StackLayout>
 
-                <xct:TabViewItem
-                    FontFamily="{StaticResource customfonts}"
-                    FontSize="13"
-                    Text="Events &#xE801; "
-                    TextColor="White"
-                    TextColorSelected="{StaticResource TabviewForeGround}">
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
 
-                        <Label
-                            Grid.Row="0"
-                            HorizontalOptions="CenterAndExpand"
-                            Text="TabContent1"
-                            VerticalOptions="CenterAndExpand" />
-                    </Grid>
+                    <ListView
+                        x:Name="MultiSelectListView"
+                        Grid.Row="3"
+                        BackgroundColor="{StaticResource NavigationBarColor}"
+                        HasUnevenRows="True"
+                        HorizontalOptions="FillAndExpand"
+                        ItemsSource="{Binding FilteredTailNumbers}"
+                        SelectionMode="None"
+                        SeparatorVisibility="None"
+                        VerticalOptions="FillAndExpand"
+                        VerticalScrollBarVisibility="Default">
 
-                </xct:TabViewItem>
+                        <ListView.Header>
+                            <StackLayout>
+                                <Button
+                                    x:Name="btnSelectAll"
+                                    BackgroundColor="{StaticResource TransparentColor}"
+                                    Clicked="btnSelectAll_Clicked"
+                                    FontSize="15"
+                                    HorizontalOptions="EndAndExpand"
+                                    Text="Select All"
+                                    TextColor="{StaticResource ButtonBackgroundColor}"
+                                    VerticalOptions="CenterAndExpand" />
+                            </StackLayout>
+                        </ListView.Header>
 
-            </xct:TabView>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout
+                                        x:Name="tailStack"
+                                        BackgroundColor="{StaticResource FilterListBG}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Orientation="Horizontal"
+                                        VerticalOptions="StartAndExpand">
+
+                                        <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
+                                            <Label
+                                                FontSize="16"
+                                                Text="{Binding tailNumber}"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                            <Label
+                                                FontSize="12"
+                                                Text="{Binding serialNumber}"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                        </StackLayout>
+
+
+                                        <CheckBox
+                                            Margin="10"
+                                            CheckedChanged="CheckBox_CheckedChanged"
+                                            HorizontalOptions="EndAndExpand"
+                                            IsChecked="{Binding isChecked, Mode=TwoWay}"
+                                            VerticalOptions="StartAndExpand"
+                                            Color="{StaticResource CheckboxColor}" />
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                </Grid>
+            </pancakeview:PancakeView>
 
         </StackLayout>
+
+
     </ContentPage.Content>
 </ContentPage>

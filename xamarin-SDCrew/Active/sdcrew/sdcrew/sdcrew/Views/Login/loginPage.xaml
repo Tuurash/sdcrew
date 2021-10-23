@@ -17,7 +17,7 @@
 
         <!--  Mainlogo  -->
         <Image
-            x:Name="Logo"
+            x:Name="Logo" Aspect="AspectFit"
             Margin="0,30,0,90"
             AbsoluteLayout.LayoutBounds="0,0,1,.7"
             AbsoluteLayout.LayoutFlags="All"
@@ -33,21 +33,21 @@
         </Image>
 
         <StackLayout
-            Margin="10,30,10,30"
+            Margin="0,30,0,30"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All"
-            Spacing="20"
+            Spacing="20" HorizontalOptions="CenterAndExpand"
             VerticalOptions="EndAndExpand">
 
             <StackLayout
                 HorizontalOptions="FillAndExpand"
                 Orientation="Vertical"
-                Spacing="10">
+                Spacing="15">
 
                 <Label
                     HorizontalOptions="CenterAndExpand"
                     TextColor="{StaticResource PrimaryTextColor}"
-                    VerticalOptions="EndAndExpand">
+                    VerticalOptions="CenterAndExpand">
                     <Label.FormattedText>
                         <FormattedString>
 
@@ -63,37 +63,37 @@
                 <!--  login button  -->
                 <Button
                     x:Name="FaceButton"
-                    Margin="3"
+                    Margin="5"
                     BackgroundColor="{StaticResource ButtonBackgroundColor}"
                     Clicked="FaceButton_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="Medium"
                     HeightRequest="60"
-                    HorizontalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
                     Text="LOGIN"
                     TextColor="{StaticResource ButtonTextColor}"
-                    WidthRequest="250" />
+                    WidthRequest="220" />
                 <!--  Command="{Binding LoginCommand}"  -->
             </StackLayout>
 
             <!--  Bottom logo  -->
             <StackLayout
-                Margin="10,70,10,20"
+                Margin="0,70,0,50"
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 Orientation="Horizontal"
-                Spacing="20"
+                Spacing="20" HorizontalOptions="CenterAndExpand" 
                 VerticalOptions="CenterAndExpand">
 
                 <Image
-                    Margin="105,0,0,0"
+                
                     Aspect="AspectFit"
                     HeightRequest="35"
                     Source="icoBottomSDlogo.png"
                     VerticalOptions="Center" />
                 <Label
-                    Margin="-7,4,0,0"
+                    VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
                     FontSize="17"
                     Text="Satcom Direct."
                     TextColor="{StaticResource PrimaryTextColor}" />
@@ -101,35 +101,39 @@
             </StackLayout>
 
             <!--  Copyright  -->
-            <Label
+            <StackLayout VerticalOptions="End">
+
+                <Label
                 FontSize="14"
                 HorizontalOptions="CenterAndExpand"
                 TextColor="{StaticResource SecondaryTextColor}"
                 VerticalOptions="EndAndExpand">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text=" ©, Copyright 2019 " />
-                        <Span
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text=" ©, Copyright 2019 " />
+                            <Span
                             FontAttributes="Bold"
                             Text="Satcom Direct, Inc."
                             TextColor="{StaticResource PrimaryTextColor}"
                             TextDecorations="Underline" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
 
-            <Label
-                Margin="0,-10,0,0"
+                <Label
+                
                 FontSize="14"
                 HorizontalOptions="CenterAndExpand"
                 TextColor="{StaticResource SecondaryTextColor}"
-                VerticalOptions="EndAndExpand">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="All Rights Reserved" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                VerticalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="All Rights Reserved" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+            </StackLayout>
 
         </StackLayout>
 

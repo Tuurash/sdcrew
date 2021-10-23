@@ -36,6 +36,8 @@ namespace sdcrew.Repositories.PreflightRepos
         //Tail Numbers
         //sd-profile-api.satcomdirect.com/preflight/api/AircraftProfiles/AircraftProfileDtos
         public readonly string FETCH_AIRCRAFT_PROFILE_DTOS = "api/AircraftProfiles/AircraftProfileDtos";
+        public readonly string FETCH_AIRCRAFT_PROFILES = "api/AircraftProfile";
+
 
         //fETCH Aircraft checklists by AircraftID & typeID
         //https://sd-profile-api.satcomdirect.com/preflight/api/ScheduledAircraftTrip/GetAppliedChecklists/1/15117 
