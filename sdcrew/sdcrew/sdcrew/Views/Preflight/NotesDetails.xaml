@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<popup:PopupPage
+    x:Class="sdcrew.Views.Preflight.NotesDetails"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="http://rotorgames.com"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+
+    <popup:PopupPage.Animation>
+        <animations:MoveAnimation
+            DurationIn="400"
+            DurationOut="300"
+            HasBackgroundAnimation="True"
+            PositionIn="Bottom"
+            PositionOut="Bottom" />
+    </popup:PopupPage.Animation>
+
+
+    <Grid HeightRequest="850" VerticalOptions="End">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Frame
+            Grid.RowSpan="2"
+            BackgroundColor="{StaticResource FlyoutBG}"
+            CornerRadius="15"
+            HeightRequest="560"
+            VerticalOptions="End">
+
+            <StackLayout>
+                <!--  Header  -->
+                <StackLayout Orientation="Horizontal">
+                    <Label
+                        x:Name="lblServiceTilte"
+                        FontSize="20"
+                        HorizontalOptions="StartAndExpand"
+                        Text="PREFLIGHT NOTE"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="CenterAndExpand" />
+
+                    <Label
+                        FontFamily="{StaticResource customfonts}"
+                        FontSize="22"
+                        HorizontalOptions="End"
+                        Text="&#xe80d;"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="CenterAndExpand">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                x:Name="btnColosePopup"
+                                NumberOfTapsRequired="1"
+                                Tapped="btnColosePopup_Tapped" />
+                        </Label.GestureRecognizers>
+
+                    </Label>
+                </StackLayout>
+
+
+                <StackLayout Margin="0,25,0,0" Orientation="Horizontal">
+
+                    <Image
+                        Aspect="AspectFit"
+                        HeightRequest="17"
+                        HorizontalOptions="Start"
+                        Source="icoNotes"
+                        VerticalOptions="CenterAndExpand" />
+
+                    <Label
+                        Margin="5,0,0,0"
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Note for "
+                        VerticalOptions="CenterAndExpand" />
+
+                    <Label
+                        x:Name="lblDate"
+                        FontSize="14"
+                        HorizontalOptions="EndAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="CenterAndExpand" />
+
+
+
+                </StackLayout>
+
+
+                <StackLayout Margin="0,25,0,0">
+
+                    <Label
+                        x:Name="lblNoteDetails"
+                        FontSize="14"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="CenterAndExpand" />
+
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+
+    </Grid>
+
+
+
+
+
+
+
+
+</popup:PopupPage>
