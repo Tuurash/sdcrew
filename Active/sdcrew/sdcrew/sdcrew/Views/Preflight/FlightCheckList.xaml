@@ -1,0 +1,462 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage
+    x:Class="sdcrew.Views.Preflight.FlightCheckList"
+    xmlns="http://xamarin.com/schemas/2014/forms" Visual="Default"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="http://rotorgames.com"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+
+
+    <popup:PopupPage.Resources>
+        <!--<OnPlatform x:Key="customfonts" x:TypeArguments="x:String">
+            <On Platform="Android" Value="customfonts.ttf#fontello" />
+            <On Platform="iOS" Value="customfonts" />
+        </OnPlatform>-->
+
+
+        <ControlTemplate x:Key="TabItemTemplate">
+            <Grid HorizontalOptions="CenterAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Column="0"
+                    FontSize="13"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{TemplateBinding Text}"
+                    TextColor="{TemplateBinding CurrentTextColor}"
+                    VerticalOptions="Center" />
+                <Image
+                    Grid.Column="1"
+                    HeightRequest="13"
+                    HorizontalOptions="Start"
+                    Source="{TemplateBinding CurrentIcon}"
+                    VerticalOptions="Center"
+                    WidthRequest="13" />
+            </Grid>
+        </ControlTemplate>
+
+
+    </popup:PopupPage.Resources>
+
+
+    <popup:PopupPage.Animation>
+        <animations:MoveAnimation
+            DurationIn="400"
+            DurationOut="300"
+            HasBackgroundAnimation="True"
+            PositionIn="Bottom"
+            PositionOut="Bottom" />
+    </popup:PopupPage.Animation>
+
+    <AbsoluteLayout>
+
+        <Grid
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            HeightRequest="550"
+            VerticalOptions="End">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+
+            <Frame
+                Grid.RowSpan="2"
+                BackgroundColor="{StaticResource FlyoutBG}"
+                CornerRadius="15"
+                HeightRequest="560"
+                VerticalOptions="End">
+
+                <AbsoluteLayout>
+
+                    <StackLayout
+                        x:Name="TabStack"
+                        Margin="0,0,10,0"
+                        AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        AbsoluteLayout.LayoutFlags="All">
+
+                        <StackLayout Orientation="Horizontal">
+                            <Label
+                                FontSize="20"
+                                HorizontalOptions="StartAndExpand"
+                                Text="PreFlight Checklists"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="CenterAndExpand" />
+
+                            <Label
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="22"
+                                HorizontalOptions="End"
+                                Text="&#xe80d;"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="CenterAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        x:Name="btnColosePopup"
+                                        NumberOfTapsRequired="1"
+                                        Tapped="btnColosePopup_Tapped" />
+                                </Label.GestureRecognizers>
+
+                            </Label>
+                        </StackLayout>
+
+                        <xct:TabView
+                            x:Name="ChklistTabview"
+                            IsSwipeEnabled="True"
+                            IsTabTransitionEnabled="True"
+                            TabContentBackgroundColor="{StaticResource TabviewBg}"
+                            TabIndicatorColor="{StaticResource TabviewForeGround}"
+                            TabIndicatorPlacement="Bottom"
+                            TabStripBackgroundColor="{StaticResource TabviewBg}"
+                            TabStripHeight="40">
+
+                            <!--  PIlot  -->
+                            <xct:TabViewItem
+                                x:Name="tabPilot"
+                                ControlTemplate="{StaticResource TabItemTemplate}"
+                                Icon="icoCrews" IconSelected="SelectedPilot" TextColorSelected="{StaticResource TabviewSelected}"   
+                                IsSelected="True"
+                                Text="PILOT"
+                                TextColor="White">
+
+                                <StackLayout>
+                                    <ListView
+                                        x:Name="Pilotchecklist"
+                                        BackgroundColor="{StaticResource FlyoutBG}"
+                                        CachingStrategy="RecycleElement"
+                                        HasUnevenRows="True"
+                                        Header="{Binding .}"
+                                        SelectionMode="None"
+                                        SeparatorVisibility="None"
+                                        VerticalOptions="FillAndExpand">
+
+                                        <ListView.HeaderTemplate>
+                                            <DataTemplate>
+                                                <ContentView>
+
+                                                    <StackLayout
+                                                        HorizontalOptions="FillAndExpand"
+                                                        IsVisible="{Binding PilotHeaderVisible}"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="CenterAndExpand">
+
+                                                        <Label
+                                                            Margin="5"
+                                                            FontSize="10"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Text="{Binding HeaderText}"
+                                                            TextColor="{StaticResource SubTitleColor}" />
+                                                        <Label
+                                                            Margin="0,5,0,5"
+                                                            FontSize="10"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Text="E-SIGNED"
+                                                            TextColor="{StaticResource SubTitleColor}" />
+                                                        <Image
+                                                            Aspect="AspectFit"
+                                                            HeightRequest="12"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Source="icoEsigned.png" />
+
+                                                    </StackLayout>
+
+                                                </ContentView>
+                                            </DataTemplate>
+                                        </ListView.HeaderTemplate>
+
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+
+                                                <ViewCell>
+                                                    <ViewCell.View>
+
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <CheckBox
+                                                                x:Name="chkPilot"
+                                                                CheckedChanged="chkPilot_CheckedChanged"
+                                                                HorizontalOptions="Start"
+                                                                IsChecked="{Binding isChecked}"
+                                                                VerticalOptions="StartAndExpand"
+                                                                Color="{StaticResource CheckboxColor}" />
+
+                                                            <StackLayout
+                                                                x:Name="chkUserStack"
+                                                                HorizontalOptions="StartAndExpand"
+                                                                VerticalOptions="CenterAndExpand">
+
+                                                                <Label
+                                                                    FontSize="11"
+                                                                    Text="{Binding ChecklistName}"
+                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                                <Label
+                                                                    x:Name="lblPchkUser"
+                                                                    FontSize="9"
+                                                                    Text="{Binding checkedByUsermailDate, Mode=TwoWay}"
+                                                                    TextColor="{StaticResource SubTitleColor}" />
+                                                            </StackLayout>
+
+                                                        </StackLayout>
+
+                                                    </ViewCell.View>
+                                                </ViewCell>
+
+
+
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+
+                                    </ListView>
+
+                                </StackLayout>
+                            </xct:TabViewItem>
+
+                            <!--  Scheduling  -->
+                            <xct:TabViewItem
+                                x:Name="tabScheduling"
+                                ControlTemplate="{StaticResource TabItemTemplate}"
+                                Icon="icoClockSeg" IconSelected="SelecteScheduling" TextColorSelected="{StaticResource TabviewSelected}"   
+                                Text="SCHEDULING"
+                                TextColor="White">
+
+                                <StackLayout>
+
+                                    <ListView
+                                        x:Name="ScheduleChecklist"
+                                        BackgroundColor="{StaticResource FlyoutBG}"
+                                        HasUnevenRows="True"
+                                        Header="{Binding .}"
+                                        SelectionMode="None"
+                                        SeparatorVisibility="None"
+                                        VerticalOptions="FillAndExpand">
+
+                                        <ListView.HeaderTemplate>
+                                            <DataTemplate>
+                                                <ContentView>
+
+                                                    <StackLayout
+                                                        HorizontalOptions="FillAndExpand"
+                                                        IsVisible="{Binding SchHeaderVisible}"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="CenterAndExpand">
+
+                                                        <Label
+                                                            Margin="5"
+                                                            FontSize="10"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Text="{Binding HeaderText}"
+                                                            TextColor="{StaticResource SubTitleColor}" />
+                                                        <Label
+                                                            Margin="0,5,0,5"
+                                                            FontSize="10"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Text="E-SIGNED"
+                                                            TextColor="{StaticResource SubTitleColor}" />
+                                                        <Image
+                                                            Aspect="AspectFit"
+                                                            HeightRequest="12"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Source="icoEsigned.png" />
+
+                                                    </StackLayout>
+
+                                                </ContentView>
+                                            </DataTemplate>
+                                        </ListView.HeaderTemplate>
+
+                                        <!--  ItemsSource="{Binding ScheduleChecklist}"  -->
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+
+                                                <ViewCell>
+                                                    <ViewCell.View>
+
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <CheckBox
+                                                                x:Name="chkSchedule"
+                                                                CheckedChanged="chkSchedule_CheckedChanged"
+                                                                HorizontalOptions="Start"
+                                                                IsChecked="{Binding isChecked}"
+                                                                VerticalOptions="CenterAndExpand"
+                                                                Color="{StaticResource CheckboxColor}" />
+
+                                                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
+
+                                                                <Label
+                                                                    FontSize="11"
+                                                                    Text="{Binding ChecklistName}"
+                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                                <Label
+                                                                    FontSize="9"
+                                                                    Text="{Binding checkedByUsermailDate}"
+                                                                    TextColor="{StaticResource SubTitleColor}" />
+                                                            </StackLayout>
+
+                                                        </StackLayout>
+
+                                                    </ViewCell.View>
+                                                </ViewCell>
+
+
+
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+
+                                    </ListView>
+
+                                </StackLayout>
+
+                            </xct:TabViewItem>
+
+                            <!--  Maintenance  -->
+                            <xct:TabViewItem
+                                x:Name="tabMaintenance"
+                                ControlTemplate="{StaticResource TabItemTemplate}"
+                                Icon="icoWrench"
+                                Text="Maintenance" IconSelected="SelectedMntc" TextColorSelected="{StaticResource TabviewSelected}"   
+                                TextColor="White">
+
+                                <StackLayout>
+
+
+                                    <ListView
+                                        x:Name="MaintenanceList"
+                                        BackgroundColor="{StaticResource FlyoutBG}"
+                                        Header="{Binding .}"
+                                        SelectionMode="None"
+                                        SeparatorVisibility="None">
+
+                                        <ListView.HeaderTemplate>
+                                            <DataTemplate>
+                                                <ContentView>
+
+                                                    <StackLayout
+                                                        HorizontalOptions="FillAndExpand"
+                                                        IsVisible="{Binding MntcHeaderVisible}"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="CenterAndExpand">
+
+                                                        <Label
+                                                            Margin="5"
+                                                            FontSize="10"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Text="{Binding HeaderText}"
+                                                            TextColor="{StaticResource SubTitleColor}" />
+                                                        <Label
+                                                            Margin="0,5,0,5"
+                                                            FontSize="10"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Text="E-SIGNED"
+                                                            TextColor="{StaticResource SubTitleColor}" />
+                                                        <Image
+                                                            Aspect="AspectFit"
+                                                            HeightRequest="12"
+                                                            HorizontalOptions="StartAndExpand"
+                                                            Source="icoEsigned.png" />
+
+                                                    </StackLayout>
+
+                                                </ContentView>
+                                            </DataTemplate>
+                                        </ListView.HeaderTemplate>
+
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+
+                                                <ViewCell>
+                                                    <ViewCell.View>
+
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <CheckBox
+                                                                x:Name="chkBoxMaintenance"
+                                                                BindingContext="{Binding .}"
+                                                                CheckedChanged="chkBoxMaintenance_CheckedChanged"
+                                                                HorizontalOptions="Start"
+                                                                IsChecked="{Binding isChecked}"
+                                                                VerticalOptions="CenterAndExpand"
+                                                                Color="{StaticResource CheckboxColor}" />
+
+                                                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
+
+                                                                <Label
+                                                                    FontSize="11"
+                                                                    Text="{Binding ChecklistName}"
+                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                                <Label
+                                                                    FontSize="9"
+                                                                    Text="{Binding checkedByUsermailDate}"
+                                                                    TextColor="{StaticResource SubTitleColor}" />
+                                                            </StackLayout>
+
+                                                        </StackLayout>
+
+                                                    </ViewCell.View>
+                                                </ViewCell>
+
+
+
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+
+                                    </ListView>
+
+                                </StackLayout>
+
+                            </xct:TabViewItem>
+
+                        </xct:TabView>
+
+                    </StackLayout>
+
+                    <!--  FABMenu  -->
+
+                    <ImageButton
+                        x:Name="FABItenery"
+                        Padding="20"
+                        AbsoluteLayout.LayoutBounds=".95,.97"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        Aspect="AspectFit"
+                        BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                        Clicked="FABSave_Clicked"
+                        CornerRadius="30"
+                        HeightRequest="60"
+                        HorizontalOptions="EndAndExpand"
+                        Source="icoSave.png"
+                        VerticalOptions="CenterAndExpand"
+                        WidthRequest="60" />
+
+                </AbsoluteLayout>
+            </Frame>
+
+        </Grid>
+
+        <!--  Activity Indicator/Loading animation  -->
+        <Frame x:Name="Loader" BackgroundColor="Gray"
+               Margin="10,30,10,30" VerticalOptions="CenterAndExpand"
+               AbsoluteLayout.LayoutBounds="0,0,1,1" HorizontalOptions="CenterAndExpand" CornerRadius="15" HeightRequest="15" 
+               AbsoluteLayout.LayoutFlags="All" >
+
+            <StackLayout Orientation="Horizontal">
+                <ActivityIndicator
+                HorizontalOptions="Start"
+                VerticalOptions="FillAndExpand"
+                IsRunning="True"
+                Color="{StaticResource PrimaryTextColor}" />
+
+                <Label Text="Please wait..." FontSize="13" HorizontalOptions="End" VerticalOptions="CenterAndExpand" TextColor="White"/>
+
+            </StackLayout>
+
+        </Frame>
+
+    </AbsoluteLayout>
+
+</popup:PopupPage>

@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Preflight.preFlightPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Preflight="clr-namespace:sdcrew.Views.Preflight"
+    xmlns:viewModels="clr-namespace:sdcrew.ViewModels.Preflight"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="PREFLIGHT"
+    NavigationPage.HasNavigationBar="false"
+    Visual="Default">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <ControlTemplate x:Key="TabItemTemplate">
+                <Grid HorizontalOptions="CenterAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalOptions="CenterAndExpand"
+                        Text="{TemplateBinding Text}"
+                        TextColor="{TemplateBinding CurrentTextColor}"
+                        VerticalOptions="Center" />
+                    <Image
+                        Grid.Column="1"
+                        HeightRequest="13"
+                        HorizontalOptions="Start"
+                        Source="{TemplateBinding CurrentIcon}"
+                        VerticalOptions="Center"
+                        WidthRequest="13" />
+                </Grid>
+            </ControlTemplate>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <ContentPage.BindingContext>
+        <viewModels:PreflightViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout BackgroundColor="{StaticResource TabviewBg}">
+
+        <!--  Custom NAvbar  -->
+        <StackLayout
+            HeightRequest="80"
+            Orientation="Horizontal"
+            Spacing="10">
+
+            <StackLayout.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,40,0,0" />
+                </OnPlatform>
+            </StackLayout.Margin>
+
+            <!--<On Platform="Android" Value="10" />-->
+
+            <Label
+                Margin="48,25,25,20"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="PREFLIGHT"
+                TextColor="{StaticResource PrimaryTextColor}"
+                VerticalOptions="CenterAndExpand" />
+
+            <!--  Filter  -->
+            <StackLayout
+                Margin="0,0,10,0"
+                HorizontalOptions="EndAndExpand"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="18"
+                    Text=" &#xE805;"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+                <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="10"
+                    Text="Filter"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="toolFilter_Clicked" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <!--  Timezone  -->
+            <StackLayout
+                Margin="0,0,10,0"
+                HorizontalOptions="End"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="18"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="&#xE803;"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+                <Label
+                    x:Name="toolTimezone"
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="10"
+                    Text="UTC"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+                <!--  "{Binding Timezone, Mode=TwoWay}"  -->
+
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="toolTimezone_Clicked" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <!--  Sync  -->
+            <StackLayout
+                Margin="0,0,10,0"
+                HorizontalOptions="End"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="18"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="&#xE804;"
+                    TextColor="{StaticResource SubTitleColor}" />
+                <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="10"
+                    Text="Synced"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+
+                <!--<StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="" />
+                </StackLayout.GestureRecognizers>-->
+            </StackLayout>
+
+        </StackLayout>
+
+
+        <!--  Content  -->
+        <xct:TabView
+            IsSwipeEnabled="False"
+            IsTabTransitionEnabled="True"
+            SelectedIndex="0"
+            TabContentBackgroundColor="{StaticResource TabviewBg}"
+            TabIndicatorColor="{StaticResource TabviewForeGround}"
+            TabIndicatorPlacement="Bottom"
+            TabStripBackgroundColor="{StaticResource TabviewBg}"
+            >
+
+            <xct:TabViewItem
+                ControlTemplate="{StaticResource TabItemTemplate}" 
+                Icon="icoAllSeg"
+                IsSelected="True" IconSelected="SelectedAllSeg" TextColorSelected="{StaticResource TabviewSelected}"   
+                Text="ALL"
+                TextColor="White">
+                
+                    
+
+                
+
+                <!--
+                    xct:IconTintColorEffect.TintColor="{StaticResource TabviewForeGround}"
+                    TextColorSelected="{StaticResource TabviewForeGround}"
+                -->
+                <!--  Text="ALL &#xE800;"  -->
+
+                <Preflight:AllPreflights x:Name="allPreflights" />
+
+            </xct:TabViewItem>
+
+            <xct:TabViewItem
+                ControlTemplate="{StaticResource TabItemTemplate}"
+                Icon="icoFlightSeg" IconSelected="SelectedicoFlightSeg" TextColorSelected="{StaticResource TabviewSelected}"   
+                Text="FLIGHTS"
+                TextColor="White">
+                <!--
+                    xct:IconTintColorEffect.TintColor="{StaticResource TabviewForeGround}"
+                    TextColorSelected="{StaticResource TabviewForeGround}"
+                -->
+                <Preflight:FlightPreflights />
+
+            </xct:TabViewItem>
+
+            <xct:TabViewItem
+                ControlTemplate="{StaticResource TabItemTemplate}"
+                Icon="icoEventSeg" IconSelected="SelectedicoEventSeg" TextColorSelected="{StaticResource TabviewSelected}"   
+                Text="EVENTS"
+                TextColor="White">
+                <!--
+                    TextColorSelected="{StaticResource TabviewForeGround}"
+                    xct:IconTintColorEffect.TintColor="{StaticResource TabviewForeGround}"
+                -->
+                <Preflight:EventPreflights />
+
+            </xct:TabViewItem>
+
+        </xct:TabView>
+
+    </StackLayout>
+
+</ContentPage>
