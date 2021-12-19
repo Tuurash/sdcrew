@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<popup:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="sdcrew.Views.Postflight.Modals.DropdownModals.CertificatesDropdown">
+
+
+
+    <Frame CornerRadius="10" Padding="0" BorderColor="LightGray" WidthRequest="350" HeightRequest="400">
+         <StackLayout Orientation="Vertical" HeightRequest="300" WidthRequest="200" BackgroundColor="White">
+
+                  <ListView SeparatorVisibility="None" ItemsSource="{Binding MyList}" VerticalScrollBarVisibility="Never">
+                     <ListView.ItemTemplate>
+                        <DataTemplate>
+                           <ViewCell>
+                              <Label Text="{Binding .}" />
+                           </ViewCell>
+                        </DataTemplate>
+                     </ListView.ItemTemplate>
+                  </ListView>
+
+         </StackLayout>      
+    </Frame>
+
+</popup:PopupPage>

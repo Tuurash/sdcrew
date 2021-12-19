@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Postflight.postFlightPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="POSTFLIGHT"
+    NavigationPage.HasNavigationBar="false"
+    xmlns:postFlight="clr-namespace:sdcrew.Views.Postflight"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <ControlTemplate x:Key="TabItemTemplate">
+                <Grid HorizontalOptions="CenterAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="13"
+                        HorizontalOptions="CenterAndExpand"
+                        Text="{TemplateBinding Text}"
+                        TextColor="{TemplateBinding CurrentTextColor}"
+                        VerticalOptions="Center" />
+                    <Image
+                        Grid.Column="1"
+                        HeightRequest="13"
+                        HorizontalOptions="Start"
+                        Source="{TemplateBinding CurrentIcon}"
+                        VerticalOptions="Center"
+                        WidthRequest="13" />
+                </Grid>
+            </ControlTemplate>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <ContentPage.Content>
+
+        <StackLayout BackgroundColor="{StaticResource TabviewBg}">
+
+            <StackLayout
+                HeightRequest="100"
+                Orientation="Horizontal"
+                Spacing="10">
+
+                <StackLayout.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="0,40,0,0" />
+                    </OnPlatform>
+                </StackLayout.Margin>
+
+                <Label
+                Margin="48,25,25,20"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="POSTFLIGHT"
+                TextColor="{StaticResource PrimaryTextColor}"
+                VerticalOptions="CenterAndExpand" />
+
+                <!--  Filter  -->
+                <StackLayout
+                Margin="0,0,10,0"
+                HorizontalOptions="EndAndExpand"
+                VerticalOptions="CenterAndExpand">
+                    <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="18"
+                    Text=" &#xE805;"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+                    <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="10"
+                    Text="Filter"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="toolFilter_Clicked" />
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+
+
+                <!--  Sync  -->
+                <StackLayout
+                Margin="0,0,10,0"
+                HorizontalOptions="End"
+                VerticalOptions="CenterAndExpand">
+                    <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="18"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="&#xE804;"
+                    TextColor="{StaticResource SubTitleColor}" />
+                    <Label
+                    FontFamily="{StaticResource customfonts}"
+                    FontSize="10"
+                    Text="Synced"
+                    TextColor="{StaticResource PrimaryToolbarButton}" />
+                </StackLayout>
+
+            </StackLayout>
+
+
+            <xct:TabView IsSwipeEnabled="False" x:Name="PostflightTabs"
+                IsTabTransitionEnabled="True"
+                SelectedIndex="0"
+                TabContentBackgroundColor="{StaticResource TabviewBg}"
+                TabIndicatorColor="{StaticResource TabviewForeGround}"
+                TabIndicatorPlacement="Bottom"
+                TabStripBackgroundColor="{StaticResource TabviewBg}">
+
+                <xct:TabViewItem x:Name="NotLggedTab"
+                    ControlTemplate="{StaticResource TabItemTemplate}"
+                    Icon="icoNotLogged" TabIndex="0"
+                    IconSelected="icoSelectedNotLogged"
+                    Text="NOT LOGGED"
+                    TextColor="White"
+                    TextColorSelected="{StaticResource TabviewSelected}">
+
+                    <xct:LazyView x:TypeArguments="postFlight:NotLoggedFlights" />
+
+                </xct:TabViewItem>
+
+                <xct:TabViewItem x:Name="LoggedTab"
+                    ControlTemplate="{StaticResource TabItemTemplate}"
+                    Icon="icoLogged"
+                    IconSelected="icoSelectedLogged"
+                    TabIndex="1"
+                    Text="LOGGED"
+                    TextColor="White"
+                    TextColorSelected="{StaticResource TabviewSelected}">
+
+                    <xct:LazyView x:TypeArguments="postFlight:LoggedFlights" />
+
+                </xct:TabViewItem>
+
+
+            </xct:TabView>
+
+
+
+
+
+        </StackLayout>
+
+
+
+
+    </ContentPage.Content>
+</ContentPage>

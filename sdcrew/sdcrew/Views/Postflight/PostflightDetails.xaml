@@ -1,0 +1,1571 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Postflight.PostflightDetails"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
+    xmlns:CC="clr-namespace:sdcrew.Views.ViewHelpers.Renderers"
+    xmlns:SegMentControl="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
+    xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:subView="clr-namespace:sdcrew.Views.Postflight.SubViews"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    BackgroundColor="{StaticResource NavigationBarColor}">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="NameLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
+            </Style>
+
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+
+            <Style x:Key="imageLableStackLayout" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal" />
+            </Style>
+
+            <Style x:Key="detailsStackLayout" TargetType="StackLayout">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="Spacing" Value="2" />
+            </Style>
+
+            <Style x:Key="imageStyle" TargetType="Image">
+                <Setter Property="WidthRequest" Value="8" />
+                <Setter Property="HeightRequest" Value="8" />
+            </Style>
+
+            <Style x:Key="profileImageStyle" TargetType="Image">
+                <Setter Property="WidthRequest" Value="80" />
+                <Setter Property="HeightRequest" Value="60" />
+                <Setter Property="Aspect" Value="AspectFit" />
+            </Style>
+
+            <Style x:Key="profileImageFrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="IsClippedToBounds" Value="True" />
+            </Style>
+
+            <Style x:Key="FrameCardViewStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="BorderColor" Value="{StaticResource TransparentColor}" />
+            </Style>
+
+            <Style x:Key="itemsInsideCardViewStackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+
+            <Style x:Key="itemsCardViewStackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="pfDetailControls">
+
+            <StackLayout
+                x:Name="contentPage"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All">
+
+                <!--  Navbar  -->
+                <StackLayout
+                    BackgroundColor="{StaticResource TabviewBg}"
+                    Orientation="Horizontal" HeightRequest="200"
+                    Spacing="8">
+
+                    <Grid
+                        x:Name="PreflightDetailsNav"
+                        Margin="0,30,10,0"
+                        Padding="10"
+                        VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1.5*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1.1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Margin="0,4,0,0"
+                            Aspect="AspectFit"
+                            HeightRequest="20"
+                            HorizontalOptions="CenterAndExpand"
+                            Source="icoBackBig"
+                            VerticalOptions="Start">
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="btnBack" Tapped="btnBack_Tapped" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+
+
+
+                        <!--  Column 1  -->
+                        <StackLayout Grid.Column="1" VerticalOptions="StartAndExpand">
+
+                            <Label
+                                x:Name="lblTail"
+                                FontSize="10"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="TailNumber"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label
+                                x:Name="lblDepartHeader"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Depart"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="StartAndExpand" />
+
+                            <Label
+                                x:Name="lblDepartDate"
+                                FontSize="10"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="TailNumber"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                        </StackLayout>
+
+                        <!--  Col 2 Icon  -->
+                        <Label
+                            x:Name="lblIconHeader"
+                            Grid.Column="2"
+                            FontFamily="{StaticResource customfonts}"
+                            FontSize="22"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="&#xE806;"
+                            TextColor="{Binding color}"
+                            VerticalOptions="CenterAndExpand" />
+
+
+                        <!--  Col 3  -->
+                        <StackLayout Grid.Column="3" VerticalOptions="StartAndExpand">
+
+                            <Label
+                                x:Name="lblTripId"
+                                FontSize="10"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="TailNumber"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label
+                                x:Name="lblArrivalHeader"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Depart"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="StartAndExpand" />
+
+                            <Label
+                                x:Name="lblArrivalDate"
+                                FontSize="10"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="TailNumber"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                        </StackLayout>
+
+
+                        <StackLayout
+                            Grid.Column="4"
+                            Margin="10,0,0,0"
+                            HorizontalOptions="EndAndExpand"
+                            VerticalOptions="CenterAndExpand">
+                            <Label
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="18"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="&#xE804;"
+                                TextColor="{StaticResource SubTitleColor}" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="8"
+                                Text="Synced"
+                                TextColor="{StaticResource PrimaryToolbarButton}" />
+                        </StackLayout>
+
+                    </Grid>
+
+                </StackLayout>
+
+                <!--  HeaderCollectionView  -->
+                <StackLayout x:Name="postflighSubNav"
+                    Margin="0,-10,0,0"
+                    BackgroundColor="{StaticResource NavigationBarColor}"
+                    HeightRequest="60"
+                    VerticalOptions="StartAndExpand">
+
+                    <StackLayout Margin="0,0,10,0" Orientation="Horizontal">
+
+                        <CollectionView
+                            x:Name="collectionViewListHorizontal"
+                            Margin="10,15,0,0"
+                            BackgroundColor="{StaticResource TransparentColor}"
+                            HeightRequest="34"
+                            HorizontalOptions="FillAndExpand"
+                            HorizontalScrollBarVisibility="Never"
+                            ItemSizingStrategy="MeasureAllItems"
+                            SelectionMode="None"
+                            VerticalOptions="CenterAndExpand"
+                            VerticalScrollBarVisibility="Never">
+
+
+
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <Frame
+                                            x:Name="{Binding TabIndex}"
+                                            Margin="5,0,5,0"
+                                            Padding="5"
+                                            BackgroundColor="{Binding TabColor}"
+                                            BorderColor="{StaticResource TransparentColor}"
+                                            CornerRadius="15"
+                                            HasShadow="False"
+                                            HorizontalOptions="FillAndExpand">
+
+                                            <Label
+                                                Margin="10,0,10,0"
+                                                FontSize="10"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Text="{Binding TabHeader}"
+                                                TextColor="{StaticResource PrimaryTextColor}"
+                                                VerticalOptions="CenterAndExpand" />
+
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    x:Name="HeaderSubNav"
+                                                    CommandParameter="{Binding TabHeader}"
+                                                    NumberOfTapsRequired="1"
+                                                    Tapped="HeaderSubNav_Tapped" />
+                                            </Frame.GestureRecognizers>
+
+                                        </Frame>
+
+                                    </StackLayout>
+
+                                </DataTemplate>
+
+
+                            </CollectionView.ItemTemplate>
+
+                        </CollectionView>
+                    </StackLayout>
+
+                </StackLayout>
+
+
+                <!--  ALLTABS  -->
+                <ScrollView
+                    x:Name="DetailTabs"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalScrollBarVisibility="Never"
+                    VerticalOptions="StartAndExpand"
+                    VerticalScrollBarVisibility="Never">
+
+                    <StackLayout
+                        x:Name="TabStack"
+                        Margin="5,0,5,0"
+                        Spacing="8">
+
+
+                        <!--OOOI-->
+                        <pv:PancakeView
+                            x:Name="OOOI"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+
+                                <behaviors:Expander Grid.Column="1" IsExpanded="False">
+                                    <!--  Header  -->
+                                    <behaviors:Expander.Header>
+
+
+                                        <StackLayout Margin="0,0,0,10">
+                                            <!--  Card Name  -->
+                                            <StackLayout
+                                                Grid.Column="0"
+                                                Margin="5,10,10,0"
+                                                HorizontalOptions="FillAndExpand"
+                                                Orientation="Horizontal"
+                                                VerticalOptions="Center">
+
+                                                <Label
+                                                    BackgroundColor="{Binding HeadeTextBGColor}"
+                                                    FontAttributes="Bold"
+                                                    FontFamily="{StaticResource customfonts}"
+                                                    FontSize="17"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="OOOI"
+                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                    VerticalOptions="CenterAndExpand" />
+
+                                                <Image
+                                                    Aspect="AspectFit"
+                                                    HeightRequest="7"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Source="arrow_a"
+                                                    VerticalOptions="Center" />
+
+                                            </StackLayout>
+
+                                            <Grid Margin="0,10,10,0" HorizontalOptions="FillAndExpand">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+
+                                                </Grid.RowDefinitions>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*" />
+                                                    <ColumnDefinition Width="2.5*" />
+                                                    <ColumnDefinition Width="1.5*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!--  Row0  -->
+                                                <!--  Col0  -->
+                                                <StackLayout
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Depart"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="EKSB"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col4  -->
+                                                <StackLayout
+                                                    Grid.Row="0"
+                                                    Grid.Column="2"
+                                                    HorizontalOptions="End"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Depart"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="EKSB"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Row1  -->
+                                                <!--  Col0  -->
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Out"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="06.66"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col1  -->
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Block Time  "
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="00.76 / 0.23"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col2  -->
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    Grid.Column="2"
+                                                    HorizontalOptions="End"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="In"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="08.88"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Row2  -->
+                                                <!--  Col0  -->
+                                                <StackLayout
+                                                    Grid.Row="2"
+                                                    Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Out"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="06.66"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col1  -->
+                                                <StackLayout
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Block Time  "
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="00.76 / 0.23"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col2  -->
+                                                <StackLayout
+                                                    Grid.Row="2"
+                                                    Grid.Column="2"
+                                                    HorizontalOptions="End"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="In"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="08.88"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+                                            </Grid>
+                                        </StackLayout>
+
+
+                                    </behaviors:Expander.Header>
+
+                                    <!--  Body  -->
+                                    <Grid
+                                        Margin="0,10,10,10"
+                                        
+                                        HorizontalOptions="FillAndExpand">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+
+                                        </Grid.RowDefinitions>
+
+
+                                        <!--  Row 0  -->
+                                        <!--  Col 0  -->
+                                        <pv:PancakeView
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="9"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="Departure ICAO"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                                                <StackLayout Orientation="Horizontal">
+
+                                                    <Label
+                                                        FontSize="10"
+                                                        HorizontalOptions="StartAndExpand"
+                                                        Text="EKSB"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+                                                    <Image
+                                                        Aspect="AspectFit"
+                                                        HeightRequest="7"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        Source="arrow_a"
+                                                        VerticalOptions="Center" />
+                                                </StackLayout>
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+
+
+
+
+                                        </pv:PancakeView>
+
+
+                                        <!--  Col 1  -->
+                                        <pv:PancakeView
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="9"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="Arrival ICAO"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                                                <StackLayout Orientation="Horizontal">
+
+                                                    <Label
+                                                        FontSize="10"
+                                                        HorizontalOptions="StartAndExpand"
+                                                        Text="EKSB"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+                                                    <Image
+                                                        Aspect="AspectFit"
+                                                        HeightRequest="7"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        Source="arrow_a"
+                                                        VerticalOptions="Center" />
+                                                </StackLayout>
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+                                        <!--  Row 1  -->
+                                        <!--  Col  -->
+                                        <pv:PancakeView
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Margin="0,10,0,0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="9"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="Departure Date"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                                                <CC:BorderlessDatePicker
+                                        
+                                                    FontSize="10" HorizontalOptions="FillAndExpand"
+                                                    Format="D"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End" 
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+
+                                        <!--  Row 2  -->
+                                        <!--  Col  -->
+                                        <pv:PancakeView
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Margin="0,10,0,0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="9"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="Arrival Date"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                                                <CC:BorderlessDatePicker
+                                          
+                                                    FontSize="10" HorizontalOptions="FillAndExpand"
+                                                    Format="D"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End" 
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+                                        </pv:PancakeView>
+
+
+                                        <!--Row 3-->
+                                        <!--Col 0-->
+                                        <pv:PancakeView
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="Out" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+                                                <StackLayout Orientation="Horizontal">
+
+                                                    <Label Text="Taxi:" TextColor="{StaticResource PrimaryTextColor}" FontSize="10" VerticalOptions="StartAndExpand"/>
+
+                                                    <Label Text="Will have some val" TextColor="{StaticResource PrimaryTextColor}" FontSize="10" VerticalOptions="StartAndExpand"/>
+
+                                                </StackLayout>
+
+                                            </StackLayout>
+
+
+
+
+
+                                        </pv:PancakeView>
+
+
+                                        <!--  Col 1  -->
+                                        <pv:PancakeView
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="Off" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+
+
+                                        <!--Row 4-->
+                                        <!--Col 0-->
+                                        <pv:PancakeView
+                                            Grid.Row="4"
+                                            Grid.Column="0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="On" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+                                                <StackLayout Orientation="Horizontal">
+
+                                                    <Label Text="Taxi:" TextColor="{StaticResource PrimaryTextColor}" FontSize="10" VerticalOptions="StartAndExpand"/>
+
+                                                    <Label Text="Will have some val" TextColor="{StaticResource PrimaryTextColor}" FontSize="10" VerticalOptions="StartAndExpand"/>
+
+                                                </StackLayout>
+                                            </StackLayout>
+
+
+
+
+
+                                        </pv:PancakeView>
+
+
+                                        <!--  Col 1  -->
+                                        <pv:PancakeView
+                                            Grid.Row="4"
+                                            Grid.Column="1"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="In" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+
+
+                                    </Grid>
+
+                                </behaviors:Expander>
+
+                            </Grid>
+                        </pv:PancakeView>
+
+
+                        <!--FUEL-->
+                        <pv:PancakeView
+                            x:Name="FUEL"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+
+                                <behaviors:Expander Grid.Column="1" IsExpanded="False">
+                                    <!--  Header  -->
+                                    <behaviors:Expander.Header>
+
+
+                                        <StackLayout Margin="0,0,0,10">
+                                            <!--  Card Name  -->
+                                            <StackLayout
+                                                Grid.Column="0"
+                                                Margin="5,10,10,0"
+                                                HorizontalOptions="FillAndExpand"
+                                                Orientation="Horizontal"
+                                                VerticalOptions="Center">
+
+                                                <Label
+                                                    BackgroundColor="{Binding HeadeTextBGColor}"
+                                                    FontAttributes="Bold"
+                                                    FontFamily="{StaticResource customfonts}"
+                                                    FontSize="17"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="FUEL"
+                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                    VerticalOptions="CenterAndExpand" />
+
+                                                <Image
+                                                    Aspect="AspectFit"
+                                                    HeightRequest="7"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Source="arrow_a"
+                                                    VerticalOptions="Center" />
+
+                                            </StackLayout>
+
+                                            <Grid Margin="0,10,10,0" HorizontalOptions="FillAndExpand">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+
+                                                </Grid.RowDefinitions>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*" />
+                                                    <ColumnDefinition Width="2.5*" />
+                                                    <ColumnDefinition Width="1.5*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!--  Row0  -->
+                                                <!--  Col0  -->
+                                                <StackLayout
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Out"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="06.66"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col1  -->
+                                                <StackLayout
+                                                    Grid.Row="0"
+                                                    Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Fuel Burn  "
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="00.76 / 0.23"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col2  -->
+                                                <StackLayout
+                                                    Grid.Row="0"
+                                                    Grid.Column="2"
+                                                    HorizontalOptions="End"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="In"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="08.88"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Row1  -->
+                                                <!--  Col0  -->
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Off"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="06.66"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col1  -->
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="Amount"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="variable unit"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                </StackLayout>
+
+                                                <!--  Col2  -->
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    Grid.Column="2"
+                                                    HorizontalOptions="End"
+                                                    Orientation="Horizontal"
+                                                    Spacing="5">
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="On"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <Label
+                                                        Margin="5,0,0,0"
+                                                        FontSize="10"
+                                                        Text="08.88"
+                                                        TextColor="{StaticResource GreenTextColor}" />
+
+                                                </StackLayout>
+                                            </Grid>
+                                        </StackLayout>
+
+
+                                    </behaviors:Expander.Header>
+
+                                    <!--  Body  -->
+                                    <Grid
+                                        Margin="0,10,10,10"
+                                        
+                                        HorizontalOptions="FillAndExpand">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+
+                                        </Grid.RowDefinitions>
+
+
+                                        <!--  Row 0  -->
+                                        <!--  Col 0  -->
+                                        <StackLayout
+                                            Grid.Row="0"
+                                            Grid.Column="0" Grid.ColumnSpan="2">
+
+                                            <Label Text="Burn" TextColor="{StaticResource PrimaryTextColor}" FontSize="17" />
+                                            <Label Text="Unit of Measure" TextColor="{StaticResource PrimaryTextColor}" FontSize="12" />
+
+                                            <control:SegmentedControl
+                                                        Margin="0,5,0,0"
+                                                        BackgroundColor="{StaticResource NavigationBarColor}"
+                                                        BorderColor="{StaticResource TransparentColor}"
+                                                        IsTabStop="True"
+                                                        SelectedSegment="0"
+                                                        SelectedTextColor="{StaticResource NavigationBarColor}"
+                                                        TextColor="{StaticResource PrimaryTextColor}"
+                                                        TintColor="{StaticResource ButtonBackgroundColor}">
+
+                                                <control:SegmentedControl.Children>  
+                                                    <control:SegmentedControlOption Text="Item 1" />  
+                                                    <control:SegmentedControlOption Text="Item 2" />  
+                                                    <control:SegmentedControlOption Text="Item 3" />  
+                                                </control:SegmentedControl.Children>  
+                                            </control:SegmentedControl>
+
+
+
+                                        </StackLayout>
+
+                                        <!--Row 1-->
+                                        <!--Col 0-->
+                                        <pv:PancakeView
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="Out" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+                                            </StackLayout>
+
+
+
+
+
+                                        </pv:PancakeView>
+
+
+                                        <!--  Col 1  -->
+                                        <pv:PancakeView
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="Off" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+
+
+                                        <!--Row 2-->
+                                        <!--Col 0-->
+                                        <pv:PancakeView
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="On" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+                                               
+                                            </StackLayout>
+
+
+
+
+
+                                        </pv:PancakeView>
+
+
+                                        <!--  Col 1  -->
+                                        <pv:PancakeView
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand">  
+                                                    <Label.FormattedText>  
+                                                        <FormattedString>  
+                                                            <Span Text="In" TextColor="{StaticResource PrimaryTextColor}"/>  
+                                                            <Span Text="*" TextColor="Red"/>  
+                                                        </FormattedString>  
+                                                    </Label.FormattedText>  
+                                                </Label>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+
+                                        <!--Row 3-->
+                  
+                                        <pv:PancakeView
+                                            Grid.Row="3" Margin="0,10,0,0"
+                                            Grid.Column="0" Grid.ColumnSpan="2"
+                                            BackgroundColor="DarkCyan"
+                                            CornerRadius="5,5,0,0">
+
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10"
+                                                    HorizontalOptions="StartAndExpand" Text="Fuel Burn"/>  
+
+                                                <CC:BorderlessEntry TextColor="{StaticResource GreenTextColor}" FontSize="11" VerticalOptions="End" />
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
+
+                                            </StackLayout>
+
+                                        </pv:PancakeView>
+
+                                    </Grid>
+
+                                </behaviors:Expander>
+
+                            </Grid>
+                        </pv:PancakeView>
+
+                        <!--Crews-->
+                        <pv:PancakeView
+                            x:Name="CREW"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" x:Name="CrewGrid">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                        <Label  Margin="10,10,10,0" Grid.Row="0"
+                                                    BackgroundColor="{Binding HeadeTextBGColor}"
+                                                    FontAttributes="Bold"
+                                                    FontFamily="{StaticResource customfonts}"
+                                                    FontSize="17"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="CREW"
+                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                    VerticalOptions="CenterAndExpand" />
+
+
+                                        
+
+                                        <CC:DashedFrame BackgroundColor="{StaticResource CardBGColor}" Grid.Row="14" Grid.ColumnSpan="2" Margin="20">
+
+                                            <Label Text="Add Crew" TextColor="{StaticResource PrimaryTextColor}" FontSize="15" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
+
+                                            <CC:DashedFrame.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="btnAddCrew_Tapped" x:Name="btnAddCrew"/> 
+                                            </CC:DashedFrame.GestureRecognizers>
+
+                                        </CC:DashedFrame>                 
+                                             
+ 
+                            </Grid>
+                        </pv:PancakeView>
+
+                        <!--PASSENGERS-->
+                        <pv:PancakeView
+                            x:Name="PASSENGERS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="PASSENGERS"/>
+                            
+                        </pv:PancakeView>
+
+
+                        <!--ADDDITIONAL DETAILS-->
+                        <pv:PancakeView
+                            x:Name="ADDDITIONALDETAILS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+                            
+                        </pv:PancakeView>
+
+                        <!--Notes-->
+                        <pv:PancakeView
+                            x:Name="NOTES"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                        <Label  Margin="10,10,10,0" Grid.Row="0"
+                                                    BackgroundColor="{Binding HeadeTextBGColor}"
+                                                    FontAttributes="Bold"
+                                                    FontFamily="{StaticResource customfonts}"
+                                                    FontSize="17"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="NOTES"
+                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                    VerticalOptions="CenterAndExpand" />
+
+
+                                         <pv:PancakeView Margin="10" BackgroundColor="{StaticResource PrimaryTextColor}" Padding="1" Grid.Row="1" >
+
+                                             
+                                             <StackLayout BackgroundColor="{StaticResource CardBGColor}">
+                                                 <CC:BorderlessEditor MinimumHeightRequest="20" HorizontalOptions="FillAndExpand" FontSize="12"  AutoSize="TextChanges" TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                 <BoxView HeightRequest="30" />
+                                             </StackLayout>
+                                             
+
+                                         </pv:PancakeView>
+
+                            </Grid>
+                        </pv:PancakeView>
+
+                        <!--EXPENSES-->
+                        <pv:PancakeView
+                            x:Name="EXPENSES"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+                            
+                        </pv:PancakeView>
+
+                        <!--DOCUMENTS-->
+                        <pv:PancakeView
+                            x:Name="DOCUMENTS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+                            
+                        </pv:PancakeView>
+
+
+                        <!--DE/ANTI-ICE-->
+                        <pv:PancakeView
+                            x:Name="DEANTIICE"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+
+                        </pv:PancakeView>
+
+
+                        <!--APU&CUSTOMCOMPONENTS-->
+                        <pv:PancakeView
+                            x:Name="APUCUSTOMCOMPONENTS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+
+                        </pv:PancakeView>
+
+                        <!--OILS&FLUIDS-->
+                        <pv:PancakeView
+                            x:Name="OILSFLUIDS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+
+                        </pv:PancakeView>
+
+                        <!--SQUAWKSDISCREPANCIES-->
+                        <pv:PancakeView
+                            x:Name="SQUAWKSDISCREPANCIES"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+
+                        </pv:PancakeView>
+
+                        <!--DUTY TIME-->
+                        <pv:PancakeView
+                            x:Name="DUTYTIME"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+
+                        </pv:PancakeView>
+
+
+                        <!--CHECKLISTS-->
+                        <pv:PancakeView
+                            x:Name="CHECKLISTS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource CardBGColor}"
+                            CornerRadius="10"
+                            VerticalOptions="FillAndExpand">
+
+                            <Label Text="Additional Details"/>
+
+                        </pv:PancakeView>
+
+
+                        <!--  Extra Space  -->
+                        <StackLayout HeightRequest="80">
+                            <Label IsVisible="false" Text="just extra space" />
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </ScrollView>
+
+            </StackLayout>
+
+            <!--  FabMenu  -->
+            <ImageButton
+                x:Name="FABItenery"
+                Padding="20"
+                AbsoluteLayout.LayoutBounds="{OnPlatform Android='.95,.97,80,80',
+                                                         iOS='.95,.90,80,80'}"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Aspect="AspectFit"
+                BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                CornerRadius="30"
+                HeightRequest="60"
+                HorizontalOptions="EndAndExpand"
+                Source="icoSave.png"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="60" />
+
+
+            <!--  Activity Indicator/Loading animation  -->
+            <Frame
+                x:Name="Loader"
+                Margin="10,30,10,30"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="{StaticResource LoaderBackground}"
+                CornerRadius="15"
+                HasShadow="False"
+                HeightRequest="15"
+                HorizontalOptions="CenterAndExpand"
+                IsVisible="false"
+                VerticalOptions="CenterAndExpand">
+
+                <StackLayout Orientation="Horizontal">
+                    <ActivityIndicator
+                        HorizontalOptions="Start"
+                        IsRunning="True"
+                        VerticalOptions="FillAndExpand"
+                        Color="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        FontSize="13"
+                        HorizontalOptions="End"
+                        Text="Please wait..."
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand" />
+
+                </StackLayout>
+
+            </Frame>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+
+</ContentPage>

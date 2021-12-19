@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Preflight.EventDetails"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{StaticResource TabviewBg}">
+
+    <ContentPage.Content>
+        <StackLayout x:Name="contentPage">
+
+            <!--  Navbar  -->
+            <StackLayout
+                BackgroundColor="{StaticResource TabviewBg}"
+                HeightRequest="50"
+                Orientation="Horizontal">
+
+                <StackLayout.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="30" />
+                    </OnPlatform>
+                </StackLayout.Margin>
+
+                    <Image Source="icoBackBig" VerticalOptions="Center" HorizontalOptions="Start" Aspect="AspectFit" HeightRequest="20"></Image>
+
+                    <Label
+                        x:Name="lblDepartHeader" HorizontalOptions="StartAndExpand" Margin="10,0,0,0"
+         
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        Text="PREFLIGHT EVENT"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="Center" />
+
+                <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="btnBack_Tapped" />
+                </StackLayout.GestureRecognizers>
+
+            </StackLayout>
+
+            <StackLayout>
+
+                <StackLayout 
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label x:Name="lblEventHeader"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="AIRCRAFT"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblAircraft"
+                        Margin="5,0,0,0"
+                        FontSize="17"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="EVENT TYPE"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblEventType"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="LOCATION"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblLocation"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="APPROVER"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblApprover"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="PLANNER"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblPlanner"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="REQUESTER"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblRequester"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="START"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblStart"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Horizontal"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="END"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblEnd"
+                        Margin="5,0,0,0"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+
+                <StackLayout
+                    Margin="15,0,0,0"
+                    Padding="5"
+                    Orientation="Vertical"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="NOTES"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblNotes"
+                        FontSize="14"
+                        HorizontalOptions="StartAndExpand"
+                        Text=""
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                </StackLayout>
+
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

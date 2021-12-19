@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage
+    x:Class="sdcrew.Views.Preflight.FlightFilterPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="http://rotorgames.com"
+    xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:pancakeview="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    BackgroundColor="{StaticResource popupBG}"
+    Visual="Default">
+
+
+    <popup:PopupPage.Resources>
+        <OnPlatform x:Key="customfonts" x:TypeArguments="x:String">
+            <On Platform="Android" Value="customfonts.ttf#fontello" />
+            <On Platform="iOS" Value="customfonts" />
+        </OnPlatform>
+    </popup:PopupPage.Resources>
+
+
+    <popup:PopupPage.Animation>
+        <animations:MoveAnimation
+            DurationIn="400"
+            DurationOut="300"
+            HasBackgroundAnimation="True"
+            PositionIn="Bottom"
+            PositionOut="Bottom" />
+    </popup:PopupPage.Animation>
+
+    <AbsoluteLayout>
+
+        <pancakeview:PancakeView
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="{StaticResource popupBG}"
+            CornerRadius="0,0,17,17">
+            <Grid Padding="10" VerticalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackLayout
+                    Grid.Row="1"
+                    Margin="0"
+                    HorizontalOptions="FillAndExpand"
+                    Orientation="Vertical"
+                    VerticalOptions="FillAndExpand">
+
+                    <StackLayout
+                        Margin="10,20,10,5"
+                        HorizontalOptions="FillAndExpand"
+                        Orientation="Horizontal"
+                        VerticalOptions="FillAndExpand">
+                        <Label
+                            FontFamily="{StaticResource customfonts}"
+                            FontSize="16"
+                            HorizontalOptions="StartAndExpand"
+                            Text="&#xE808; Cancel"
+                            TextColor="White"
+                            VerticalOptions="StartAndExpand">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    x:Name="btnCancelPop"
+                                    NumberOfTapsRequired="1"
+                                    Tapped="btnCancelPop_Tapped" />
+                            </Label.GestureRecognizers>
+
+
+                        </Label>
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="23"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="Filters"
+                            TextColor="White"
+                            VerticalOptions="CenterAndExpand" />
+
+                        <Label
+                            FontFamily="{StaticResource customfonts}"
+                            FontSize="16"
+                            HorizontalOptions="EndAndExpand"
+                            Text="&#xE807; Apply"
+                            TextColor="{StaticResource SubTitleColor}"
+                            VerticalOptions="StartAndExpand">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    x:Name="btnFilter"
+                                    NumberOfTapsRequired="1"
+                                    Tapped="btnFilter_Tapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+
+                    <StackLayout
+                        Grid.Row="2"
+                        Margin="20,0,20,0"
+                        BackgroundColor="{StaticResource TextBoxWrapper}"
+                        HorizontalOptions="Fill"
+                        Orientation="Vertical"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Margin="10,2,0,0"
+                            FontSize="12"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Aircraft Search"
+                            TextColor="{StaticResource SubTitleColor}" />
+
+                        <StackLayout Margin="5,0,0,0" Orientation="Horizontal">
+                            <input:AdvancedEntry
+                                x:Name="txtSearchBar"
+                                BackgroundColor="{StaticResource FlyoutFooter}"
+                                BorderColor="Transparent"
+                                HeightRequest="45"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="Start"
+                                Keyboard="Text"
+                                Placeholder="Search Here"
+                                PlaceholderColor="{StaticResource SecondaryTextColor}"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="FillAndExpand" />
+
+                            <Image
+                                Margin="0,0,15,0"
+                                behaviors:IconTintColorEffect.TintColor="{StaticResource SecondaryTextColor}"
+                                Aspect="AspectFit"
+                                HeightRequest="18"
+                                HorizontalOptions="End"
+                                Source="icoSearch"
+                                VerticalOptions="CenterAndExpand">
+                                <Image.GestureRecognizers>
+
+                                    <TapGestureRecognizer x:Name="btntxtSearch" />
+
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                        </StackLayout>
+
+                        <BoxView
+                            HeightRequest="1"
+                            VerticalOptions="End"
+                            Color="{StaticResource SecondaryTextColor}" />
+
+                    </StackLayout>
+
+                    <Label
+                        FontSize="12"
+                        HorizontalOptions="CenterAndExpand"
+                        Text="Search by Tail Number or Serial Number"
+                        TextColor="{StaticResource SecondaryTextColor}"
+                        VerticalOptions="Start" />
+
+
+                </StackLayout>
+
+                <!--  CachingStrategy="RecycleElement" - stackoverflow.com/questions/40850946/xamarin-forms-listview-itemssource-async-update-nullreferenceexception/69875909#69875909  -->
+
+                <StackLayout
+                    Grid.Row="3"
+                    Margin="0,20,0,0"
+                    BackgroundColor="{StaticResource FilterListBG}">
+
+                    <ListView
+                        x:Name="MultiSelectListView"
+                        Margin="10"
+                        BackgroundColor="{StaticResource TransparentColor}"
+                        CachingStrategy="RecycleElement"
+                        HasUnevenRows="True"
+                        HorizontalOptions="FillAndExpand"
+                        ItemsSource="{Binding FilteredTailNumbers}"
+                        SelectionMode="None"
+                        SeparatorVisibility="None"
+                        VerticalOptions="FillAndExpand"
+                        VerticalScrollBarVisibility="Never">
+
+                        <ListView.Header>
+                            <StackLayout>
+                                <Button
+                                    x:Name="btnSelectAll"
+                                    BackgroundColor="{StaticResource TransparentColor}"
+                                    Clicked="btnSelectAll_Clicked"
+                                    FontSize="15"
+                                    HorizontalOptions="EndAndExpand"
+                                    Text="Deselect All"
+                                    TextColor="{StaticResource ButtonBackgroundColor}"
+                                    VerticalOptions="CenterAndExpand" />
+                            </StackLayout>
+                        </ListView.Header>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout
+                                        HorizontalOptions="FillAndExpand"
+                                        Orientation="Horizontal"
+                                        VerticalOptions="StartAndExpand">
+
+                                        <StackLayout
+                                            Margin="5"
+                                            HorizontalOptions="StartAndExpand"
+                                            VerticalOptions="StartAndExpand">
+                                            <Label
+                                                FontSize="15"
+                                                Text="{Binding tailNumber}"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                            <Label
+                                                FontSize="11"
+                                                Text="{Binding serialNumber}"
+                                                TextColor="{StaticResource PrimaryTextColor}" />
+                                        </StackLayout>
+
+
+                                        <input:CheckBox
+                                            Margin="10"
+                                            BoxBackgroundColor="{StaticResource FilterListBG}"
+                                            BoxSizeRequest="20"
+                                            CheckChanged="CheckBox_CheckChanged"
+                                            HorizontalOptions="EndAndExpand"
+                                            IconColor="{StaticResource FilterListBG}"
+                                            IsChecked="{Binding isChecked, Mode=TwoWay}"
+                                            Type="Material"
+                                            VerticalOptions="StartAndExpand"
+                                            Color="{StaticResource CheckboxColor}" />
+
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer x:Name="TailCell" Tapped="TailCell_Tapped" />
+                                        </StackLayout.GestureRecognizers>
+
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                </StackLayout>
+
+            </Grid>
+        </pancakeview:PancakeView>
+
+        <!--  Activity Indicator/Loading animation  -->
+        <Frame
+            x:Name="Loader"
+            Margin="10,30,10,30"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="{StaticResource LoaderBackground}"
+            CornerRadius="15"
+            HasShadow="False"
+            HeightRequest="15"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand">
+
+            <StackLayout Orientation="Horizontal">
+                <ActivityIndicator
+                    HorizontalOptions="Start"
+                    IsRunning="True"
+                    VerticalOptions="FillAndExpand"
+                    Color="{StaticResource PrimaryTextColor}" />
+
+                <Label
+                    FontSize="13"
+                    HorizontalOptions="End"
+                    Text="Please wait..."
+                    TextColor="White"
+                    VerticalOptions="CenterAndExpand" />
+            </StackLayout>
+
+        </Frame>
+
+    </AbsoluteLayout>
+
+
+
+</popup:PopupPage>

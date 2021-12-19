@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Login.loginPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:sdcrew.ViewModels"
+    BackgroundColor="{StaticResource PageBackgroundColor}"
+    NavigationPage.HasNavigationBar="False" 
+    Visual="Default">
+
+
+    <ContentPage.BindingContext>
+        <viewModels:credentialsViewModel />
+    </ContentPage.BindingContext>
+
+
+    <AbsoluteLayout>
+
+        <!--  Mainlogo  -->
+        <Image
+            x:Name="Logo"
+            Margin="0,30,0,90"
+            AbsoluteLayout.LayoutBounds="0,0,1,.7"
+            AbsoluteLayout.LayoutFlags="All"
+            Aspect="AspectFit"
+            HeightRequest="170"
+            HorizontalOptions="CenterAndExpand"
+            Source="icoMainlogo"
+            VerticalOptions="CenterAndExpand"
+            WidthRequest="200">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ImageTapGestureRecognizer_Tapped" />
+            </Image.GestureRecognizers>
+
+        </Image>
+
+        <StackLayout
+            Margin="0,30,0,30"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            HorizontalOptions="CenterAndExpand"
+            Spacing="20"
+            VerticalOptions="EndAndExpand">
+
+            <StackLayout
+                HorizontalOptions="FillAndExpand"
+                Orientation="Vertical"
+                Spacing="15">
+
+                <Label
+                    HorizontalOptions="CenterAndExpand"
+                    TextColor="{StaticResource PrimaryTextColor}"
+                    VerticalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+
+                            <Span
+                                FontAttributes="Bold"
+                                FontSize="24"
+                                Text=" SD Crew " />
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <!--  login button  -->
+                <Button
+                    x:Name="FaceButton"
+                    Margin="5"
+                    BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                    Clicked="FaceButton_Clicked"
+                    CornerRadius="10"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    HeightRequest="60"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="LOGIN"
+                    TextColor="{StaticResource ButtonTextColor}"
+                    VerticalOptions="CenterAndExpand"
+                    WidthRequest="220" />
+                <!--  Command="{Binding LoginCommand}"  -->
+            </StackLayout>
+
+            <!--  Bottom logo  -->
+            <StackLayout
+                Margin="0,70,0,50"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                HorizontalOptions="CenterAndExpand"
+                Orientation="Horizontal"
+                Spacing="20"
+                VerticalOptions="CenterAndExpand">
+
+                <Image
+                    Aspect="AspectFit"
+                    HeightRequest="35"
+                    Source="icoBottomSDlogo.png"
+                    VerticalOptions="Center" />
+                <Label
+                    FontSize="17"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="Satcom Direct."
+                    TextColor="{StaticResource PrimaryTextColor}"
+                    VerticalOptions="CenterAndExpand" />
+
+            </StackLayout>
+
+            <!--  Copyright  -->
+            <StackLayout VerticalOptions="End">
+
+                <Label
+                    FontSize="14"
+                    HorizontalOptions="CenterAndExpand"
+                    TextColor="{StaticResource SecondaryTextColor}"
+                    VerticalOptions="EndAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text=" ©, Copyright 2019 " />
+                            <Span
+                                FontAttributes="Bold"
+                                Text="Satcom Direct, Inc."
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                TextDecorations="Underline" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label
+                    FontSize="14"
+                    HorizontalOptions="CenterAndExpand"
+                    TextColor="{StaticResource SecondaryTextColor}"
+                    VerticalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="All Rights Reserved" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+            </StackLayout>
+
+        </StackLayout>
+
+        <!--  Activity Indicator/Loading animation  -->
+        <Frame x:Name="Loader" BackgroundColor="{StaticResource LoaderBackground}"
+               Margin="10,30,10,30" VerticalOptions="CenterAndExpand"
+               AbsoluteLayout.LayoutBounds="0,0,1,1" HorizontalOptions="CenterAndExpand" CornerRadius="15" HeightRequest="15" 
+               AbsoluteLayout.LayoutFlags="All" >
+
+            <StackLayout Orientation="Horizontal">
+                <ActivityIndicator
+                HorizontalOptions="Start"
+                VerticalOptions="FillAndExpand"
+                IsRunning="True"
+                Color="{StaticResource PrimaryTextColor}" />
+
+                <Label Text="Please wait..." FontSize="13" HorizontalOptions="End" VerticalOptions="CenterAndExpand" TextColor="White"/>
+            </StackLayout>
+
+        </Frame>
+        <!--  {Binding IsBusy}  -->
+
+    </AbsoluteLayout>
+
+</ContentPage>

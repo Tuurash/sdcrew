@@ -1,0 +1,1206 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="sdcrew.Views.Preflight.PreflightDetails"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:SegMentControl="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
+    BackgroundColor="{StaticResource NavigationBarColor}"
+    Visual="Default">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="NameLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
+            </Style>
+
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+
+            <Style x:Key="imageLableStackLayout" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal" />
+            </Style>
+
+            <Style x:Key="detailsStackLayout" TargetType="StackLayout">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="Spacing" Value="2" />
+            </Style>
+
+            <Style x:Key="imageStyle" TargetType="Image">
+                <Setter Property="WidthRequest" Value="8" />
+                <Setter Property="HeightRequest" Value="8" />
+            </Style>
+
+            <Style x:Key="profileImageStyle" TargetType="Image">
+                <Setter Property="WidthRequest" Value="80" />
+                <Setter Property="HeightRequest" Value="60" />
+                <Setter Property="Aspect" Value="AspectFit" />
+            </Style>
+
+            <Style x:Key="profileImageFrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="IsClippedToBounds" Value="True" />
+            </Style>
+
+            <Style x:Key="FrameCardViewStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="BorderColor" Value="{StaticResource TransparentColor}" />
+            </Style>
+
+            <Style x:Key="itemsInsideCardViewStackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+
+            <Style x:Key="itemsCardViewStackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="pfDetailControls">
+
+            <StackLayout
+                x:Name="contentPage"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All">
+
+                <!--  Navbar  -->
+                <StackLayout
+                    BackgroundColor="{StaticResource TabviewBg}"
+                    HeightRequest="255"
+                    Orientation="Horizontal"
+                    Spacing="8">
+
+                    <Grid
+                        x:Name="PreflightDetailsNav"
+                        Margin="0,35,10,0"
+                        Padding="10"
+                        VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2.5*" />
+                            <ColumnDefinition Width="1.5*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1.1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Margin="0,4,0,0"
+                            Aspect="AspectFit"
+                            HeightRequest="20"
+                            HorizontalOptions="CenterAndExpand"
+                            Source="icoBackBig"
+                            VerticalOptions="Start">
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="btnBack" Tapped="btnBack_Tapped" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Label
+                            x:Name="lblDepartHeader"
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="Depart"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="StartAndExpand">
+
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="btnBack_Tapped" />
+                            </Label.GestureRecognizers>
+
+
+                        </Label>
+
+                        <StackLayout Grid.Column="2" VerticalOptions="StartAndExpand">
+
+                            <Label
+                                x:Name="lblIconHeader"
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="22"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="&#xE806;"
+                                TextColor="{Binding color}"
+                                VerticalOptions="CenterAndExpand" />
+
+                            <Label
+                                x:Name="lblAircraftTail"
+                                FontSize="10"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="TailNumber"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                        </StackLayout>
+
+                        <Label
+                            x:Name="lblArrivalHeader"
+                            Grid.Column="3"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="Arrival"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="StartAndExpand" />
+
+                        <StackLayout
+                            Grid.Column="4"
+                            HorizontalOptions="End"
+                            VerticalOptions="StartAndExpand">
+                            <Label
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="18"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="&#xE804;"
+                                TextColor="{StaticResource SubTitleColor}" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontFamily="{StaticResource customfonts}"
+                                FontSize="8"
+                                Text="Synced"
+                                TextColor="{StaticResource PrimaryToolbarButton}" />
+                        </StackLayout>
+
+                    </Grid>
+
+                </StackLayout>
+
+                <!--  HeaderCollectionView  -->
+                <StackLayout x:Name="stackSubNav"
+                    Margin="0,-10,0,0"
+                    BackgroundColor="{StaticResource NavigationBarColor}"
+                    HeightRequest="60"
+                    VerticalOptions="StartAndExpand">
+
+                    <StackLayout Margin="0,0,10,0" Orientation="Horizontal">
+
+                        <CollectionView
+                            x:Name="collectionViewListHorizontal"
+                            Margin="10,15,0,0"
+                            BackgroundColor="{StaticResource TransparentColor}"
+                            HeightRequest="34"
+                            HorizontalOptions="FillAndExpand"
+                            HorizontalScrollBarVisibility="Never"
+                            ItemSizingStrategy="MeasureAllItems"
+                            SelectionMode="None"
+                            VerticalOptions="CenterAndExpand"
+                            VerticalScrollBarVisibility="Never">
+
+
+
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+
+                                    <StackLayout Orientation="Horizontal">
+
+
+                                        <Frame
+                                            x:Name="{Binding TabIndex}"
+                                            Margin="5,0,5,0"
+                                            Padding="5"
+                                            BackgroundColor="{Binding TabColor}"
+                                            BorderColor="{StaticResource TransparentColor}"
+                                            CornerRadius="15"
+                                            HasShadow="False"
+                                            HorizontalOptions="FillAndExpand">
+
+                                            <Label
+                                                Margin="10,0,10,0"
+                                                FontSize="10"
+                                                HorizontalOptions="CenterAndExpand"
+                                                Text="{Binding TabHeader}"
+                                                TextColor="{StaticResource PrimaryTextColor}"
+                                                VerticalOptions="CenterAndExpand" />
+
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    CommandParameter="{Binding TabHeader}"
+                                                    NumberOfTapsRequired="1"
+                                                    Tapped="TapGestureRecognizer_Tapped" />
+                                            </Frame.GestureRecognizers>
+
+                                        </Frame>
+
+                                    </StackLayout>
+
+                                </DataTemplate>
+
+
+                            </CollectionView.ItemTemplate>
+
+                        </CollectionView>
+
+
+
+                    </StackLayout>
+
+
+
+
+                </StackLayout>
+
+
+                <!--  ALLTABS  -->
+                <ScrollView
+                    x:Name="DetailTabs"
+                    Margin="0,0,0,0"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalScrollBarVisibility="Never"
+                    VerticalOptions="FillAndExpand"
+                    VerticalScrollBarVisibility="Never">
+
+                    <StackLayout
+                        x:Name="TabStack"
+                        Margin="5,0,5,0"
+                        Spacing="8">
+
+                        <!--  FLIGHT  -->
+                        <Frame
+                            x:Name="FLIGHT"
+                            Margin="5"
+                            Padding="10"
+                            BackgroundColor="{StaticResource HeaderItemBg}"
+                            BorderColor="{StaticResource TransparentColor}"
+                            CornerRadius="11"
+                            Style="{StaticResource FrameCardViewStyle}">
+
+                            <StackLayout
+                                Grid.Row="0"
+                                Margin="5"
+                                Padding="5">
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="FLIGHT"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <StackLayout Orientation="Horizontal">
+
+                                    <Label
+                                        FontSize="12"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Flight Information"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <Label
+                                        x:Name="lblFlightTripID"
+                                        FontSize="12"
+                                        HorizontalOptions="EndAndExpand"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                </StackLayout>
+
+
+                                <!--  ICAOS  -->
+                                <!--  Icao Header  -->
+                                <StackLayout Margin="0,6,0,0" Orientation="Horizontal">
+
+                                    <Label
+                                        FontSize="11"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="DEPARTURE"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <Label
+                                        FontSize="11"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="ARRIVAL"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+
+                                    <Label
+                                        x:Name="lblDepartureICAO"
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="DEPARTUREICAO"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <Label
+                                        x:Name="lblArrivalICAO"
+                                        FontSize="14"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="ARRIVALICAO"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+                                </StackLayout>
+
+
+                                <!--  Dates  -->
+                                <StackLayout Orientation="Horizontal">
+
+                                    <StackLayout HorizontalOptions="StartAndExpand">
+
+                                        <Label
+                                            x:Name="lblDepartureDate"
+                                            FontSize="14"
+                                            HorizontalOptions="StartAndExpand"
+                                            Text="DEPARTUREDate"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            TextTransform="Uppercase" />
+
+                                        <Label
+                                            x:Name="lblDepartureTime"
+                                            FontSize="14"
+                                            HorizontalOptions="StartAndExpand"
+                                            Text="DEPARTURETime"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    </StackLayout>
+
+                                    <StackLayout HorizontalOptions="CenterAndExpand">
+
+                                        <Label
+                                            x:Name="iconFlight"
+                                            FontFamily="{StaticResource customfonts}"
+                                            FontSize="20"
+                                            HorizontalOptions="CenterAndExpand"
+                                            Text="&#xE806;"
+                                            TextColor="{Binding color}"
+                                            VerticalOptions="CenterAndExpand" />
+
+                                        <Label
+                                            x:Name="lblETE"
+                                            FontSize="12"
+                                            HorizontalOptions="CenterAndExpand"
+                                            Text="ETE 03:56"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    </StackLayout>
+
+                                    <StackLayout HorizontalOptions="EndAndExpand">
+
+                                        <Label
+                                            x:Name="lblArrivalDate"
+                                            FontSize="14"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="ArrivalDate"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            TextTransform="Uppercase" />
+
+                                        <Label
+                                            x:Name="lblArrivalTime"
+                                            FontSize="14"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="ArrivalTime"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </StackLayout>
+
+
+
+                        </Frame>
+
+                        <!--  AIRPORTS  -->
+                        <Frame
+                            x:Name="AIRPORTS"
+                            Margin="5"
+                            Padding="10"
+                            BackgroundColor="{StaticResource HeaderItemBg}"
+                            CornerRadius="11"
+                            Style="{StaticResource FrameCardViewStyle}">
+
+                            <StackLayout
+                                Grid.Row="0"
+                                Margin="5"
+                                Padding="5">
+
+                                <!--  Header  -->
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="AIRPORTS"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="FBO Information"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <!--  Departure  -->
+
+
+                                <StackLayout Margin="7,0,0,0" BindingContext="">
+                                    <Label
+                                        x:Name="lblAirportDepartICAO"
+                                        FontAttributes="Bold"
+                                        FontSize="13"
+                                        Text="KNEW"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <Label
+                                        x:Name="lblFboDepartHandlerName"
+                                        FontSize="13"
+                                        Text="FlightLine First"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <Label
+                                            x:Name="lblFboDepartPhone"
+                                            FontSize="13"
+                                            HorizontalOptions="StartAndExpand"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            VerticalOptions="CenterAndExpand" />
+
+                                        <Label
+                                            x:Name="lblFboDepartCallIcon"
+                                            FontFamily="{StaticResource customfonts}"
+                                            FontSize="27"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="&#xE810;"
+                                            TextColor="{StaticResource SubTitleColor}"
+                                            VerticalOptions="CenterAndExpand">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer x:Name="btnAirportDepurtureCall" Tapped="btnAirportDepurtureCall_Tapped" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+
+                                    </StackLayout>
+
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <Label
+                                            x:Name="lblFboDepartMail"
+                                            FontSize="13"
+                                            HorizontalOptions="StartAndExpand"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            VerticalOptions="CenterAndExpand" />
+
+                                        <Label
+                                            x:Name="lblFboDepartMailIcon"
+                                            FontFamily="{StaticResource customfonts}"
+                                            FontSize="27"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="&#xE816;"
+                                            TextColor="{StaticResource SubTitleColor}"
+                                            VerticalOptions="CenterAndExpand">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer x:Name="btnAirportDepurtureMail" Tapped="btnAirportDepurtureMail_Tapped" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </StackLayout>
+
+                                </StackLayout>
+
+                                <!--  Arrival  -->
+                                <StackLayout Margin="7,0,0,0">
+                                    <Label
+                                        x:Name="lblAirportArrival"
+                                        FontAttributes="Bold"
+                                        FontSize="13"
+                                        Text="KLAX"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <Label
+                                        x:Name="lblFboArrivalHandlerName"
+                                        FontSize="13"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <Label
+                                            x:Name="lblFboArrivalPhone"
+                                            FontSize="13"
+                                            HorizontalOptions="StartAndExpand"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            VerticalOptions="CenterAndExpand" />
+
+                                        <Label
+                                            x:Name="lblFboArrivalCallIcon"
+                                            FontFamily="{StaticResource customfonts}"
+                                            FontSize="27"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="&#xE810;"
+                                            TextColor="{StaticResource SubTitleColor}"
+                                            VerticalOptions="CenterAndExpand">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer x:Name="btnAirportArrivalCall" Tapped="btnAirportArrivalCall_Tapped" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+
+                                    </StackLayout>
+
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <Label
+                                            x:Name="lblFboArrivalMail"
+                                            FontSize="13"
+                                            HorizontalOptions="StartAndExpand"
+                                            TextColor="{StaticResource PrimaryTextColor}"
+                                            VerticalOptions="CenterAndExpand" />
+
+                                        <Label
+                                            x:Name="lblFboArrivalMailIcon"
+                                            FontFamily="{StaticResource customfonts}"
+                                            FontSize="27"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="&#xE816;"
+                                            TextColor="{StaticResource SubTitleColor}"
+                                            VerticalOptions="CenterAndExpand">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer x:Name="AirportSendMail" Tapped="AirportSendMail_Tapped" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+
+                                    </StackLayout>
+
+                                </StackLayout>
+
+                            </StackLayout>
+
+
+
+                        </Frame>
+
+                        <!--  CREWS  -->
+                        <Frame
+                            x:Name="CREWS"
+                            Margin="5"
+                            Padding="10"
+                            BackgroundColor="{StaticResource HeaderItemBg}"
+                            CornerRadius="11"
+                            Style="{StaticResource FrameCardViewStyle}">
+
+                            <StackLayout
+                                Grid.Row="0"
+                                Margin="5"
+                                Padding="5">
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="CREW"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <StackLayout Orientation="Horizontal">
+
+                                    <Label
+                                        FontSize="12"
+                                        Text="Total Crew"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    <Label
+                                        x:Name="lblCrewCount"
+                                        FontSize="12"
+                                        Text="2"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                </StackLayout>
+
+                                <CollectionView x:Name="CollectionCrew" HeightRequest="{Binding CrewRowHeigtht}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <!--<ViewCell>-->
+                                            <Grid Margin="7,0,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="2*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="1*" />
+                                                    <ColumnDefinition Width="1*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    FontAttributes="Bold"
+                                                    FontSize="13"
+                                                    Text="{Binding crewMemberType}"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    FontSize="13"
+                                                    Text="{Binding fullName}"
+                                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                <Label
+                                                    Grid.Row="2"
+                                                    Grid.Column="0"
+                                                    FontSize="13"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="{Binding fullPhoneNumber}"
+                                                    TextColor="{StaticResource PrimaryTextColor}"
+                                                    VerticalOptions="CenterAndExpand" />
+
+                                                <Label
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    FontFamily="{StaticResource customfonts}"
+                                                    FontSize="27"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    IsVisible="{Binding CallVisible}"
+                                                    Text="&#xE810;"
+                                                    TextColor="{StaticResource SubTitleColor}"
+                                                    VerticalOptions="CenterAndExpand">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                                            x:Name="crewMakeCall"
+                                                            CommandParameter="{Binding fullPhoneNumber}"
+                                                            Tapped="crewMakeCall_Tapped" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </Grid>
+
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </StackLayout>
+                        </Frame>
+
+                        <!--  <passengers  -->
+                        <Frame
+                            x:Name="PASSENGERS"
+                            Margin="5"
+                            Padding="5"
+                            BackgroundColor="{StaticResource HeaderItemBg}"
+                            CornerRadius="11"
+                            Style="{StaticResource FrameCardViewStyle}">
+
+                            <StackLayout Grid.Row="0" Margin="5">
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="PASSENGERS"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <StackLayout Orientation="Horizontal">
+
+                                    <StackLayout
+                                        HorizontalOptions="StartAndExpand"
+                                        Orientation="Horizontal"
+                                        VerticalOptions="CenterAndExpand">
+
+                                        <Label
+                                            FontSize="12"
+                                            HorizontalOptions="StartAndExpand"
+                                            Text="Total Passengers"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                        <Label
+                                            x:Name="lblPassengerCount"
+                                            FontSize="12"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="2"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    </StackLayout>
+
+                                    <StackLayout
+                                        HorizontalOptions="EndAndExpand"
+                                        Orientation="Horizontal"
+                                        VerticalOptions="CenterAndExpand">
+
+                                        <Label
+                                            FontSize="12"
+                                            HorizontalOptions="StartAndExpand"
+                                            Text="On Board"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                        <Label
+                                            x:Name="lblPassengerOnboardCount"
+                                            FontSize="12"
+                                            HorizontalOptions="EndAndExpand"
+                                            Text="2"
+                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                    </StackLayout>
+
+                                </StackLayout>
+
+                                <!--  Passengers  -->
+
+
+                                <CollectionView
+                                    x:Name="CollectionPassenger"
+                                    Margin="3,0,0,10"
+                                    HeightRequest="{Binding PassengerRowHeigtht}"
+                                    VerticalOptions="Start">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout Orientation="Vertical" />
+                                    </CollectionView.ItemsLayout>
+
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <StackLayout>
+
+                                                <!--  passengerName  -->
+                                                <StackLayout Margin="7,10,0,0" Orientation="Horizontal">
+                                                    <Label
+                                                        FontFamily="{StaticResource customfonts}"
+                                                        FontSize="15"
+                                                        HorizontalOptions="Start"
+                                                        Text="&#xE817;"
+                                                        TextColor="{StaticResource PrimaryTextColor}"
+                                                        VerticalOptions="StartAndExpand" />
+
+                                                    <Label
+                                                        x:Name="lblPassenger"
+                                                        FontSize="13"
+                                                        Text="{Binding PassengerName}"
+                                                        TextColor="{StaticResource PrimaryTextColor}"
+                                                        VerticalOptions="CenterAndExpand" />
+
+                                                </StackLayout>
+
+                                                <!--  PassengerPhone  -->
+                                                <StackLayout Margin="7,10,0,0" Orientation="Horizontal">
+
+                                                    <Label
+                                                        FontSize="13"
+                                                        HorizontalOptions="StartAndExpand"
+                                                        Text="{Binding passengerPhoneNumber}"
+                                                        TextColor="{StaticResource PrimaryTextColor}"
+                                                        VerticalOptions="CenterAndExpand" />
+
+                                                    <Label
+                                                        FontFamily="{StaticResource customfonts}"
+                                                        FontSize="27"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        IsVisible="{Binding pCallVisible}"
+                                                        Text="&#xE810;"
+                                                        TextColor="{StaticResource SubTitleColor}"
+                                                        VerticalOptions="CenterAndExpand">
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                x:Name="passengerMakeCall"
+                                                                CommandParameter="{Binding passengerPhoneNumber}"
+                                                                Tapped="crewMakeCall_Tapped" />
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
+                                                </StackLayout>
+
+
+                                                <StackLayout Margin="0,7,0,0" IsEnabled="False">
+
+                                                    <!--  Passengers Segment  -->
+                                                    <Label
+                                                        FontSize="13"
+                                                        Text="Passenger Status"
+                                                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                    <SegMentControl:SegmentedControl
+                                                        x:Name="PassengerSegmentedControl"
+                                                        Margin="0,5,0,0"
+                                                        BackgroundColor="{StaticResource NavigationBarColor}"
+                                                        BorderColor="{StaticResource TransparentColor}"
+                                                        IsTabStop="True"
+                                                        SelectedSegment="0"
+                                                        SelectedTextColor="{StaticResource NavigationBarColor}"
+                                                        TextColor="{StaticResource PrimaryTextColor}"
+                                                        TintColor="{StaticResource ButtonBackgroundColor}">
+
+                                                        <!--  SelectedSegment="{Binding passengerStatusId}"  -->
+
+                                                        <SegMentControl:SegmentedControl.Children>
+                                                            <SegMentControl:SegmentedControlOption
+                                                                AutomationId="2"
+                                                                TabIndex="2"
+                                                                Text="Onboard" />
+                                                            <SegMentControl:SegmentedControlOption
+                                                                AutomationId="0"
+                                                                TabIndex="0"
+                                                                Text="Waitlist" />
+                                                            <SegMentControl:SegmentedControlOption
+                                                                AutomationId="1"
+                                                                TabIndex="1"
+                                                                Text="Deadhead" />
+                                                        </SegMentControl:SegmentedControl.Children>
+                                                    </SegMentControl:SegmentedControl>
+
+                                                </StackLayout>
+
+
+                                            </StackLayout>
+
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+
+                        </Frame>
+
+                        <!--  Checklist  -->
+                        <Frame
+                            x:Name="CHECKLISTS"
+                            Margin="5"
+                            BackgroundColor="{StaticResource HeaderItemBg}"
+                            CornerRadius="11"
+                            Style="{StaticResource FrameCardViewStyle}">
+
+                            <StackLayout
+                                Grid.Row="0"
+                                Margin="5"
+                                Padding="5">
+
+                                <StackLayout Margin="0,0,0,10" Orientation="Horizontal">
+
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        HorizontalOptions="Start"
+                                        Text="CHECKLISTS"
+                                        TextColor="{StaticResource PrimaryTextColor}" />
+                                    <!--  E838  -->
+                                    <Label
+                                        x:Name="lblChecklistUpdatingStatus"
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="10"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE838; Updating.."
+                                        TextColor="White"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                </StackLayout>
+
+                                <!--  PILOT  -->
+                                <StackLayout
+                                    Margin="7,0,0,10"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="CenterAndExpand">
+
+                                    <Label
+                                        x:Name="lblpilotStatus"
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="Start"
+                                        Text="&#xE808;"
+                                        TextColor="#FF646A"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Pilot"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE819;"
+                                        TextColor="{StaticResource SubTitleColor}"
+                                        VerticalOptions="CenterAndExpand">
+
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="btnCheckList_Tapped" />
+                                        </Label.GestureRecognizers>
+
+                                    </Label>
+
+                                </StackLayout>
+
+                                <!--  Maintenance  -->
+                                <StackLayout
+                                    Margin="7,0,0,10"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Label
+                                        x:Name="lblMaintenanceStatus"
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="Start"
+                                        Text="&#xE808;"
+                                        TextColor="#FF646A"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Maintenance"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE819;"
+                                        TextColor="{StaticResource SubTitleColor}"
+                                        VerticalOptions="CenterAndExpand">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="btnCheckList_Tapped" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                </StackLayout>
+
+                                <!--  Scheduling  -->
+                                <StackLayout
+                                    Margin="7,0,0,0"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Label
+                                        x:Name="lblSchedulingStatus"
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="Start"
+                                        Text="&#xE808;"
+                                        TextColor="#FF646A"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Scheduling"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE819;"
+                                        TextColor="{StaticResource SubTitleColor}"
+                                        VerticalOptions="CenterAndExpand">
+
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="btnCheckList_Tapped" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                </StackLayout>
+
+                            </StackLayout>
+
+                        </Frame>
+
+                        <!--  Services  -->
+                        <Frame
+                            x:Name="SERVICES"
+                            Margin="5"
+                            BackgroundColor="{StaticResource HeaderItemBg}"
+                            CornerRadius="11"
+                            Style="{StaticResource FrameCardViewStyle}">
+
+                            <StackLayout
+                                Margin="5"
+                                Padding="5"
+                                HorizontalOptions="FillAndExpand">
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="SERVICES"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <!--  Catering  -->
+                                <StackLayout
+                                    Margin="7,0,0,0"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="16"
+                                        HeightRequest="18"
+                                        HorizontalOptions="Start"
+                                        Text="&#xE811;"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="25" />
+
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Catering"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE819;"
+                                        TextColor="{StaticResource SubTitleColor}"
+                                        VerticalOptions="CenterAndExpand">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                CommandParameter="Catering"
+                                                NumberOfTapsRequired="1"
+                                                Tapped="btnServices_Tapped" />
+                                        </Label.GestureRecognizers>
+
+                                    </Label>
+
+                                </StackLayout>
+
+                                <!--  Grounds  -->
+                                <StackLayout
+                                    Margin="7,0,0,0"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="16"
+                                        HeightRequest="18"
+                                        HorizontalOptions="Start"
+                                        Text="&#xE814;"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="25" />
+
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Ground"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE819;"
+                                        TextColor="{StaticResource SubTitleColor}"
+                                        VerticalOptions="CenterAndExpand">
+
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                CommandParameter="Grounds"
+                                                NumberOfTapsRequired="1"
+                                                Tapped="btnServices_Tapped" />
+                                        </Label.GestureRecognizers>
+
+                                    </Label>
+
+                                </StackLayout>
+
+                                <!--  Hotel  -->
+                                <StackLayout
+                                    Margin="7,0,0,0"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="16"
+                                        HeightRequest="18"
+                                        HorizontalOptions="Start"
+                                        Text="&#xE815;"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="25" />
+
+                                    <Label
+                                        FontSize="14"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="Hotel"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
+
+                                    <Label
+                                        FontFamily="{StaticResource customfonts}"
+                                        FontSize="22"
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="&#xE819;"
+                                        TextColor="{StaticResource SubTitleColor}"
+                                        VerticalOptions="CenterAndExpand">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                CommandParameter="Hotel"
+                                                NumberOfTapsRequired="1"
+                                                Tapped="btnServices_Tapped" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+
+                                </StackLayout>
+
+                            </StackLayout>
+
+                        </Frame>
+
+                        <StackLayout HeightRequest="80">
+                            <Label IsVisible="false" Text="just extra space" />
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </ScrollView>
+
+            </StackLayout>
+
+
+            <!--  FabMenu  -->
+            <ImageButton
+                x:Name="FABItenery"
+                Padding="20"
+                AbsoluteLayout.LayoutBounds="{OnPlatform Android='.95,.97,80,80',
+                                                         iOS='.95,.90,80,80'}"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Aspect="AspectFit"
+                BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                Clicked="FABItenery_Clicked"
+                CornerRadius="30"
+                HeightRequest="60"
+                HorizontalOptions="EndAndExpand"
+                Source="icoEllipsis.png"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="60" />
+
+
+            <!--  Activity Indicator/Loading animation  -->
+            <Frame
+                x:Name="Loader"
+                Margin="10,30,10,30"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="{StaticResource LoaderBackground}"
+                CornerRadius="15"
+                HasShadow="False"
+                HeightRequest="15"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand">
+
+                <StackLayout Orientation="Horizontal">
+                    <ActivityIndicator
+                        HorizontalOptions="Start"
+                        IsRunning="True"
+                        VerticalOptions="FillAndExpand"
+                        Color="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        FontSize="13"
+                        HorizontalOptions="End"
+                        Text="Please wait..."
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand" />
+
+                </StackLayout>
+
+            </Frame>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+
+</ContentPage>

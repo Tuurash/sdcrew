@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<switch:CustomSwitch
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="sdcrew.Views.ViewHelpers.CustomControls.SDSwitch"
+    xmlns:switch="clr-namespace:Switch;assembly=Switch"
+    CornerRadius="10"
+    HeightRequest="20"
+    KnobCornerRadius="9" KnobHeight="18" KnobWidth="18" 
+    KnobLimit="Boundary"
+    HorizontalKnobMargin="1" BackgroundColor="{StaticResource TransparentColor}"
+    KnobColor="{StaticResource SwitchOnColor}"
+    WidthRequest="40"
+    VibrateDuration="0">
+
+    <switch:CustomSwitch.BackgroundContent>
+        <StackLayout Orientation="Horizontal">
+            <FlexLayout x:Name="Flex"
+                        Margin="1,0,1,0"
+                        JustifyContent="SpaceBetween"
+                        WidthRequest="90">
+
+                <Label FontAttributes="Bold"
+                   HorizontalOptions="FillAndExpand"
+                   HorizontalTextAlignment="Center"
+                   Text=" ✓"
+                   TextColor="{StaticResource SubTitleColor}"
+                   VerticalOptions="FillAndExpand"
+                   VerticalTextAlignment="Center" />
+                <Label FontAttributes="Bold"
+                   FontSize="12"
+                   HorizontalOptions="FillAndExpand"
+                   HorizontalTextAlignment="Center"
+                   Text=" "
+                   TextColor="#BBBBBB"
+                   VerticalOptions="FillAndExpand"
+                   VerticalTextAlignment="Center" />
+
+            </FlexLayout>
+        </StackLayout>
+    </switch:CustomSwitch.BackgroundContent>
+
+</switch:CustomSwitch>

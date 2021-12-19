@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell
+    x:Class="sdcrew.Views.Dashboard.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:controls1="clr-namespace:sdcrew.Utils"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:postflightViews="clr-namespace:sdcrew.Views.Postflight"
+    xmlns:preflightViews="clr-namespace:sdcrew.Views.Preflight"
+    xmlns:settingsViews="clr-namespace:sdcrew.Views.Settings"
+    xmlns:notificationV="clr-namespace:sdcrew.Views.Notification"
+    xmlns:viewModels="clr-namespace:sdcrew.ViewModels"
+    xmlns:views="clr-namespace:sdcrew.Views"
+    BackgroundColor="{StaticResource FlyoutBG}"
+    FlyoutBackgroundColor="{StaticResource FlyoutBG}" Visual="Material"
+    FlyoutHeaderBehavior="CollapseOnScroll"
+    FlyoutIcon="icoInvisibleMenu.png"
+    Navigating="Shell_Navigating"
+    Shell.BackgroundColor="{StaticResource BarBackgroundColor}"
+    Shell.ItemTemplate="{StaticResource FlyoutTemplateSelector}"
+    Shell.MenuItemTemplate="{StaticResource MenuTemplate}"
+    Shell.NavBarIsVisible="False"
+    mc:Ignorable="d">
+
+    <!--<Shell.BindingContext>
+        <viewModels:AppShellViewModel />
+    </Shell.BindingContext>-->
+
+    <Shell.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource TabbarBg}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource TabbarForeGround}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TabBarUnselected}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource TabbarForeGround}" />
+            </Style>
+
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
+
+            <!--  Menus  -->
+            <DataTemplate x:Key="MenuTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.75*" />
+                    </Grid.ColumnDefinitions>
+                    <Image
+                        Grid.Column="0" Aspect="AspectFit"
+                        HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand"
+                        HeightRequest="20"
+                        Source="{Binding Icon}" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,13,0,15"
+                        FontSize="16"
+                        Text="{Binding Title}"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+
+            <!--  itemHeader  -->
+            <DataTemplate x:Key="FlyoutItemTemplate">
+
+
+                <StackLayout
+                    BackgroundColor="{StaticResource FlyoutBG}"
+                    HorizontalOptions="FillAndExpand"
+                    Orientation="Horizontal">
+
+
+                    <Label
+                        Margin="16,0,0,0"
+                        FontSize="14"
+                        Opacity=".4"
+                        Text="{Binding Title}"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="Center" />
+                </StackLayout>
+
+
+            </DataTemplate>
+
+            <controls1:FlyoutItemTemplateSelector
+                x:Key="FlyoutTemplateSelector"
+                NavigationItemTemplate="{StaticResource FlyoutItemTemplate}" />
+
+
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!--Flyout Header-->
+    <Shell.FlyoutHeader>
+        <ContentView>
+            <Grid HeightRequest="100"
+                    x:Name="gridFlyoutHeader"
+                    Padding="20,30,20,20"
+                    BackgroundColor="{StaticResource FlyoutBG}"
+                    ColumnSpacing="25"
+                    HorizontalOptions="FillAndExpand"
+                    RowSpacing="15"
+                    VerticalOptions="Start">
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+
+                <controls:CircleImage x:Name="imgUser"
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Grid.Column="0"
+                            BorderColor="{StaticResource TransparentColor}" BorderThickness="2"
+                            Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
+                            HeightRequest="85">
+                </controls:CircleImage>
+
+
+                <Label x:Name="lblUserName"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="15" 
+                        Text="Name long long"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="EndAndExpand" />
+
+                <Label
+                        x:Name="txtUserAirlines"
+                        Grid.Row="1" FontSize="13"
+                        Grid.Column="1"
+                        Text="SD Pro Demo"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                <Label
+                        x:Name="lblUserEmail"
+                        Grid.Row="2" FontSize="10" Margin="-5,0,-5,0"
+                        Grid.Column="1" HorizontalOptions="FillAndExpand"
+                        Text="Biggggg@amail.coom"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+
+                <BoxView
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Margin="-20,10,-20,0"
+                        HeightRequest="1"
+                        HorizontalOptions="FillAndExpand"
+                        Opacity=".5"
+                        Color="{StaticResource PrimaryTextColor}" />
+
+            </Grid>
+        </ContentView>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem Route="flyout" >
+
+        <Tab
+            Title="Menu" 
+            Icon="icoMenu.png"
+            Route="ShowFlyout">
+            <ShellContent ContentTemplate="{DataTemplate views:supportPage}" />
+        </Tab>
+
+        <Tab
+            x:Name="Tab_Preflight" 
+            Title="PREFLIGHT"
+            Icon="icoPreflight.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate preflightViews:preFlightPage}" Route="Preflight" />
+        </Tab>
+
+        <Tab
+            Title="POSTFLIGHT"
+            Icon="icoPostflight.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate postflightViews:postFlightPage}" Route="PostFlight" />
+        </Tab>
+
+        <Tab
+            Title="SETTINGS"
+            Icon="icoSettings.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate settingsViews:settingsPage}" Route="Settings" />
+        </Tab>
+
+        <Tab
+            Title="NOTIFCATION"
+            Icon="icoBellTab.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate notificationV:notificationPage}" Route="Notification" />
+        </Tab>
+
+    </FlyoutItem>
+
+    <!--General-->
+    <ShellContent
+        Title="General"
+        IsEnabled="False"
+        Route="Header1" />
+
+    <MenuItem
+        Command="{Binding NavigateSupport}"
+        CommandParameter="Support"
+        IconImageSource="icoSupport.png"
+        Text="Support" />
+    <MenuItem
+        Command="{Binding NavigateNotification}"
+        CommandParameter="Notification"
+        IconImageSource="icoBell.png"
+        Text="Notifications" />
+
+    <!--Preflight-->
+    <ShellContent
+        Title="PreFlight"
+        IsEnabled="False"
+        Route="Header4" />
+
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="Preflight/EventTab"
+        IconImageSource="icoEventSeg.png"
+        Text="Events" />
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="Preflight/FlightTab"
+        IconImageSource="icoFlightSeg.png"
+        Text="Flights" />
+
+    <!--Postflight-->
+    <ShellContent
+        Title="PostFlight"
+        IsEnabled="False"
+        Route="Header5" />
+
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="PostFlight/NotLggedTab"
+        IconImageSource="icoNotLogged.png"
+        Text="Not Logged" />
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="PostFlight/LoggedTab"
+        IconImageSource="icoLogged.png"
+        Text="Logged" />
+
+    <!--Preferences-->
+    <ShellContent
+        Title="Prefereces"
+        IsEnabled="False"
+        Route="Header3" />
+
+    <MenuItem
+        Command="{Binding NavigateCommand}"
+        CommandParameter="Settings/"
+        IconImageSource="icoSettings.png"
+        Text="Settings" />
+    <MenuItem
+        Command="{Binding LogoutCommand}"
+        CommandParameter="Logout"
+        IconImageSource="icoLogout.png"
+        Text="Logout" />
+
+    <Shell.FlyoutFooterTemplate>
+
+        <DataTemplate>
+
+            <ContentView BackgroundColor="{StaticResource FlyoutFooter}" HeightRequest="120">
+
+                <Grid
+                    Margin="30,13,5,5"
+                    HorizontalOptions="FillAndExpand"
+                    Opacity=".6"
+                    VerticalOptions="Start">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="18" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="1.2*" />
+                        <RowDefinition Height="1.4*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.75*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0" Grid.ColumnSpan="2"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        HorizontalOptions="Start"
+                        Text="SUPPORT"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Image
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="16"
+                        HorizontalOptions="Start"
+                        Source="icoPhone.png" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="14"
+                        Text="+1.321.777.3236"
+                        TextColor="{StaticResource PrimaryTextColor}">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="footerPhone_Tapped" x:Name="footerPhone"/>
+                        </Label.GestureRecognizers>
+
+                    </Label>
+
+                    <Image
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="16"
+                        HorizontalOptions="Start"
+                        Source="icoMail.png" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="support@satcomdirect.com"
+                        TextColor="{StaticResource PrimaryTextColor}">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="footerMail_Tapped" x:Name="footerMail"/>
+                        </Label.GestureRecognizers>
+
+                    </Label>
+
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        FontSize="11"
+                        HorizontalOptions="End"
+                        Text="SD Crew v0.1"
+                        TextColor="{StaticResource TabbarForeGround}"
+                        VerticalOptions="End" />
+
+                </Grid>
+
+            </ContentView>
+
+        </DataTemplate>
+
+    </Shell.FlyoutFooterTemplate>
+
+</Shell>
