@@ -1,0 +1,485 @@
+using Android.Content.Res;
+
+using IdentityModel.OidcClient;
+using IdentityModel.OidcClient.Browser;
+using IdentityModel.OidcClient.Results;
+using Newtonsoft.Json;
+using sdcrew.Utils;
+using sdcrew.Views.Dashboard;
+using sdcrew.Views.Login;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using sdcrew.Services;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Essentials;
+using Xamarin.Forms;
+using sdcrew.Services.Data;
+
+namespace sdcrew.ViewModels
+{
+    public class credentialsViewModel : BaseViewModel
+    {
+        OidcClient _client;
+
+
+        private static string CurrentUserKey => "scheduler.current_user";
+
+
+        //save user after login line 284
+
+        UserServices _userServices;
+
+        //Structs
+        public readonly struct User
+        {
+            public string IdentityToken { get; }
+            public string AccessToken { get; }
+            public DateTime AccessTokenGoodUntilUTC { get; }
+            public string RefreshToken { get; }
+            public string Name { get; }
+            public string Email { get; }
+            public string CustomerId { get; }
+            public string AccountId { get; }
+
+            public User(string identityToken, string accessToken, DateTime accessTokenGoodUntilUTC, string refreshToken, string name, string email, string customerId, string accountId)
+            {
+                IdentityToken = identityToken;
+                AccessToken = accessToken;
+
+                AccessTokenGoodUntilUTC = accessTokenGoodUntilUTC.ToUniversalTime();
+                RefreshToken = refreshToken;
+                Name = name;
+                CustomerId = customerId;
+                AccountId = accountId;
+                Email = email;
+            }
+        }
+
+        protected struct OidcEnvironmentSettings
+        {
+            public string Authority;
+            public string ClientId;
+        }
+
+        public readonly struct UserChangedEventArgs
+        {
+            public User? User { get; }
+
+            public UserChangedEventArgs(User? user)
+            {
+                User = user;
+            }
+        }
+
+        private User? _currentUser = null;
+
+        //public Tasks
+        private Task FetchSavedUserTask { get; set; }
+
+        public event EventHandler<UserChangedEventArgs> UserChanged;
+
+        public credentialsViewModel()
+        {
+            _userServices = new UserServices();
+
+            FetchSavedUserTask = Task.Run(async () =>
+            {
+                var user = await LoadSavedUserAsync();
+                user = await RefreshAsync(user);
+                CurrentUser = user;
+            });
+
+            //MainThread.BeginInvokeOnMainThread(async () =>
+            //{
+            //    await CheckUserCred();
+            //});
+
+            //var browser = new WebAuthenticatorBrowser();
+            InitSdclientOptions();
+        }
+
+        private void InitSdclientOptions()
+        {
+            string AuthUrl = "https://identity.satcomdirect.com";
+            string ClientId = "CrewMobileClient";
+
+            if (Settings.StoreAuthidentifierUrl != "")
+            {
+                AuthUrl = Settings.StoreAuthidentifierUrl;
+            }
+            else
+            {
+                AuthUrl = "https://identity.satcomdirect.com";
+            }
+
+            var options = new OidcClientOptions
+            {
+
+                //Browser = DependencyService.Get<IBrowser>(),
+                Browser = new WebAuthenticatorBrowser(),
+                Authority = AuthUrl,
+                ClientId = ClientId,
+ 
+                Scope = "openid profile offline_access sdportalapi",
+                RedirectUri = "sdcrew://callback",
+                PostLogoutRedirectUri = "sdcrew://logout",  //"sdcrew://logout",
+                ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect,
+
+            };
+
+            _client = new OidcClient(options);
+        }
+
+        public User? CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                SaveUserAsync(_currentUser);
+                UserChanged?.Invoke(this, new UserChangedEventArgs(_currentUser));
+                if (value == null)
+                {
+                    StopRefreshingToken();
+                }
+                else
+                {
+                    StartRefreshingToken();
+                }
+            }
+        }
+
+        public async Task<User?> LoginAsync()
+        {
+            InitSdclientOptions();
+            await FetchSavedUserTask;
+
+            var result = await _client.LoginAsync(new LoginRequest());
+
+            if (result.IsError)
+            {
+                CurrentUser = null;
+            }
+            else
+            {
+                CurrentUser = CreateUser(result);
+            }
+
+            return CurrentUser;
+        }
+
+        private static async Task<User?> LoadSavedUserAsync()
+        {
+            Console.WriteLine($"[oidc] loading saved user...");
+            try
+            {
+                var strUser = await SecureStorage.GetAsync(CurrentUserKey);
+                if(strUser==null)
+                {
+                    strUser = Settings.GeneralSettings;
+                }
+
+                if (strUser == null)
+                {
+                    strUser = Settings.GeneralSettings;
+                }
+
+                if (strUser == null || strUser == "")
+                {
+                    Console.WriteLine($"[oidc] no saved user found");
+                    return null;
+                }
+
+                var tUser = JsonConvert.DeserializeObject<User>(strUser);
+                Console.WriteLine($"[oidc] user found [{tUser.Name}]");
+                return tUser;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[oidc] error while loading user");
+                Console.WriteLine($"[oidc] msg [{e.Message}]");
+                return null;
+            }
+        }
+
+        public async Task CheckUserCred()
+        {
+            var strUser = Settings.GeneralSettings;
+            if (strUser == null || strUser=="")
+            {
+                Console.WriteLine($"[oidc] no saved user found");
+            }
+            else
+            {
+                var tUser = JsonConvert.DeserializeObject<User>(strUser);
+                Console.WriteLine($"[oidc] user found [{tUser.Name}]");
+                CurrentUser = tUser;
+
+                await RefreshAsync(tUser);
+                await Task.Run(async () => { await _userServices.AddUser(); });
+
+                App.Current.MainPage = new AppShell();
+            }
+        }
+
+        private async Task<User?> RefreshAsync(User? user)
+        {
+            Console.WriteLine($"Refreshing user [{user?.Name}]");
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var tUser = user.Value;
+
+            if (string.IsNullOrWhiteSpace(tUser.RefreshToken))
+            {
+                Console.WriteLine($"Refresh token is empty");
+                return null;
+            }
+
+            try
+            {
+                var result = await _client.RefreshTokenAsync(tUser.RefreshToken);
+                if (result.IsError)
+                {
+                    Console.WriteLine($"Error while refreshing [{result.Error}]");
+                    // TODO(jpr): log to appcenter
+                    return null;
+                }
+                //Store AccessToken into localstorage
+                Settings.StoreAccessToken = string.Empty;
+                Settings.StoreAccessToken = tUser.AccessToken;
+
+                Console.WriteLine($"Refreshed user");
+                return CreateUser(result, tUser.Name, tUser.Email, tUser.CustomerId, tUser.AccountId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while refreshing [{e.Message}]");
+                // TODO(jpr): log to appcenter
+                return null;
+            }
+        }
+
+        #region CreateUser
+
+        private static User CreateUser(LoginResult result)
+        {
+            var fetched_Email = result.User.Claims.First(x => x.Type == "email").Value;
+            var fetched_CustomerId = result.User.Claims.First(x => x.Type == "http://schemas.satcomdirect.com/ws/2014/10/identity/claims/customerids").Value;
+            var fetched_AccountId = result.User.Claims.First(x => x.Type == "http://schemas.satcomdirect.com/ws/2014/10/identity/claims/accountids").Value;
+
+            //Store Refreshtoken into localstorage
+            Settings.StoreAccessToken = string.Empty;
+            Settings.StoreAccessToken = result.AccessToken;
+
+            return new User(
+                identityToken: result.IdentityToken,
+                accessToken: result.AccessToken,
+                accessTokenGoodUntilUTC: result.AccessTokenExpiration.ToUniversalTime(),
+                refreshToken: result.RefreshToken,
+                name: result.User.Identity.Name,
+                email: fetched_Email,
+                accountId: fetched_AccountId,
+                customerId: fetched_CustomerId
+            );
+
+
+        }
+
+        private static User CreateUser(RefreshTokenResult result, string Name, string Email, string CustomerID, string AccountID)
+        {
+            return new User(
+                identityToken: result.IdentityToken,
+                accessToken: result.AccessToken,
+                accessTokenGoodUntilUTC: result.AccessTokenExpiration.ToUniversalTime(),
+                refreshToken: result.RefreshToken,
+                name: Name,
+                email: Email,
+                customerId: CustomerID,
+                accountId: AccountID
+            );
+        }
+
+        #endregion
+
+        //SaveUserAsync was static
+        public static Task SaveUserAsync(User? user)
+        {
+            if (user is User tUser)
+            {
+                Console.WriteLine($"[oidc] saving user [{tUser.Name}]...");
+                var strUser = JsonConvert.SerializeObject(tUser);
+                SecureStorage.SetAsync(CurrentUserKey, strUser);
+
+                //Save to local settings storage
+                Settings.GeneralSettings = strUser;
+
+                //Store Refreshtoken into localstorage
+                Settings.StoreAccessToken = string.Empty;
+                Settings.StoreAccessToken = tUser.AccessToken;
+
+            }
+            else
+            {
+                Console.WriteLine($"[oidc] removing saved user...");
+                SecureStorage.Remove(CurrentUserKey);
+                Settings.StoreAccessToken = string.Empty;
+                Console.WriteLine($"[oidc] done");
+            }
+            return null;
+        }
+
+        //Helpers
+        private bool IsRefreshing { get; set; } = false;
+
+        private Semaphore RefreshLock = new Semaphore(1, 1, "RefreshLock");
+
+        private CancellationTokenSource tokenSource;
+
+        private readonly TimeSpan TimeInAdvanceToRequestRefresh = TimeSpan.FromSeconds(60);
+
+        public void StartRefreshingToken()
+        {
+            Console.WriteLine($"REFRESH START CALLED [isRefreshing {IsRefreshing}] [name {CurrentUser?.Name}]");
+            if (CurrentUser == null || IsRefreshing)
+            {
+                return;
+            }
+
+            RefreshLock.WaitOne();
+
+            Console.WriteLine($"REFRESH START ENTERED");
+
+            if (CurrentUser == null || IsRefreshing)
+            {
+                goto cleanup;
+            }
+
+            IsRefreshing = true;
+
+            tokenSource = new CancellationTokenSource();
+            var token = tokenSource.Token;
+            Action refresh = async () =>
+            {
+                var innerToken = token;
+                Console.WriteLine("REFRESH STARTING");
+                while (!innerToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("REFRESH TICK");
+                    var user = CurrentUser;
+                    if (user == null)
+                    {
+                        break;
+                    }
+                    var tUser = user.Value;
+
+                    var dt = tUser.AccessTokenGoodUntilUTC - DateTime.UtcNow - TimeInAdvanceToRequestRefresh;
+                    dt = dt < TimeSpan.Zero ? TimeSpan.Zero : dt;
+                    Console.WriteLine($"REFRESH SCHEDULED [{(int)dt.TotalMinutes}m{dt.Seconds}s]");
+                    await Task.Delay(dt);
+                    if (!innerToken.IsCancellationRequested)
+                    {
+                        CurrentUser = await RefreshAsync(CurrentUser);
+                    }
+                }
+
+                Console.WriteLine("REFRESH STOPPED");
+            };
+            Task.Run(refresh);
+
+        cleanup:
+            RefreshLock.Release();
+        }
+
+        public void StopRefreshingToken()
+        {
+            Console.WriteLine($"REFRESH STOP CALLED [isRefreshing {IsRefreshing}]");
+            if (!IsRefreshing)
+            {
+                return;
+            }
+
+            RefreshLock.WaitOne();
+
+            Console.WriteLine($"REFRESH STOP ENTERED");
+
+            if (!IsRefreshing)
+            {
+                goto cleanup;
+            }
+
+            IsRefreshing = false;
+
+            tokenSource.Cancel();
+            tokenSource = null;
+
+        cleanup:
+            RefreshLock.Release();
+        }
+
+        //Logout events
+        public async Task LogoutAsync()
+        {
+
+            await PerformLogoutTask();
+
+            CurrentUser = null;
+
+            Settings.GeneralSettings = "";
+            SecureStorage.Remove("scheduler.current_user");
+            Settings.StoreAccessToken = string.Empty;
+        }
+
+        private Task PerformLogoutTask()
+        {
+            var Cuser = _userServices.GetUser();
+
+            var idToken = Cuser.Result.IdentityToken;
+
+            if (idToken != null)
+            {
+                var request = new LogoutRequest
+                {
+                    IdTokenHint = idToken,
+                };
+                return _client.LogoutAsync(request);
+            }
+            return Task.CompletedTask;
+        }
+
+        public ICommand LoginCommand => new Command(PerformLogin);
+
+        private async void PerformLogin(object obj)
+        {
+            IsBusy = true;
+
+            await LoginAsync();
+            await Task.Run(async () => { await _userServices.AddUser(); });
+
+            if (CurrentUser != null)
+            {
+                RedirectToDashboard();
+                IsBusy = false;
+            }
+        }
+
+        private void RedirectToDashboard()
+        {
+            App.Current.MainPage = new AppShell();
+        }
+
+    }
+
+    public class AccountOptions
+    {
+        // More account options
+        public static bool AutomaticRedirectAfterSignOut = true;
+    }
+
+}

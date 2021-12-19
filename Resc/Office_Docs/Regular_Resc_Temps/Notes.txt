@@ -1,0 +1,9 @@
+string getStartDate = DateTime.Today.AddDays(-14).ToShortDateString();
+            string getEndDate = DateTime.Today.AddDays(+14).ToShortDateString();
+var url = preflightEndpoints.PRE_FLIGHT_REQUEST_URL + preflightEndpoints.FETCH_NOTE + "?startDateTime=" + getStartDate
+                +"&endDateTime=" + getEndDate + "&inAirportLocalTime=true&showCanceled=false";
+
+
+----------------
+crewMemberType instead of  crew initials
+----------------

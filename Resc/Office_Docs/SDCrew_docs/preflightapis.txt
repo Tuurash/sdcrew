@@ -1,0 +1,34 @@
+timeformat=year-month-day
+
+preflight e 2ta event staff event r aircraft event
+
+Staff Events:
+
+https://sd-profile-api.satcomdirect.com/preflight/api/MobileCalendar/StaffEvents?startDateTime=2020-08-03&endDateTime=2021-08-03&inAirportLocalTime=false&showCanceled=false
+https://sd-profile-api.satcomdirect.com/preflight/api/MobileCalendar/GetCalendarDaysByDateRange?startDateTime=2020-08-03&endDateTime=2021-08-03&inAirportLocalTime=false&showCanceled=false
+
+
+preflight er staff event Types:
+AppConfig.RequestAPIS.PRE_FLIGHT_REQUEST_URL + AppConfig.RequestAPIS.FETCH_STAFF_EVENT_TYPES
+
+https://sd-profile-api.satcomdirect.com/preflight/api/StaffEvent/StaffEventTypes
+
+preflight aircraft events:
+var aircraftUrlString = AppConfig.RequestAPIS.PRE_FLIGHT_PROFILE_REQUEST_URL + AppConfig.RequestAPIS.PRE_FLIGHT_AIRCRAFT_EVENT + "?startDateTime=\(escapedStringStartdate)&endDateTime=\(escapedStringtodate)&inAirportLocalTime=false&showCanceled=false"//&inAirportLocalTime=false"
+
+https://sd-profile-api.satcomdirect.com/preflight/api/MobileCalendar/GetCalendarDaysByDateRange?startDateTime=2020-08-03&endDateTime=2021-08-03&inAirportLocalTime=false&showCanceled=false&inAirportLocalTime=false
+
+preflight Notes:
+var apprtypeurlString = AppConfig.RequestAPIS.PRE_FLIGHT_REQUEST_URL + AppConfig.RequestAPIS.FETCH_PREFLIGHT_NOTES + "?startDateTime=\(escapedStringStartdate)&endDateTime=\(escapedStringtodate)&inAirportLocalTime=false&showCanceled=false"
+
+
+Preflight Notifications:
+let notificationurlString = AppConfig.RequestAPIS.PRE_FLIGHT_REQUEST_URL + AppConfig.RequestAPIS.FETCH_NOTIFICATION + "?notificationOption=\(notificationOption)&pageNumber=1&pageSize=25"
+
+
+FETCH_TAIL_NUMBERS:
+
+PRE_FLIGHT_PROFILE_REQUEST_URL+FETCH_TAIL_NUMBERS
+
+
+https://sd-profile-api.satcomdirect.com/preflight/api/AircraftProfiles/AircraftProfileDtos

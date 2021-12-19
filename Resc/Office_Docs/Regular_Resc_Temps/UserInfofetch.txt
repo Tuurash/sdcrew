@@ -1,0 +1,13 @@
+ParentID-> CustomerID
+
+
+
+Decide CustID
+
+
+
+CustomerID link:
+http://schemas.satcomdirect.com/ws/2014/10/identity/claims/customerids 
+
+AccountID link:
+http://schemas.satcomdirect.com/ws/2014/10/identity/claims/accountids

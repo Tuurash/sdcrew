@@ -1,0 +1,14 @@
+12 sep 2021 (All Capital) Done
+am/pm will not be here Done
+time icon needs conditions Done
+Date format monday,13,2021 (collapsable date) Done
+
+aircraft icons also needs condition
+
+
+
+
+
+StringFormat='{0:dd MMMM, yyyy hh:mm} 12 September, 2021 5.14
+
+StringFormat='{0:DDDD, dd, MMMM, yyyy} monday,13,2021

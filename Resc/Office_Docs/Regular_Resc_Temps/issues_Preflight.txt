@@ -1,0 +1,22 @@
+Done:
+-Ete should be in middle 
+-group by header should be collapsable
+-load previousdata before{load data consequently}
+-tripID  will be null in staff events
+-lastupdate(header) should be scrollable
+-filter items should be saved
+
+
+- -Data missing in events need Checking
+
+To Do:
+-in cards time format should be utc
+
+
+Planned:
+-lazy loading in listview
+
+
+NB:
+filter e Aircraftprofile
+-API calling must not be in main thread

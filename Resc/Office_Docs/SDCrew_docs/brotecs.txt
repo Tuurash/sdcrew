@@ -1,0 +1,19 @@
+SDCrew
+------
+A flight log app.logs fuel,crew,passenger and etc info
+* font Roboto
+
+Technologies:\
+--------------
+
+* login Cred Technology---AuthZero, 
+* NetworkHandler
+
+
+* appcenter
+* appanalytics
+* push notifications/ Azure hub
+
+
+Requirements:
+-------------

@@ -1,0 +1,10 @@
+Documentaiton settings package, SecureStorage
+Study Encryption Algorithm
+Auth0 logout workflow for parameter
+C# (CSharp) CompletionHandler Examples
+
+sqlite with sqlcypher 
+
+test sdcrew in IOS platform asap
+
+study of push notifcation

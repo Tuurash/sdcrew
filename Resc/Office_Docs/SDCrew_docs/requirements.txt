@@ -1,0 +1,13 @@
+releases goes--> MS appcenter
+
+Splash screen
+login--> authzero
+	 save login cred to keychain
+
+
+
+Dashboard 5 Tabs(module)
+
+menu, preflight, sttings & support
+	1`
+

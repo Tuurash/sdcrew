@@ -1,0 +1,10 @@
+login
+
+Api call best approach:
+	Creating RestClient singleton instance, 
+	loopback 3x, 
+	signalIR
+
+Api request/framework
+UI
+MVVM
