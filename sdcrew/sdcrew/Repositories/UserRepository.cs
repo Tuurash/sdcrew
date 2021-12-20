@@ -45,7 +45,7 @@ namespace sdcrew.Repositories
             return _requestService.GetAsync<Document>(url).Result;
         }
 
-        public string GetImageAsync()
+        public Uri GetImageAsync()
         {
             string url = "https://sd-profile-api.satcomdirect.com/preflight/api/FileStorage/" + GetDocumentAsync().Result.fileId;
 

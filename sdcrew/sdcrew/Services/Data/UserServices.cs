@@ -18,7 +18,7 @@ namespace sdcrew.Services.Data
     public class UserServices
     {
         KeyGenerator _keygen = new KeyGenerator();
-       
+
         UserRepository _userRepo;
         static SQLiteConnection db;
 
@@ -33,7 +33,7 @@ namespace sdcrew.Services.Data
 
         private async Task Init()
         {
-           db= await DB_Init.Init();
+            db = await DB_Init.Init();
         }
 
         public async Task AddUser(User _user)
@@ -45,7 +45,7 @@ namespace sdcrew.Services.Data
                 string userFromStorage = Settings.GeneralSettings;
                 _user = JsonConvert.DeserializeObject<User>(userFromStorage);
 
-                string imgUri= _userRepo.GetImageAsync();
+                Uri imgUri = _userRepo.GetImageAsync();
 
                 _user = new User
                 {
@@ -92,7 +92,7 @@ namespace sdcrew.Services.Data
                 string userFromStorage = Settings.GeneralSettings;
                 _user = JsonConvert.DeserializeObject<User>(userFromStorage);
 
-                string imgUri = _userRepo.GetImageAsync();
+                Uri imgUri = _userRepo.GetImageAsync();
 
                 var user = new User
                 {
@@ -112,7 +112,7 @@ namespace sdcrew.Services.Data
                 {
                     db.Insert(user);
                 }
-                catch(Exception exc) { Console.WriteLine(exc); }
+                catch (Exception exc) { Console.WriteLine(exc); }
 
                 Console.WriteLine("Added User: " + user.UserID);
 
@@ -126,7 +126,7 @@ namespace sdcrew.Services.Data
             var fetchedUser = db.Table<User>().Where(x => x.AccessToken == tUser.AccessToken).FirstOrDefault();
             await Task.Delay(0);
 
-            if(fetchedUser!=null)
+            if (fetchedUser != null)
             {
                 var user = new User
                 {

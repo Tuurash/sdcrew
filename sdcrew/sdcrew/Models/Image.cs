@@ -12,7 +12,7 @@ namespace sdcrew.Models
         public string fileExtension { get; set; }
         public string contentType { get; set; }
         public int sizeBytes { get; set; }
-        public string fileUri { get; set; }
+        public Uri fileUri { get; set; }
         public string sasToken { get; set; }
         public string storageAccount { get; set; }
         public bool exists { get; set; }

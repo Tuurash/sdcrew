@@ -30,6 +30,8 @@ namespace sdcrew.Views.Dashboard
         Dictionary<string, Type> routes = new Dictionary<string, Type>();
 
         public ICommand NavigateCommand => new Command(Navigate);
+
+
         public ICommand NavigateNotification => new Command(async () => await PushPage(new notificationPage()));
         public ICommand NavigateSupport => new Command(async () => await PushPage(new supportPage()));
 
@@ -38,9 +40,10 @@ namespace sdcrew.Views.Dashboard
         public AppShell()
         {
             InitializeComponent();
+
             BindingContext = this;
             RegisterRoutes();
-            this.CurrentItem.CurrentItem = Tab_Preflight;
+            this.CurrentItem = Tab_Preflight;
 
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -58,15 +61,7 @@ namespace sdcrew.Views.Dashboard
             lblUserName.Text = user.Name;
             lblUserEmail.Text = user.Email;
 
-            //var client = new System.Net.Http.HttpClient();
-
-            //System.IO.Stream imagestream = await client.GetStreamAsync(user.ImageUri);
-            //imgUser.Source = ImageSource.FromStream(() => imagestream);
-
-            System.Uri uri;
-            System.Uri.TryCreate(user.ImageUri, UriKind.Absolute, out uri);
-            Task<ImageSource> result = Task<ImageSource>.Factory.StartNew(() => ImageSource.FromUri(uri));
-            imgUser.Source = await result;
+            ImgUserSrc.Uri = user.ImageUri;
 
         }
 
@@ -174,7 +169,7 @@ namespace sdcrew.Views.Dashboard
                 await Email.ComposeAsync(message);
             }
             catch (Exception) { }
-        } 
+        }
         #endregion
     }
 

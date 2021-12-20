@@ -4,40 +4,68 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="sdcrew.Views.ViewHelpers.CustomControls.SDSwitch"
     xmlns:switch="clr-namespace:Switch;assembly=Switch"
-    CornerRadius="10"
-    HeightRequest="20"
+    CornerRadius="10" 
+    HeightRequest="20" 
     KnobCornerRadius="9" KnobHeight="18" KnobWidth="18" 
     KnobLimit="Boundary"
-    HorizontalKnobMargin="1" BackgroundColor="{StaticResource TransparentColor}"
+    HorizontalKnobMargin="1"
     KnobColor="{StaticResource SwitchOnColor}"
     WidthRequest="40"
     VibrateDuration="0">
 
+    <!--Text=" ✓"-->
+
+
     <switch:CustomSwitch.BackgroundContent>
-        <StackLayout Orientation="Horizontal">
-            <FlexLayout x:Name="Flex"
-                        Margin="1,0,1,0"
-                        JustifyContent="SpaceBetween"
+        <Frame x:Name="SDBorder" CornerRadius="11" BackgroundColor="Transparent" Padding="0">
+
+            <FlexLayout Margin="3" 
+                        JustifyContent="SpaceEvenly"
                         WidthRequest="90">
 
                 <Label FontAttributes="Bold"
-                   HorizontalOptions="FillAndExpand"
-                   HorizontalTextAlignment="Center"
-                   Text=" ✓"
-                   TextColor="{StaticResource SubTitleColor}"
-                   VerticalOptions="FillAndExpand"
-                   VerticalTextAlignment="Center" />
+                           HorizontalOptions="StartAndExpand"
+                           HorizontalTextAlignment="Center"
+                           Text="✓  " FontSize="12"
+                           TextColor="{StaticResource SwitchThumbColor}"
+                           VerticalOptions="FillAndExpand"
+                           VerticalTextAlignment="Center" />
+
                 <Label FontAttributes="Bold"
-                   FontSize="12"
-                   HorizontalOptions="FillAndExpand"
-                   HorizontalTextAlignment="Center"
-                   Text=" "
-                   TextColor="#BBBBBB"
-                   VerticalOptions="FillAndExpand"
-                   VerticalTextAlignment="Center" />
+                           FontSize="12"
+                           HorizontalOptions="FillAndExpand"
+                           HorizontalTextAlignment="Center"
+                           Text=" "
+                           TextColor="#BBBBBB"
+                           VerticalOptions="FillAndExpand"
+                           VerticalTextAlignment="Center" />
 
             </FlexLayout>
-        </StackLayout>
+
+
+        </Frame>
     </switch:CustomSwitch.BackgroundContent>
+
+    <!--knob-->
+    <switch:CustomSwitch.KnobContent>
+        <StackLayout Orientation="Horizontal">
+            <FlexLayout x:Name="Flex"
+                        AlignItems="Center"
+                        JustifyContent="SpaceBetween"
+                        WidthRequest="60">
+                <Image x:Name="MoonImg"
+                       Aspect="AspectFit"
+                       HeightRequest="40"
+                       HorizontalOptions="Center"
+                       Source="imgKnobDActive"
+                       VerticalOptions="Center" />
+                <Image Aspect="AspectFit"
+                       HeightRequest="40"
+                       HorizontalOptions="Center"
+                       Source="imgKnob"
+                       VerticalOptions="Center" />
+            </FlexLayout>
+        </StackLayout>
+    </switch:CustomSwitch.KnobContent>
 
 </switch:CustomSwitch>

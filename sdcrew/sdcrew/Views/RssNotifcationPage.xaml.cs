@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 using sdcrew.Repositories;
 
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace sdcrew.Views
 {
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    [DesignTimeVisible(false)]
     public partial class RssNotifcationPage : ContentPage
     {
         MiscRepository misc;
@@ -15,10 +21,12 @@ namespace sdcrew.Views
         public RssNotifcationPage()
         {
             InitializeComponent();
+            Device.BeginInvokeOnMainThread(() => sdLoader.IsVisible = true);
         }
 
         protected override void OnAppearing()
         {
+            base.OnAppearing();
             Task.Run(async () => await FetchAllRss()).ConfigureAwait(false);
         }
 
@@ -34,21 +42,38 @@ namespace sdcrew.Views
             });
         }
 
-        void btnBack_Tapped(System.Object sender, System.EventArgs e)
+        async void btnBack_Tapped(System.Object sender, System.EventArgs e)
         {
+            HapticFeedback.Perform(HapticFeedbackType.Click);
+
+            await Navigation.PopAsync();
         }
 
-        void rss_Tapped(System.Object sender, System.EventArgs e)
+        async void rss_Tapped(System.Object sender, System.EventArgs e)
         {
             dynamic param = ((TappedEventArgs)e).Parameter;
+            await Task.Delay(0);
 
-            //HtmlDescription  e.SelectedItem as Job
-
-            var browser = new WebView();
             var htmlSource = new HtmlWebViewSource();
             htmlSource.Html = param.HtmlDescription;
 
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                rssDetailsWebView.Source = htmlSource;
+                WebviewHolder.IsVisible = true;
+                RssListView.IsVisible = false;
+            });
+        }
 
+        async void btnCloseWebview_Clicked(System.Object sender, System.EventArgs e)
+        {
+            await Task.Delay(0);
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                WebviewHolder.IsVisible = false;
+                RssListView.IsVisible = true;
+            });
         }
     }
 }

@@ -369,6 +369,8 @@
     <BundleResource Include="Resources\icoDropdown.png" />
     <BundleResource Include="Resources\icoBellTab.png" />
     <BundleResource Include="Resources\sd_loading.gif" />
+    <BundleResource Include="Resources\imgKnob.png" />
+    <BundleResource Include="Resources\imgKnobDActive.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

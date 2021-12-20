@@ -15,6 +15,10 @@
                 </OnPlatform>
             </AbsoluteLayout.Margin>
 
+            <Image Source="sd_loading" HeightRequest="150" IsVisible="false" WidthRequest="150" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Aspect="AspectFit"
+                   AbsoluteLayout.LayoutBounds="0,0,1,1"
+                   AbsoluteLayout.LayoutFlags="All"
+                   IsAnimationPlaying="True" x:Name="sdLoader"/>
 
             <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All">
@@ -75,6 +79,15 @@
 
                 </pv:PancakeView>
 
+                <Grid x:Name="WebviewHolder" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" IsVisible="False">
+
+                    <WebView x:Name="rssDetailsWebView" HeightRequest="2500" Margin="0,-25,0,0"/>
+
+                    <Button Text="Close" HorizontalOptions="EndAndExpand" VerticalOptions="StartAndExpand" TextColor="Blue" BackgroundColor="{StaticResource TransparentColor}" x:Name="btnCloseWebview"
+                            Clicked="btnCloseWebview_Clicked"/>
+
+                </Grid>
+
                 <CollectionView x:Name="RssListView"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10" SelectionMode="None" HorizontalScrollBarVisibility="Never" BackgroundColor="{StaticResource TransparentColor}">
 
 
@@ -109,12 +122,6 @@
                 </CollectionView>
 
             </StackLayout>
-
-            <Image Source="sd_loading" HeightRequest="300" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Aspect="AspectFit"
-                   AbsoluteLayout.LayoutBounds="0,0,1,1"
-                   AbsoluteLayout.LayoutFlags="All"
-                   IsAnimationPlaying="True" x:Name="sdLoader"/>
-
 
         </AbsoluteLayout>
 

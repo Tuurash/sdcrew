@@ -1,4 +1,5 @@
 ﻿using SQLite;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace sdcrew.Models
     {
         //CustomerID from http://schemas.satcomdirect.com/ws/2014/10/identity/claims/customerids
         //Account from http://schemas.satcomdirect.com/ws/2014/10/identity/claims/accountids
-        
+
         [PrimaryKey, AutoIncrement]
         public int UserID { get; set; }
 
@@ -24,7 +25,7 @@ namespace sdcrew.Models
 
         public DateTime LoginTime { get; set; }
 
-        public string ImageUri { get; set; }
+        public Uri ImageUri { get; set; }
 
 
     }

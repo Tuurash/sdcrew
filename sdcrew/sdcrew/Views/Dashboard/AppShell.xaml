@@ -15,18 +15,18 @@
     xmlns:views="clr-namespace:sdcrew.Views"
     BackgroundColor="{StaticResource FlyoutBG}"
     FlyoutBackgroundColor="{StaticResource FlyoutBG}" Visual="Material"
-    FlyoutHeaderBehavior="CollapseOnScroll"
+    FlyoutHeaderBehavior="Scroll"
     FlyoutIcon="icoInvisibleMenu.png"
     Navigating="Shell_Navigating"
     Shell.BackgroundColor="{StaticResource BarBackgroundColor}"
     Shell.ItemTemplate="{StaticResource FlyoutTemplateSelector}"
     Shell.MenuItemTemplate="{StaticResource MenuTemplate}"
     Shell.NavBarIsVisible="False"
+
+
+
     mc:Ignorable="d">
 
-    <!--<Shell.BindingContext>
-        <viewModels:AppShellViewModel />
-    </Shell.BindingContext>-->
 
     <Shell.Resources>
         <ResourceDictionary>
@@ -42,6 +42,7 @@
 
             <!--  Menus  -->
             <DataTemplate x:Key="MenuTemplate">
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.25*" />
@@ -62,7 +63,7 @@
                 </Grid>
             </DataTemplate>
 
-            <!--  itemHeader  -->
+            <!--Flyout itemHeader Style  -->
             <DataTemplate x:Key="FlyoutItemTemplate">
 
 
@@ -92,10 +93,10 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!--Flyout Header-->
+    <!--Flyout itemHeader-->
     <Shell.FlyoutHeader>
-        <ContentView>
-            <Grid HeightRequest="100"
+
+        <Grid HeightRequest="100"
                     x:Name="gridFlyoutHeader"
                     Padding="20,30,20,20"
                     BackgroundColor="{StaticResource FlyoutBG}"
@@ -105,28 +106,32 @@
                     VerticalOptions="Start">
 
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="4*" />
-                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
 
-                <controls:CircleImage x:Name="imgUser"
+            <controls:CircleImage x:Name="imgUser"
                             Grid.Row="0"
                             Grid.RowSpan="3"
                             Grid.Column="0"
                             BorderColor="{StaticResource TransparentColor}" BorderThickness="2"
                             Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
                             HeightRequest="85">
-                </controls:CircleImage>
+                <Image.Source>
+                    <UriImageSource x:Name="ImgUserSrc" CachingEnabled="True" CacheValidity="30"/>
+                </Image.Source>
+
+            </controls:CircleImage>
 
 
-                <Label x:Name="lblUserName"
+            <Label x:Name="lblUserName"
                         Grid.Row="0"
                         Grid.Column="1"
                         FontAttributes="Bold"
@@ -135,14 +140,14 @@
                         TextColor="{StaticResource PrimaryTextColor}"
                         VerticalOptions="EndAndExpand" />
 
-                <Label
+            <Label
                         x:Name="txtUserAirlines"
                         Grid.Row="1" FontSize="13"
                         Grid.Column="1"
                         Text="SD Pro Demo"
                         TextColor="{StaticResource PrimaryTextColor}" />
 
-                <Label
+            <Label
                         x:Name="lblUserEmail"
                         Grid.Row="2" FontSize="10" Margin="-5,0,-5,0"
                         Grid.Column="1" HorizontalOptions="FillAndExpand"
@@ -150,7 +155,7 @@
                         TextColor="{StaticResource PrimaryTextColor}" />
 
 
-                <BoxView
+            <BoxView
                         Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
@@ -160,14 +165,14 @@
                         Opacity=".5"
                         Color="{StaticResource PrimaryTextColor}" />
 
-            </Grid>
-        </ContentView>
+        </Grid>
+
     </Shell.FlyoutHeader>
 
-    <FlyoutItem Route="flyout" >
+    <FlyoutItem Route="flyout">
 
         <Tab
-            Title="Menu" 
+            Title="Menu"
             Icon="icoMenu.png"
             Route="ShowFlyout">
             <ShellContent ContentTemplate="{DataTemplate views:supportPage}" />
@@ -188,7 +193,7 @@
             <ShellContent ContentTemplate="{DataTemplate postflightViews:postFlightPage}" Route="PostFlight" />
         </Tab>
 
-        <Tab
+        <Tab x:Name="Tab_Settings"
             Title="SETTINGS"
             Icon="icoSettings.png"
             Route="tab">

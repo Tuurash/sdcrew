@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Switch;
 using Switch.Helpers;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,32 +16,31 @@ namespace sdcrew.Views.ViewHelpers.CustomControls
         {
             InitializeComponent();
 
-            //Comment out Later
+            SwitchPanUpdate += (sender, e) =>
+            {
+                Color fromBackgroundColor = IsToggled ? Color.FromHex("#80D1EA") : Color.FromHex("#797D7F");
+                Color toBackgroundColor = IsToggled ? Color.FromHex("#797D7F") : Color.FromHex("#80D1EA");
 
-            //SwitchPanUpdate += (sender, e) =>
-            //{
-            //    Color fromColorGradient1 = IsToggled ? Color.FromHex("#B1E3F2") : Color.FromHex("#808080");
-            //    Color toColorGradient1 = IsToggled ? Color.FromHex("#808080") : Color.FromHex("#B1E3F2");
+                double t = e.Percentage * 0.01;
 
-            //    Color fromColorGradient2 = IsToggled ? Color.FromHex("#B1E3F2") : Color.FromHex("#808080");
-            //    Color toColorGradient2 = IsToggled ? Color.FromHex("#808080") : Color.FromHex("#B1E3F2");
+                Flex.TranslationX = -(e.TranslateX + e.XRef);
+                if (IsToggled)
+                {
+                    if (e.Percentage >= 50)
+                    {
+                        MoonImg.Opacity = ((e.Percentage - 50) * 2) * 0.01;
+                    }
+                }
+                else
+                {
+                    if (e.Percentage <= 50)
+                    {
+                        MoonImg.Opacity = (100 - (e.Percentage * 2)) * 0.01;
+                    }
+                }
 
-            //    double t = e.Percentage * 0.01;
-
-            //    KnobBackground = new LinearGradientBrush(new GradientStopCollection
-            //    {
-            //        new GradientStop
-            //        {
-            //            Color =  ColorAnimationUtil.ColorAnimation(fromColorGradient1, toColorGradient1, t),
-            //            Offset = 0
-            //        },
-            //        new GradientStop
-            //        {
-            //            Color = ColorAnimationUtil.ColorAnimation(fromColorGradient2, toColorGradient2, t),
-            //            Offset = 1
-            //        }
-            //    }, new Point(0.6, 1), new Point(1, 0));
-            //};
+                SDBorder.BorderColor = ColorAnimationUtil.ColorAnimation(fromBackgroundColor, toBackgroundColor, t);
+            };
         }
     }
 }
