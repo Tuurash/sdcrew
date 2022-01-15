@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="sdcrew.Views.Postflight.LoggedFlights"
+    xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    BackgroundColor="{StaticResource PageBackgroundColor}"
+    NavigationPage.HasNavigationBar="True"
+    mc:Ignorable="d">
+
+
+    <ContentView.Content Margin="0,10,0,50">
+
+        <AbsoluteLayout BackgroundColor="{StaticResource TransparentColor}" x:Name="AContentControl">
+
+            <AbsoluteLayout.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,0,0,50" />
+                </OnPlatform>
+            </AbsoluteLayout.Margin>
+
+
+            <!-- Postflight Logged List  -->
+            <ListView
+                x:Name="LoggedListView"
+                Margin="2,0,2,0"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                CachingStrategy="RecycleElement"
+                FlexLayout.AlignSelf="Auto"
+                HasUnevenRows="True"
+                HorizontalOptions="FillAndExpand"
+                IsPullToRefreshEnabled="True"
+                
+                Refreshing="GroupedView_Refreshing"
+                SelectionMode="None"
+                SeparatorVisibility="None"
+                VerticalOptions="FillAndExpand">
+
+                <!--Header Refresh time-->
+                <ListView.Header Margin="10,25,0,15">
+                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
+
+                        <Label
+                            Margin="10,15,0,0"
+                            FontSize="11"
+                            HorizontalOptions="Start"
+                            Text="Last refreshed on"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <Label
+                            x:Name="lblRefreshTime"
+                            Margin="0,15,0,0"
+                            FontSize="11"
+                            
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            TextTransform="Uppercase" />
+
+                        <StackLayout
+                            Margin="0,15,10,0"
+                            HorizontalOptions="EndAndExpand"
+                            Orientation="Horizontal">
+                            <Label
+                                FontSize="11"
+                                Text="Pull to refresh"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="End" />
+                            <Image
+                                Margin="-5,0,0,0"
+                                Aspect="AspectFit"
+                                HeightRequest="15"
+                                Source="icoRefresh"
+                                WidthRequest="11" />
+                        </StackLayout>
+
+                    </StackLayout>
+                </ListView.Header>
+
+
+                <ListView.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <ViewCell>
+                            <ViewCell.View>
+
+                                <StackLayout>
+
+                                    <!--  Events  -->
+                                    <pv:PancakeView
+                                        x:Name="PancakeItem"
+                                        Margin="5"
+                                        BackgroundColor="{StaticResource CardBGColor}"
+                                        CornerRadius="10"
+                                        HorizontalOptions="CenterAndExpand"
+                                        VerticalOptions="CenterAndExpand">
+
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <BoxView
+                                                BackgroundColor="{Binding aircraftColor}"
+                                                HorizontalOptions="FillAndExpand"
+                                                VerticalOptions="FillAndExpand"
+                                                WidthRequest="4" />
+
+                                            <StackLayout Grid.Column="1">
+
+                                                <!--  header  -->
+                                                <Grid HorizontalOptions="FillAndExpand">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="1*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!--  Header Left  -->
+                                                    <StackLayout
+                                                        Grid.Column="0"
+                                                        Margin="3"
+                                                        HorizontalOptions="Start"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="CenterAndExpand">
+
+                                                        <!--Icon Hard Coded-->
+                                                        <Label
+                                                            Margin="2"
+                                                            FontFamily="{StaticResource customfonts}"
+                                                            FontSize="17"
+                                                            Text="&#xE805;"
+                                                            TextColor="{Binding aircraftColor}"
+                                                            VerticalOptions="FillAndExpand" />
+
+                                                        <Label
+                                                            Margin="5,0,0,0"
+                                                            FontSize="15"
+                                                            HorizontalOptions="FillAndExpand"
+                                                            Text="{Binding TailNumber}"
+                                                            TextColor="{StaticResource PrimaryTextColor}"
+                                                            VerticalOptions="CenterAndExpand" />
+
+                                                    </StackLayout>
+
+                                                    <!--  Header Right  -->
+                                                    <StackLayout
+                                                        Grid.Column="1"
+                                                        Margin="20"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        Orientation="Horizontal"
+                                                        VerticalOptions="CenterAndExpand">
+
+                                                        <Label
+                                                            FontSize="12" FontAttributes="Bold"
+                                                            Text="Trip ID: "
+                                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                        <Label
+                                                            FontSize="12"
+                                                            Text="{Binding Customized_TripId}"
+                                                            TextColor="{StaticResource PrimaryTextColor}" />
+                                                    </StackLayout>
+
+                                                </Grid>
+
+
+                                                <!--  Body  -->
+                                                <Grid Margin="0,0,0,5" HorizontalOptions="FillAndExpand">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="1.5*" />
+
+                                                        <ColumnDefinition Width="Auto" />
+
+                                                        <ColumnDefinition Width="1.5*" />
+                                                        <ColumnDefinition Width=".4*" />
+                                                    </Grid.ColumnDefinitions>
+
+
+                                                    <!--  Col1  -->
+                                                    <StackLayout
+                                                        Grid.Column="0"
+                                                        HorizontalOptions="FillAndExpand"
+                                                        Spacing="5">
+
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            FontSize="12"
+                                                            Text="{Binding departureIcao}"
+                                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            FontSize="10"
+                                                            Text="{Binding StartDate}"
+                                                            TextColor="{StaticResource PrimaryTextColor}"
+                                                            TextTransform="Uppercase" />
+
+                                                        <!--  Time Stamp  -->
+                                                        <StackLayout Orientation="Horizontal">
+
+                                                            <Label
+                                                                Margin="2,0,0,0"
+                                                                FontSize="13"
+                                                                HorizontalOptions="Start"
+                                                                Text="{Binding StartTime}"
+                                                                TextColor="{StaticResource PrimaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
+
+                                                            <!--Timezone Hard Coded-->
+                                                            <Label
+                                                                FontSize="10"
+                                                                HorizontalOptions="FillAndExpand"
+                                                                Text="UTC"
+                                                                TextColor="{StaticResource SecondaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
+
+                                                        </StackLayout>
+
+
+
+                                                    </StackLayout>
+
+                                                    <!--  Col2 BigImage  -->
+                                                    <Label Grid.Column="1"
+                                                        Margin="8,0,14,0"
+                                                        FontFamily="{StaticResource customfonts}"
+                                                        FontSize="20"
+                                                        HorizontalOptions="FillAndExpand"
+                                                        Text="&#xE806;"
+                                                        TextColor="{Binding aircraftColor}"
+                                                        VerticalOptions="CenterAndExpand" />
+
+
+                                                    <!--  Col3  -->
+                                                    <StackLayout
+                                                        Grid.Column="2"
+                                                        HorizontalOptions="FillAndExpand"
+                                                        Spacing="5">
+
+
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            FontSize="12"
+                                                            Text="{Binding airportIcao}"
+                                                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            FontSize="10"
+                                                            Text="{Binding EndDate}"
+                                                            TextColor="{StaticResource PrimaryTextColor}"
+                                                            TextTransform="Uppercase" />
+
+                                                        <!--  Time Stamp  -->
+                                                        <StackLayout Orientation="Horizontal">
+
+                                                            <Label
+                                                                Margin="2,0,0,0"
+                                                                FontSize="13"
+                                                                HorizontalOptions="Start"
+                                                                Text="{Binding EndTime}"
+                                                                TextColor="{StaticResource PrimaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
+
+                                                            <Label
+                                                                FontSize="10"
+                                                                HorizontalOptions="FillAndExpand"
+                                                                Text="UTC"
+                                                                TextColor="{StaticResource SecondaryTextColor}"
+                                                                VerticalOptions="EndAndExpand" />
+
+                                                        </StackLayout>
+
+                                                    </StackLayout>
+
+                                                    <!--  Col4  -->
+                                                    <Image Grid.Column="3"
+                                                            Margin="0,0,0,32"
+                                                            HeightRequest="12"
+                                                            HorizontalOptions="Center"
+                                                            Source="icoRightArrow"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="70" />
+
+                                                </Grid>
+
+                                            </StackLayout>
+
+                                        </Grid>
+
+                                        <pv:PancakeView.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                x:Name="FlightGetDetails" Tapped="FlightGetDetails_Tapped"
+                                                behaviors:TouchEffect.AnimationDuration="12"
+                                                CommandParameter="{Binding .}"
+                                                NumberOfTapsRequired="1"
+                                                 />
+                                        </pv:PancakeView.GestureRecognizers>
+
+
+                                    </pv:PancakeView>
+
+                                </StackLayout>
+
+                            </ViewCell.View>
+                        </ViewCell>
+
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+
+                <ListView.Footer>
+                    <Label HeightRequest="100" Text="Some Space" IsVisible="false"></Label>
+                </ListView.Footer>
+
+            </ListView>
+
+
+
+            <!--  Activity Indicator/Loading animation  -->
+            <Frame
+                x:Name="Loader" HasShadow="False"
+                Margin="10,30,10,30"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="{StaticResource LoaderBackground}"
+                CornerRadius="15"
+                HeightRequest="15"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand">
+
+                <StackLayout Orientation="Horizontal">
+                    <ActivityIndicator
+                        HorizontalOptions="Start"
+                        IsRunning="True"
+                        VerticalOptions="FillAndExpand"
+                        Color="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        FontSize="13"
+                        HorizontalOptions="End"
+                        Text="Please wait..."
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand" />
+
+                </StackLayout>
+
+            </Frame>
+
+
+
+        </AbsoluteLayout>
+
+    </ContentView.Content>
+
+
+
+
+
+</ContentView>
