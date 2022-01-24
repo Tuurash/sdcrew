@@ -594,10 +594,10 @@ namespace sdcrew.Views.Preflight
                     .ContinueWith(x =>
                     {
                         Device.BeginInvokeOnMainThread(() =>
-   {
-       pfDetailControls.IsEnabled = true;
-       Loader.IsVisible = false;
-   });
+                       {
+                           pfDetailControls.IsEnabled = true;
+                           Loader.IsVisible = false;
+                       });
                     });
             }
         }

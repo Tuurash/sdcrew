@@ -22,7 +22,6 @@ namespace sdcrew.Views.Postflight.Modals.DropdownModals
         public AirportICAODropdown()
         {
             InitializeComponent();
-
             Device.BeginInvokeOnMainThread(async () => await FillAirportData());
         }
 

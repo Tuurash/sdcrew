@@ -124,11 +124,17 @@ namespace sdcrew.Views.Postflight
             {
                 IsRefreshing = true;
 
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    AContentControl.IsEnabled = false;
+                    Loader.IsVisible = true;
+                });
+
+
                 Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = false);
 
                 await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
                 await postflightServices.InsertDatas();
-
                 await PopulateData();
 
                 RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
@@ -140,7 +146,11 @@ namespace sdcrew.Views.Postflight
                 IsRefreshing = false;
 
                 await Task.Delay(2);
-                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = true);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Loader.IsVisible = false;
+                    AContentControl.IsEnabled = true;
+                });
 
                 refreshFlag++;
             }
@@ -152,11 +162,8 @@ namespace sdcrew.Views.Postflight
             {
                 IsRefreshing = true;
 
-                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = false);
-
                 await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
                 await postflightServices.InsertDatas();
-
                 await PopulateData();
 
                 RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
@@ -166,10 +173,6 @@ namespace sdcrew.Views.Postflight
                 NotLoggedListView.EndRefresh();
 
                 IsRefreshing = false;
-
-                await Task.Delay(2);
-                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = true);
-
                 refreshFlag++;
             }
         }
@@ -184,7 +187,6 @@ namespace sdcrew.Views.Postflight
 
                 await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
                 await postflightServices.RefreshDatas();
-
                 await PopulateData();
 
                 RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
@@ -197,9 +199,9 @@ namespace sdcrew.Views.Postflight
 
                 await Task.Delay(2);
                 Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = true);
-
                 refreshFlag++;
             }
+            else { }
         }
 
         public async Task PerformBackgroundRefresh()

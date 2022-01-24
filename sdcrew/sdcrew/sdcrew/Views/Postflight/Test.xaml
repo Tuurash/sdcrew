@@ -1,108 +1,718 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
+    x:Class="sdcrew.Views.Postflight.Test"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        xmlns:control="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
     xmlns:CC="clr-namespace:sdcrew.Views.ViewHelpers.Renderers"
     xmlns:SegMentControl="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
     xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
-    xmlns:subView="clr-namespace:sdcrew.Views.Postflight.SubViews"
+    xmlns:control="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
     xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-    x:Class="sdcrew.Views.Postflight.Test">
+    xmlns:subView="clr-namespace:sdcrew.Views.Postflight.SubViews"
+    BackgroundColor="{StaticResource BarBackgroundColor}">
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+
+        <Grid
+            Margin="5,10,10,10"
+            CompressedLayout.IsHeadless="True"
+            HorizontalOptions="FillAndExpand"
+            RowSpacing="10">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Expensse Type  -->
+            <pv:PancakeView
+                Grid.Row="0"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label FontSize="15" HorizontalOptions="StartAndExpand">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Expense Type " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="*" TextColor="Red" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownExpenseType"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="N/A"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            AutomationProperties.Name="arrow"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  Expense Date  -->
+            <pv:PancakeView
+                Grid.Row="1"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label FontSize="15" HorizontalOptions="StartAndExpand">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Transaction Date " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="*" TextColor="Red" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <CC:BorderlessDatePicker
+                        x:Name="pickerExpenseDate"
+                        BackgroundColor="Transparent"
+                        FontSize="15"
+                        Format="D"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="End" />
+
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  File- Attatch reciept  -->
+            <StackLayout Grid.Row="2" Margin="0,10,0,0">
+
+                <Label
+                    FontSize="15"
+                    HorizontalOptions="StartAndExpand"
+                    Text="Attatch Reciept"
+                    TextColor="{StaticResource PrimaryTextColor}"
+                    VerticalOptions="CenterAndExpand" />
+
+                <pv:PancakeView BackgroundColor="LightGray" CornerRadius="5,5,0,0">
+
+                    <Grid Margin="0,10,0,0" RowSpacing="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <pv:PancakeView
+                            Grid.Row="0"
+                            BackgroundColor="Blue"
+                            CornerRadius="40"
+                            HeightRequest="80"
+                            HorizontalOptions="CenterAndExpand"
+                            VerticalOptions="CenterAndExpand"
+                            WidthRequest="80">
+
+                            <Image
+                                Aspect="AspectFit"
+                                AutomationProperties.Name="File"
+                                HeightRequest="40"
+                                HorizontalOptions="CenterAndExpand"
+                                Source="receipt.png"
+                                VerticalOptions="CenterAndExpand" />
+                        </pv:PancakeView>
+
+                        <Label
+                            Grid.Row="1"
+                            Margin="0,0,0,15"
+                            FontSize="18"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="Add Reciept"
+                            TextColor="Black"
+                            VerticalOptions="EndAndExpand" />
+
+                    </Grid>
 
 
 
 
+                </pv:PancakeView>
 
-    <StackLayout>
-
-
-
-        <!--Crews-->
-        <pv:PancakeView x:Name="CREW"
-                        Margin="5"
-                        BackgroundColor="{StaticResource CardBGColor}"
-                        CornerRadius="10"
-                        VerticalOptions="FillAndExpand">
+            </StackLayout>
 
 
-            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" x:Name="CrewGrid">
+            <!--  Row 3 Title  -->
+            <pv:PancakeView
+                Grid.Row="3"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Title"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <CC:BorderlessEntry
+                        x:Name="txtExpenseTitle"
+                        FontSize="15"
+                        HorizontalOptions="FillAndExpand"
+                        Keyboard="Numeric"
+                        Placeholder="New Expense"
+                        PlaceholderColor="Gray"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="End"
+                        WidthRequest="120" />
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  Row 4 Invoice Number  -->
+            <pv:PancakeView
+                Grid.Row="4"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Title"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <CC:BorderlessEntry
+                        x:Name="txtExpenseInvoiceNum"
+                        FontSize="15"
+                        HorizontalOptions="FillAndExpand"
+                        Keyboard="Numeric"
+                        Placeholder="My Reciept"
+                        PlaceholderColor="Gray"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="End"
+                        WidthRequest="120" />
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  Row 5 Payment Type  -->
+            <pv:PancakeView
+                Grid.Row="5"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Payment Type"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownPaymentType"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="N/A"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            AutomationProperties.Name="arrow"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                    <!--<StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="dropdownTypeDAIce_Tapped" />
+                </StackLayout.GestureRecognizers>-->
+
+                </StackLayout>
+
+            </pv:PancakeView>
+
+            <!--  Row 6 Charge to  -->
+            <pv:PancakeView
+                Grid.Row="6"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Charge To"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownTypeDAIce"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="N/A"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            AutomationProperties.Name="arrow"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                    <!--<StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="dropdownTypeDAIce_Tapped" />
+                </StackLayout.GestureRecognizers>-->
+
+                </StackLayout>
+
+            </pv:PancakeView>
+
+            <!--  Row 7 Expensse Cost  -->
+            <pv:PancakeView
+                Grid.Row="7"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Cost"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
 
-                <TableView Intent="Form" Grid.Row="0" Grid.ColumnSpan="2">
-                    <TableRoot>
-                        <TableSection>
-                            <ViewCell>
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            FontSize="15"
+                            HorizontalOptions="Start"
+                            Text="$"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="End" />
+                        <CC:BorderlessEntry
+                            x:Name="txtExpenseCost"
+                            FontSize="15"
+                            HorizontalOptions="FillAndExpand"
+                            Keyboard="Numeric"
+                            Placeholder="New Expense"
+                            PlaceholderColor="Gray"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            VerticalOptions="End"
+                            WidthRequest="120" />
+                    </StackLayout>
 
-                                <Label  Margin="10,10,10,0" 
-                                        BackgroundColor="{Binding HeadeTextBGColor}"
-                                        FontAttributes="Bold"
-                                        FontFamily="{StaticResource customfonts}"
-                                        FontSize="17"
-                                        HorizontalOptions="StartAndExpand"
-                                        Text="CREW"
-                                        TextColor="{StaticResource PrimaryTextColor}"
-                                        VerticalOptions="CenterAndExpand" />
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
 
-                            </ViewCell>
-                        </TableSection>
+                </StackLayout>
+            </pv:PancakeView>
 
-                        <TableSection>
-                            <ViewCell>
+            <!--  Row 8 Fuel Coditional retail Price  -->
+            <StackLayout Grid.Row="8" Spacing="10">
 
-                                <Label  Margin="10,10,10,0" 
-                                        BackgroundColor="{Binding HeadeTextBGColor}"
-                                        FontAttributes="Bold"
-                                        FontFamily="{StaticResource customfonts}"
-                                        FontSize="17"
-                                        HorizontalOptions="StartAndExpand"
-                                        Text="CREW"
-                                        TextColor="{StaticResource PrimaryTextColor}"
-                                        VerticalOptions="CenterAndExpand" />
+                <!--  retail Price  -->
+                <pv:PancakeView BackgroundColor="DarkCyan" CornerRadius="5,5,0,0">
 
-                            </ViewCell>
-                        </TableSection>
+                    <StackLayout Margin="5,5,5,0">
 
-                    </TableRoot>
-                </TableView>
-
-
-
-                <CC:DashedFrame BackgroundColor="{StaticResource CardBGColor}" Grid.Row="14" Grid.ColumnSpan="2" Margin="20">
-
-                    <Label Text="Add Crew" TextColor="{StaticResource PrimaryTextColor}" FontSize="15" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
-
-                    <CC:DashedFrame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="btnAddCrew_Tapped" x:Name="btnAddCrew"/>
-                    </CC:DashedFrame.GestureRecognizers>
-
-                </CC:DashedFrame>
-
-            </Grid>
-        </pv:PancakeView>
+                        <Label
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Retail Fuel Price"
+                            TextColor="{StaticResource PrimaryTextColor}" />
 
 
-    </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label
+                                FontSize="15"
+                                HorizontalOptions="Start"
+                                Text="$"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="End" />
+                            <CC:BorderlessEntry
+                                x:Name="txtRetailfuelPrice"
+                                FontSize="15"
+                                HorizontalOptions="FillAndExpand"
+                                Keyboard="Numeric"
+                                Placeholder="New Expense"
+                                PlaceholderColor="Gray"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="End"
+                                WidthRequest="120" />
+                        </StackLayout>
+
+                        <BoxView
+                            HeightRequest="1"
+                            VerticalOptions="End"
+                            Color="{StaticResource SecondaryTextColor}" />
+
+                    </StackLayout>
+                </pv:PancakeView>
+
+                <!--  Unit  -->
+                <pv:PancakeView BackgroundColor="DarkCyan" CornerRadius="5,5,0,0">
+
+                    <StackLayout Margin="5,5,5,0">
+
+                        <Label
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Unit"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <StackLayout Orientation="Horizontal">
+
+                            <Label
+                                x:Name="dropdownUnit"
+                                FontSize="15"
+                                HorizontalOptions="StartAndExpand"
+                                Text="N/A"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+                            <Image
+                                Aspect="AspectFit"
+                                AutomationProperties.Name="arrow"
+                                HeightRequest="7"
+                                HorizontalOptions="EndAndExpand"
+                                Source="arrow_a"
+                                VerticalOptions="Center" />
+                        </StackLayout>
+
+                        <BoxView
+                            HeightRequest="1"
+                            VerticalOptions="End"
+                            Color="{StaticResource SecondaryTextColor}" />
+
+                        <!--<StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="dropdownTypeDAIce_Tapped" />
+                </StackLayout.GestureRecognizers>-->
+
+                    </StackLayout>
+
+                </pv:PancakeView>
+
+                <!--  Quantitity & cost per unit  -->
+                <StackLayout Orientation="Horizontal" Spacing="10">
+
+                    <pv:PancakeView
+                        BackgroundColor="DarkCyan"
+                        CornerRadius="5,5,0,0"
+                        HorizontalOptions="FillAndExpand">
+                        <StackLayout Margin="5,5,5,0">
+
+                            <Label
+                                FontSize="15"
+                                HorizontalOptions="StartAndExpand"
+                                Text="Quantity"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <CC:BorderlessEntry
+                                x:Name="txtQuantity"
+                                FontSize="15"
+                                HorizontalOptions="FillAndExpand"
+                                Keyboard="Numeric"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="End" />
+
+                            <BoxView
+                                HeightRequest="1"
+                                VerticalOptions="End"
+                                Color="{StaticResource SecondaryTextColor}" />
+
+                        </StackLayout>
+                    </pv:PancakeView>
+
+                    <StackLayout Margin="5,0,5,0" HorizontalOptions="End">
+                        <Label
+                            FontSize="15"
+                            Text="Cost/Unit"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Label
+                            FontSize="15"
+                            Text="$ 1200"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+
+                    </StackLayout>
+
+                </StackLayout>
 
 
+            </StackLayout>
 
+            <!--  Row 9 Tail  -->
+            <pv:PancakeView
+                Grid.Row="9"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Tail"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblTailNo"
+                        FontSize="15"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="End"
+                        WidthRequest="120" />
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  Row 10 Airport  -->
+            <pv:PancakeView
+                Grid.Row="10"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Airport"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label
+                        x:Name="lblDepartAirport"
+                        FontSize="15"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="End"
+                        WidthRequest="120" />
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  row 11  FBO  -->
+            <pv:PancakeView
+                Grid.Row="11"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="FBO "
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownFBO"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="N/A"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            AutomationProperties.Name="arrow"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  row 12  B.Catagory  -->
+            <pv:PancakeView
+                Grid.Row="12"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Business Catagory "
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownBCatagory"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="N/A"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            AutomationProperties.Name="arrow"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  row 13  Purchaser  -->
+            <pv:PancakeView
+                Grid.Row="13"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Purchaser "
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownPurchaser"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="N/A"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            AutomationProperties.Name="arrow"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+            <!--  Row 3 Title  -->
+            <pv:PancakeView
+                Grid.Row="14"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Description"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <CC:BorderlessEntry
+                        x:Name="txtDescription"
+                        FontSize="15"
+                        HeightRequest="60"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="End"
+                        WidthRequest="120" />
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                </StackLayout>
+            </pv:PancakeView>
+
+        </Grid>
+
+    </ScrollView>
 
 </ContentPage>

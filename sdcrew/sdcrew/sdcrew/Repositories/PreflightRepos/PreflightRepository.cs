@@ -368,6 +368,29 @@ namespace sdcrew.Repositories.PreflightRepos
             return CheckLists;
         }
 
+        public async Task<PreflightChecklist> GetAircraftCheckLists(int tripID, int ChecklistTypeId)
+        {
+            string checklistTypeId = ChecklistTypeId.ToString();
+            //https://sd-profile-api.satcomdirect.com/preflight/api/ScheduledAircraftTrip/GetAppliedChecklists/1/15117 
+
+            var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.FETCH_CHECKLIST + "/" + checklistTypeId + "/" + tripID.ToString();
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var CheckLists = new PreflightChecklist();
+            try
+            {
+                CheckLists = JsonConvert.DeserializeObject<PreflightChecklist>(JString);
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
+
+            return CheckLists;
+        }
+
         public async Task<bool> SaveChecklist(ChecklistVM Checklist)
         {
             var url = _preflightEndpoints.PRE_FLIGHT_REQUEST_URL + _preflightEndpoints.POST_PREFLIGHT_CHECKED_CHECKLIST;

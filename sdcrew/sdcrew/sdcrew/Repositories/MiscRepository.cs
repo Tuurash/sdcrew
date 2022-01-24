@@ -1,29 +1,18 @@
-﻿using System;
+﻿using ChoETL;
+using Newtonsoft.Json;
+using sdcrew.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-
-using ChoETL;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-using RestSharp;
-
-using sdcrew.Models;
-using sdcrew.Services;
 
 namespace sdcrew.Repositories
 {
     public class MiscRepository
     {
-        private readonly IRequestsService _requestService;
 
         MiscEndPoints misc;
 

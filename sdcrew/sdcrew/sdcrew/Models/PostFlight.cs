@@ -58,21 +58,40 @@ namespace sdcrew.Models
         public bool IsUpdated { get; set; }
     }
 
-    //no Table
     public class PostedFlightDeIce
     {
         [PrimaryKey, AutoIncrement]
         [Column("PostedFlightDeIceId")]
         public int? PostedFlightDeIceId { get; set; }
-    }
 
-    //No Table
-    public class PostedFlightAdditional
-    {
+        public DateTime deIceStartDateTime { get; set; }
+        public DateTime deIceEndDateTime { get; set; }
+        public int deIceMixRatioTypeId { get; set; }
+        public int deIceTypeId { get; set; }
         public int postedFlightId { get; set; }
     }
 
-    //No table
+    public class MixType
+    {
+        public int id { get; set; }
+        public bool isOverride { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public bool active { get; set; }
+        public bool deleted { get; set; }
+    }
+
+    public class PostedFlightAdditional
+    {
+        public int postedFlightId { get; set; }
+        public int delayTypeId { get; set; }
+        public int delayDuration { get; set; }
+        public int goArounds { get; set; }
+        public int rejectedTakeoffs { get; set; }
+        public int departmentId { get; set; }
+        public int businessCategoryId { get; set; }
+    }
+
     public class LogbookApproach
     {
         public int logbookApproachId { get; set; }
@@ -215,6 +234,8 @@ namespace sdcrew.Models
         public string name { get; set; }
         public int postedFlightId { get; set; }
         public int cycles { get; set; }
+        public int unitTypeId { get; set; }
+        public double usage { get; set; }
     }
 
     public class Oooi
@@ -257,6 +278,37 @@ namespace sdcrew.Models
         public Oooi oooi { get; set; }
         [ManyToOne]
         public Fuel fuel { get; set; }
+    }
+
+    //Apu & Custom Components
+    public class ApuNCustomComponents
+    {
+        [JsonProperty("postedFlightComponentId")]
+        public int PostedFlightComponentId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("componentId")]
+        public int ComponentId { get; set; }
+
+        [JsonProperty("componentTypeId")]
+        public int ComponentTypeId { get; set; }
+
+        [JsonProperty("componentType")]
+        public string ComponentType { get; set; }
+
+        [JsonProperty("usage")]
+        public double Usage { get; set; }
+
+        [JsonProperty("carryOverMinutes")]
+        public int CarryOverMinutes { get; set; }
+
+        [JsonProperty("currentMinutes")]
+        public int CurrentMinutes { get; set; }
+
+        [JsonProperty("postedFlightId")]
+        public int PostedFlightId { get; set; }
     }
 
     //No Table
@@ -383,6 +435,91 @@ namespace sdcrew.Models
 
     }
 
+    #region BusinessCatagories
 
+    public class BusinessCatagory
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    #endregion
+
+    #region DelayTypes
+
+    public class DelayType
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+
+
+    }
+
+    #endregion
+
+    #region Department
+
+    public class Department
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+
+    }
+
+    #endregion
 
 }

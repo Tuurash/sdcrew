@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
+using System.Linq;
 using sdcrew.Models;
 using sdcrew.Services.Data;
 
@@ -109,6 +109,7 @@ namespace sdcrew.ViewModels.Postflight
                         StartDate = flight.flightStartDateTime.ToString("dd MMM yyyy"),
                         EndDate = getEndDate,
 
+                        tripId = flight.tripId,
                         //avoid using result
                         //TailNumber = postflightServices.FetchTailNumber(flight.aircraftProfileId).Result,
                         TailNumber = flight.TailNumber,
@@ -120,7 +121,7 @@ namespace sdcrew.ViewModels.Postflight
                 }
             }
 
-            var FlightObservableCollection = new ObservableCollection<PostFlightVM>(flightList);
+            var FlightObservableCollection = new ObservableCollection<PostFlightVM>(flightList.OrderByDescending(x => x.StartDate));
             return FlightObservableCollection;
         }
 

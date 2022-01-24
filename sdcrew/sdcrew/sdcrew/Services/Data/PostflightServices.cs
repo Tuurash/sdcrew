@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 using sdcrew.Models;
 using sdcrew.Repositories.PostflightRepos;
+using sdcrew.Repositories.PreflightRepos;
 
 using SQLite;
 
@@ -24,6 +25,7 @@ namespace sdcrew.Services.Data
         static SQLiteConnection db;
 
         PostflightRepository postflightRepo;
+        PreflightRepository _preflightRepo;
 
         string colorString = "";
 
@@ -46,6 +48,11 @@ namespace sdcrew.Services.Data
                 await AddPostflight_AircraftProfileDTos()
                     .ContinueWith(async x =>
                     {
+                        await InsertBusinessCatagoriesAsync();
+                        await InsertDepartmentsAsync();
+                        await InsertDelayTypesAsync();
+                        await InsertMixRatioTypes();
+                        await InsertCrews();
                         await AddAllPostflights();
                     });
 
@@ -62,7 +69,12 @@ namespace sdcrew.Services.Data
                 await AddPostflight_AircraftProfileDTos()
                     .ContinueWith(async x =>
                     {
+                        await InsertCrews();
+                        await InsertBusinessCatagoriesAsync();
+                        await InsertDelayTypesAsync();
+                        await InsertMixRatioTypes();
                         await RefreshPostflights();
+
                     });
 
 
@@ -111,8 +123,7 @@ namespace sdcrew.Services.Data
             if (AllCrews != null)
             {
                 //Clear Table before Insertion
-                var dltStatusCrews = db.Table<CrewDetailsVM>().Delete(x => x.CrewMemberId != 0);
-
+                db.Table<CrewDetailsVM>().Delete(x => x.CrewMemberId != 0);
 
                 foreach (var crew in AllCrews)
                 {
@@ -126,6 +137,9 @@ namespace sdcrew.Services.Data
                             BusinessPersonId = crew.BusinessPersonId,
                             FirstName = crew.FirstName,
                             LastName = crew.LastName,
+
+                            FullName = crew.LastName + " " + crew.FirstName,
+
                             HomeBase = crew.HomeBase,
                             Ron = crew.Ron,
                             Initials = crew.Initials,
@@ -134,21 +148,28 @@ namespace sdcrew.Services.Data
 
                         try
                         {
-                            db.Insert(crew);
+                            db.Insert(crewDetails);
                         }
                         catch (Exception exc)
                         { Crashes.TrackError(exc); }
                     }
                 }
-
             }
         }
 
         public async Task<List<CrewDetailsVM>> GetCrewsAsync()
         {
             await Init();
-            var crews = db.Table<CrewDetailsVM>().ToList();
-            return crews;
+            try
+            {
+                var crews = db.Table<CrewDetailsVM>().ToList();
+                return crews;
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+                return null;
+            }
         }
 
         public async Task<List<FlightCrewMember>> GetFlightCrewMembersAsync(int FlightId)
@@ -166,8 +187,6 @@ namespace sdcrew.Services.Data
         }
 
         #endregion
-
-
 
         #region Oooi
 
@@ -311,6 +330,389 @@ namespace sdcrew.Services.Data
 
         #endregion
 
+        #region Apu N Custom Components
+
+        public async Task<ApuNCustomComponents> FetchApuNComponents(int PostedFlightId, int AircraftProfileId, DateTime FlightStartDateTime)
+        {
+            await Init();
+
+            var Apu = await postflightRepo.FetchApuNCustomComponentsAsync(PostedFlightId, AircraftProfileId, FlightStartDateTime);
+
+            var Exist = db.Table<ApuNCustomComponents>().FirstOrDefault(x => x.PostedFlightId == PostedFlightId);
+            if (Exist != null)
+            {
+                return Exist;
+            }
+            else
+            {
+                db.Insert(Apu);
+                return Apu;
+            }
+        }
+
+        #endregion
+
+        #region Checklists
+
+        public IEnumerable<ChecklistVM> GetAll_ChecklistsByRoleName(int TripID, int CheckListTypeId, string ChecklistRoleTypeName)
+        {
+            _ = Init();
+
+            var Checklist = db.Table<ChecklistVM>().Where(x => x.checklistRoleTypeName == ChecklistRoleTypeName & x.tripId == TripID & x.checkListTypeId == CheckListTypeId);
+            return Checklist;
+        }
+
+        public List<ChecklistVM> Get_SelectedChecklists(List<string> cIDs, string ChecklistRoleTypeName, int TripId)
+        {
+            _ = Init();
+
+            var ConfigIds = cIDs.Select(int.Parse).ToList();
+
+            List<ChecklistVM> checklists = new List<ChecklistVM>();
+
+            foreach (int i in ConfigIds)
+            {
+                var Checklist = db.Table<ChecklistVM>().Where(x => x.tripId == TripId & x.checklistRoleTypeName == ChecklistRoleTypeName & x.configTaskId.Equals(i)).First();
+
+                checklists.Add(Checklist);
+            }
+            return checklists;
+        }
+
+        public IEnumerable<ChecklistVM> Get_UnSelectedChecklists(List<string> cIDs, string ChecklistRoleTypeName, int TripId)
+        {
+            _ = Init();
+
+            var ConfigIds = cIDs.Select(int.Parse).ToList();
+            List<ChecklistVM> checklists = new List<ChecklistVM>();
+
+            foreach (int i in ConfigIds)
+            {
+                var Checklist = db.Table<ChecklistVM>().Where(x => x.tripId == TripId && x.checklistRoleTypeName == ChecklistRoleTypeName && x.configTaskId.Equals(i)).First();
+
+                checklists.Add(Checklist);
+            }
+            return checklists;
+        }
+
+        public async Task<bool> AddPreflight_Checklists(int TripId, int CheckListTypeId)
+        {
+            PreflightChecklist preflightChecklist = new PreflightChecklist();
+            SchedulingChecklist schedulingChecklist = new SchedulingChecklist();
+            PilotChecklist pilotChecklist = new PilotChecklist();
+            MaitenanceChecklist maitenanceChecklist = new MaitenanceChecklist();
+
+            ChecklistVM checklistVM = new ChecklistVM();
+
+            _preflightRepo = new PreflightRepository();
+
+            await Init();
+
+            ClearChecklistVmByAircraft(TripId);
+
+            var checklists = await _preflightRepo.GetAircraftCheckLists(TripId, 2).ConfigureAwait(false);
+            if (checklists != null)
+            {
+                var schedules = checklists.schedulingChecklists;
+                if (schedules.Count != 0)
+                {
+                    foreach (var schedule in schedules)
+                    {
+                        checklistVM = new ChecklistVM
+                        {
+                            customerId = schedule.customerId,
+                            tripId = schedule.tripId,
+                            flightId = schedule.flightId,
+                            legNumber = schedule.legNumber,
+                            checkListTypeId = schedule.checkListTypeId,
+                            checklistRoleTypeId = schedule.checklistRoleTypeId,
+                            checklistRoleTypeName = schedule.checklistRoleTypeName,
+                            configTaskId = schedule.configTaskId,
+                            configTaskName = schedule.configTaskName,
+                            configTaskOrder = schedule.configTaskOrder,
+                            selectedByUser = schedule.selectedByUser,
+                            selectedDateTime = schedule.selectedDateTime,
+                            checklistSignId = schedule.checklistSignId
+                        };
+
+                        try
+                        {
+                            var exists = GetAll_ChecklistsByRoleName(TripId, CheckListTypeId, "Scheduling").FirstOrDefault(x => x.configTaskName == schedule.configTaskName);
+                            if (exists != null)
+                            {
+                                UpdateChecklistVm(checklistVM);
+                            }
+                            else
+                            {
+                                db.Insert(checklistVM);
+                            }
+                        }
+                        catch (Exception exc) { Crashes.TrackError(exc); }
+                    }
+                }
+
+                var pilots = checklists.pilotChecklists;
+                if (pilots.Count != 0)
+                {
+                    foreach (var pilot in pilots)
+                    {
+
+                        checklistVM = new ChecklistVM
+                        {
+                            customerId = pilot.customerId,
+                            tripId = pilot.tripId,
+                            flightId = pilot.flightId,
+                            legNumber = pilot.legNumber,
+                            checkListTypeId = pilot.checkListTypeId,
+                            checklistRoleTypeName = pilot.checklistRoleTypeName,
+                            checklistRoleTypeId = pilot.checklistRoleTypeId,
+                            configTaskId = pilot.configTaskId,
+                            configTaskName = pilot.configTaskName,
+                            configTaskOrder = pilot.configTaskOrder,
+                            selectedByUser = pilot.selectedByUser,
+                            selectedDateTime = pilot.selectedDateTime,
+                            checklistSignId = pilot.checklistSignId
+                        };
+
+                        try
+                        {
+                            var exists = GetAll_ChecklistsByRoleName(TripId, CheckListTypeId, "Pilot").FirstOrDefault(x => x.configTaskName == pilot.configTaskName);
+                            if (exists != null)
+                            {
+                                UpdateChecklistVm(checklistVM);
+                            }
+                            else
+                            {
+                                db.Insert(checklistVM);
+                            }
+                        }
+                        catch (Exception exc) { Crashes.TrackError(exc); }
+                    }
+                }
+
+                var maintances = checklists.maitenanceChecklists;
+                if (maintances.Count != 0)
+                {
+                    foreach (var maintance in maintances)
+                    {
+                        try
+                        {
+                            checklistVM = new ChecklistVM
+                            {
+                                customerId = maintance.customerId,
+                                tripId = maintance.tripId,
+                                flightId = maintance.flightId,
+                                legNumber = maintance.legNumber,
+                                checkListTypeId = maintance.checkListTypeId,
+                                checklistRoleTypeName = maintance.checklistRoleTypeName,
+                                checklistRoleTypeId = maintance.checklistRoleTypeId,
+                                configTaskId = maintance.configTaskId,
+                                configTaskName = maintance.configTaskName,
+                                configTaskOrder = maintance.configTaskOrder,
+                                selectedByUser = maintance.selectedByUser,
+                                selectedDateTime = maintance.selectedDateTime,
+                                checklistSignId = maintance.checklistSignId
+                            };
+
+                            var exists = GetAll_ChecklistsByRoleName(TripId, CheckListTypeId, "Maintenance").FirstOrDefault(x => x.configTaskName == maintance.configTaskName);
+                            if (exists != null)
+                            {
+                                UpdateChecklistVm(checklistVM);
+                            }
+                            else
+                            {
+                                db.Insert(checklistVM);
+                            }
+                        }
+                        catch (Exception exc) { Crashes.TrackError(exc); }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        internal void UpdateChecklistVm(ChecklistVM Checklist)
+        {
+            var getCheckItemj = db.Table<ChecklistVM>().Delete(x => x.legNumber == Checklist.legNumber & x.checklistRoleTypeName == Checklist.checklistRoleTypeName & x.tripId == Checklist.tripId & x.configTaskName == Checklist.configTaskName && x.configTaskId == Checklist.configTaskId);
+            db.Insert(Checklist);
+        }
+
+        internal void ClearChecklistVmByRole(string RoleName)
+        {
+            var delete = db.Table<ChecklistVM>().Delete(x => x.checklistRoleTypeName == RoleName);
+        }
+
+        internal void ClearChecklistVmByAircraft(int SchAircraftID)
+        {
+            var delete = db.Table<ChecklistVM>().Delete(x => x.tripId == SchAircraftID);
+        }
+
+
+        public async Task<int> CheckStatusChecklist(PostFlightVM flight, string v)
+        {
+            var AllChecklist = db.Table<ChecklistVM>().Where(x => x.checklistRoleTypeName == v & x.tripId == flight.tripId).ToList(); //& x.checkListTypeId == CheckListTypeId
+
+            var SavedChecklist = db.Table<ChecklistVM>().Where(x => x.checklistRoleTypeName == v & x.tripId == flight.tripId & x.selectedByUser != "").ToList(); //& x.checkListTypeId == CheckListTypeId
+
+            await Task.Delay(1);
+
+            if (AllChecklist.Count() > 0)
+            {
+                if (SavedChecklist.Count() == 0)
+                {
+                    return 0;  //red
+                }
+                else
+                {
+                    if (AllChecklist.Count() == SavedChecklist.Count())
+                    {
+                        return 1; //green
+                    }
+                    else
+                    {
+                        return 2; //yellow
+                    }
+                }
+            }
+            else
+            {
+                return 3; //NA
+            }
+        }
+
+        #endregion
+
+        #region PostedFlight Additional
+
+        public async Task InsertBusinessCatagoriesAsync()
+        {
+            await Init();
+
+            var businessCatagories = await postflightRepo.FetchBusinessCatagoriesAsync();
+            if (businessCatagories != null)
+            {
+                db.Table<BusinessCatagory>().Delete(x => x.Id != 0);
+                foreach (var item in businessCatagories)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<BusinessCatagory>> GetBusinessCatagoriesAsync()
+        {
+            await Init();
+            return db.Table<BusinessCatagory>().ToList();
+        }
+
+        public async Task<BusinessCatagory> GetBusinessCatagoryAsync(int BusinesscatagoryId)
+        {
+            await Init();
+            var businessCatagory = db.Table<BusinessCatagory>().FirstOrDefault(x => x.Id == BusinesscatagoryId);
+            return businessCatagory;
+        }
+
+        public async Task InsertDelayTypesAsync()
+        {
+            await Init();
+
+            var delayTypes = await postflightRepo.FetchDelayTypesAsync();
+            if (delayTypes != null)
+            {
+                db.Table<DelayType>().Delete(x => x.Id != 0);
+                foreach (var item in delayTypes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<DelayType>> GetDelayTypesAsync()
+        {
+            await Init();
+            return db.Table<DelayType>().ToList();
+        }
+
+        public async Task<DelayType> GetDelayTypeAsync(int DelayTypeId)
+        {
+            await Init();
+            var businessCatagory = db.Table<DelayType>().FirstOrDefault(x => x.Id == DelayTypeId);
+            return businessCatagory;
+        }
+
+        public async Task InsertDepartmentsAsync()
+        {
+            await Init();
+
+            var departments = await postflightRepo.FetchDepartmentsAsync();
+            foreach (var item in departments)
+            {
+                db.Insert(item);
+            }
+        }
+
+        public async Task<List<Department>> GetDepartmentsAsync()
+        {
+            await Init();
+            return db.Table<Department>().ToList();
+        }
+
+        public async Task<Department> GetDepartmentAsync(int DepartmentId)
+        {
+            await Init();
+            var businessCatagory = db.Table<Department>().FirstOrDefault(x => x.Id == DepartmentId);
+            return businessCatagory;
+        }
+
+        public async Task<PostedFlightAdditional> PostedFlightAdditionalAsync(int PostedFlightId)
+        {
+            await Init();
+            var businessCatagory = db.Table<PostedFlightAdditional>().FirstOrDefault(x => x.postedFlightId == PostedFlightId);
+            return businessCatagory;
+        }
+
+        #endregion
+
+        #region OilsNFluids
+
+        public async Task<List<Fluid>> GetFluidsAsync()
+        {
+            await Init();
+            return db.Table<Fluid>().ToList();
+        }
+
+        #endregion
+
+        #region DeAntiIce
+
+        public async Task InsertMixRatioTypes()
+        {
+            await Init();
+            var mixTypes = await postflightRepo.FetchMixTypesAsync();
+            db.Table<MixType>().Delete(x => x.id != 0);
+            foreach (var item in mixTypes)
+            {
+                db.Insert(item);
+            }
+        }
+
+        public async Task<List<MixType>> MixTypesAsync()
+        {
+            await Init();
+            var types = db.Table<MixType>().ToList();
+            return types;
+        }
+
+        public async Task<PostedFlightDeIce> PostedFlightDeIceAsync(int PostedFlightId)
+        {
+            await Init();
+            return db.Table<PostedFlightDeIce>().FirstOrDefault(x => x.postedFlightId == PostedFlightId);
+        }
+
+        #endregion
+
+
         #region AllPostFlights
 
         public async Task AddPostflight_AircraftProfileDTos()
@@ -355,7 +757,7 @@ namespace sdcrew.Services.Data
             _ = Init();
 
             var Typewiseflights = db.Table<PostFlightVM>().Where(x => x.postFlightStatusName == type);
-            var flights = Typewiseflights.Where(x => !filteritemsList.Contains(x.TailNumber)).OrderBy(x => x.StartDate).ToList();
+            var flights = Typewiseflights.Where(x => !filteritemsList.Contains(x.TailNumber)).OrderByDescending(x => x.StartDate).ToList();
 
             return flights;
         }
@@ -364,7 +766,7 @@ namespace sdcrew.Services.Data
         {
             _ = Init();
 
-            var flights = db.Table<PostFlightVM>().Where(x => x.postFlightStatusName == type).OrderBy(x => x.StartDate).ToList();
+            var flights = db.Table<PostFlightVM>().Where(x => x.postFlightStatusName == type).OrderByDescending(x => x.StartDate).ToList();
             return flights;
         }
 
@@ -438,15 +840,6 @@ namespace sdcrew.Services.Data
                                 isUserSigned = flight.isUserSigned,             //remove if not necessary
                                 passengerLegCount = flight.passengerLegCount,   //remove if not necessary
 
-                                oooi = new Oooi
-                                {
-                                    postedFlightId = flight.postedFlightId,
-                                    automatedOutTime = flight.automatedFlightData.oooi.automatedOutTime,
-                                    automatedOffTime = flight.automatedFlightData.oooi.automatedOffTime,
-                                    automatedOnTime = flight.automatedFlightData.oooi.automatedOnTime,
-                                    automatedInTime = flight.automatedFlightData.oooi.automatedInTime,
-                                },
-
                                 postedFlightAdditional = flight.postedFlightAdditional, //model
 
                                 crewInitials = flight.crewInitials, //remove if not necessary
@@ -464,6 +857,42 @@ namespace sdcrew.Services.Data
 
                                 TailNumber = getTailnumber,
                             };
+
+                            if (flight.postedFlightDeIce != null)
+                            {
+                                var deIce = new PostedFlightDeIce
+                                {
+                                    postedFlightId = flight.postedFlightId,
+                                    deIceStartDateTime = flight.postedFlightDeIce.deIceStartDateTime,
+                                    deIceEndDateTime = flight.postedFlightDeIce.deIceEndDateTime,
+                                    deIceMixRatioTypeId = flight.postedFlightDeIce.deIceMixRatioTypeId,
+                                    deIceTypeId = flight.postedFlightDeIce.deIceTypeId
+                                };
+
+                                db.Insert(deIce);
+                            }
+
+                            if (flight.fluids != null)
+                            {
+                                foreach (var fluid in flight.fluids)
+                                {
+                                    db.Insert(fluid);
+                                }
+                            }
+
+                            if (flight.PostedFlightOooi != null)
+                            {
+                                var oooi = new Oooi
+                                {
+                                    postedFlightId = flight.postedFlightId,
+                                    automatedOutTime = flight.automatedFlightData.oooi.automatedOutTime,
+                                    automatedOffTime = flight.automatedFlightData.oooi.automatedOffTime,
+                                    automatedOnTime = flight.automatedFlightData.oooi.automatedOnTime,
+                                    automatedInTime = flight.automatedFlightData.oooi.automatedInTime,
+                                };
+
+                                db.Insert(oooi);
+                            }
 
                             if (flight.flightPassengers != null)
                             {
@@ -486,10 +915,11 @@ namespace sdcrew.Services.Data
                                     db.Insert(passengerDetails);
                                 }
                             }
+
                             db.Insert(postflightVm);
-                            db.Insert(flight.PostedFlightOooi);
-                            db.Insert(postflightVm.oooi);
                             db.Insert(flight.postedFlightFuel);
+                            db.Insert(flight.postedFlightAdditional);
+
                             if (flight.flightCrewMember.Count != 0)
                             {
                                 foreach (var flightcrew in flight.flightCrewMember)
@@ -520,8 +950,6 @@ namespace sdcrew.Services.Data
             string getTailnumber = "";
             string getEndDate = "N/A";
 
-            PostFlightVM postflightVm = new PostFlightVM();
-
             await Init();
 
             var AllPostflights = await postflightRepo.GetAllPostFlightEvents();
@@ -539,7 +967,7 @@ namespace sdcrew.Services.Data
                         }
                         try
                         {
-                            postflightVm = new PostFlightVM
+                            var postflightVm = new PostFlightVM
                             {
                                 flightId = flight.flightId,
                                 aircraftProfileId = flight.aircraftProfileId,
@@ -566,16 +994,6 @@ namespace sdcrew.Services.Data
                                 legNumber = flight.legNumber,
                                 isUserSigned = flight.isUserSigned,             //remove if not necessary
                                 passengerLegCount = flight.passengerLegCount,   //remove if not necessary
-
-                                oooi = new Oooi
-                                {
-                                    postedFlightId = flight.postedFlightId,
-                                    automatedOutTime = flight.automatedFlightData.oooi.automatedOutTime,
-                                    automatedOffTime = flight.automatedFlightData.oooi.automatedOffTime,
-                                    automatedOnTime = flight.automatedFlightData.oooi.automatedOnTime,
-                                    automatedInTime = flight.automatedFlightData.oooi.automatedInTime,
-                                },
-
                                 postedFlightAdditional = flight.postedFlightAdditional, //model
 
                                 //crewInitials = flight.crewInitials, //remove if not necessary
@@ -596,12 +1014,32 @@ namespace sdcrew.Services.Data
 
                             try
                             {
-                                Console.WriteLine(flight.postFlightStatusName);
+                                //Console.WriteLine(flight.postFlightStatusName);
 
                                 var Existing = await GetPostFlight(flight.postedFlightId);
 
                                 if (Existing == null)
                                 {
+                                    if (flight.fluids != null)
+                                    {
+                                        foreach (var fluid in flight.fluids)
+                                        {
+                                            db.Insert(fluid);
+                                        }
+                                    }
+                                    if (flight.PostedFlightOooi != null)
+                                    {
+                                        var oooi = new Oooi
+                                        {
+                                            postedFlightId = flight.postedFlightId,
+                                            automatedOutTime = flight.automatedFlightData.oooi.automatedOutTime,
+                                            automatedOffTime = flight.automatedFlightData.oooi.automatedOffTime,
+                                            automatedOnTime = flight.automatedFlightData.oooi.automatedOnTime,
+                                            automatedInTime = flight.automatedFlightData.oooi.automatedInTime,
+                                        };
+
+                                        db.Insert(oooi);
+                                    }
                                     if (flight.flightPassengers != null)
                                     {
                                         foreach (var flightpassenger in flight.flightPassengers)
@@ -609,10 +1047,11 @@ namespace sdcrew.Services.Data
                                             db.Insert(flightpassenger);
                                         }
                                     }
+
                                     db.Insert(postflightVm);
-                                    db.Insert(flight.PostedFlightOooi);
-                                    db.Insert(postflightVm.oooi);
                                     db.Insert(flight.postedFlightFuel);
+                                    db.Insert(flight.postedFlightAdditional);
+
                                     if (flight.flightCrewMember.Count != 0)
                                     {
                                         foreach (var flightcrew in flight.flightCrewMember)
@@ -632,8 +1071,6 @@ namespace sdcrew.Services.Data
 
                                         }
                                     }
-
-
                                 }
 
                                 Console.WriteLine("Refreshed Postflight flightID: " + flight.flightId);
@@ -642,7 +1079,6 @@ namespace sdcrew.Services.Data
                             {
                                 Crashes.TrackError(exc);
                             }
-
 
                         }
                         catch (Exception exc)

@@ -14,6 +14,7 @@ using Plugin.XamarinFormsSaveOpenPDFPackage;
 using Xamarin.Forms;
 using sdcrew.ViewModels;
 using sdcrew.Views.Login;
+using Microsoft.AppCenter.Crashes;
 
 namespace sdcrew.Repositories
 {
@@ -90,7 +91,6 @@ namespace sdcrew.Repositories
 
             return serialized;
         }
-
 
         public async Task<string> GetJsonResult(string uri, string token = "")
         {
@@ -187,7 +187,11 @@ namespace sdcrew.Repositories
                 IRestResponse response = client.Execute(request);
                 return true;
             }
-            catch (Exception) { return false; }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+                return false;
+            }
         }
 
         public async Task<MemoryStream> PostAsyncPDF(string uri, dynamic data, string getIteneraryName, string token = "")
@@ -222,8 +226,6 @@ namespace sdcrew.Repositories
                 return null;
             }
         }
-
-
 
     }
 

@@ -3,9 +3,9 @@
     x:Class="sdcrew.Views.Settings.settingsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-    xmlns:CSwitch="clr-namespace:sdcrew.Views.ViewHelpers.CustomControls"
     xmlns:CI="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:CSwitch="clr-namespace:sdcrew.Views.ViewHelpers.CustomControls"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:viewModels="clr-namespace:sdcrew.ViewModels"
     Title="Settings"
     BackgroundColor="{DynamicResource FlyoutBG}">
@@ -19,43 +19,48 @@
         <StackLayout>
 
             <!--  Navbar  -->
-            <pv:PancakeView Shadow="{pv:ShadowMarkup Color=Black, Offset='0,5'}"
+            <pv:PancakeView
                 Margin="0,0,0,15"
                 Padding="15"
                 BackgroundColor="{StaticResource TabviewBg}"
                 HorizontalOptions="FillAndExpand"
+                Shadow="{pv:ShadowMarkup Color=Black,
+                                         Offset='0,5'}"
                 VerticalOptions="CenterAndExpand">
 
 
-                <StackLayout Margin="0,20,0,0" CompressedLayout.IsHeadless="true"
+                <StackLayout
+                    Margin="0,20,0,0"
+                    CompressedLayout.IsHeadless="true"
                     Orientation="Horizontal"
                     Spacing="8">
                     <!--  BackButton  -->
                     <Label
-                    Margin="0,15,10,5"
-                    FontAttributes="Bold"
-                    FontSize="18"
-                    HorizontalOptions="CenterAndExpand"
-                    Text="SETTINGS"
-                    TextColor="{StaticResource PrimaryTextColor}"
-                    VerticalOptions="StartAndExpand" />
-
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Margin="10,15,10,5"
-                    HorizontalOptions="EndAndExpand"
-                    VerticalOptions="StartAndExpand">
-                        <Label
-                        FontFamily="{StaticResource customfonts}"
+                        Margin="0,15,10,5"
+                        FontAttributes="Bold"
                         FontSize="18"
                         HorizontalOptions="CenterAndExpand"
-                        Text="&#xE804;"
-                        TextColor="{StaticResource PrimaryTextColor}" />
+                        Text="SETTINGS"
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        VerticalOptions="StartAndExpand" />
+
+                    <StackLayout
+                        Margin="10,15,10,5"
+                        CompressedLayout.IsHeadless="true"
+                        HorizontalOptions="EndAndExpand"
+                        VerticalOptions="StartAndExpand">
                         <Label
-                        FontAttributes="Bold"
-                        FontFamily="{StaticResource customfonts}"
-                        FontSize="8"
-                        Text="Synced"
-                        TextColor="{StaticResource PrimaryToolbarButton}" />
+                            FontFamily="{StaticResource customfonts}"
+                            FontSize="18"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="&#xE804;"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontFamily="{StaticResource customfonts}"
+                            FontSize="8"
+                            Text="Synced"
+                            TextColor="{StaticResource PrimaryToolbarButton}" />
                     </StackLayout>
                 </StackLayout>
 
@@ -63,7 +68,10 @@
 
             <ScrollView VerticalOptions="Start">
 
-                <Grid VerticalOptions="Start" Padding="0" CompressedLayout.IsHeadless="true">
+                <Grid
+                    Padding="0"
+                    CompressedLayout.IsHeadless="true"
+                    VerticalOptions="Start">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -77,15 +85,18 @@
                     </Grid.RowDefinitions>
 
                     <!--  User  -->
-                    <StackLayout Grid.Row="0" Margin="30,0,15,0" CompressedLayout.IsHeadless="true">
+                    <StackLayout
+                        Grid.Row="0"
+                        Margin="30,0,15,0"
+                        CompressedLayout.IsHeadless="true">
 
                         <!--  Account Information  -->
                         <Grid
-                        Margin="15,10,15,0"
-                        Padding="5"
-                        ColumnSpacing="20"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="CenterAndExpand">
+                            Margin="15,10,15,0"
+                            Padding="5"
+                            ColumnSpacing="20"
+                            HorizontalOptions="CenterAndExpand"
+                            VerticalOptions="CenterAndExpand">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -99,69 +110,68 @@
                             </Grid.ColumnDefinitions>
 
                             <CI:CircleImage
-                            Grid.Row="0" x:Name="imgUser"
-                            Grid.RowSpan="3"
-                            Grid.Column="0"
-                            Aspect="AspectFit"
-                            HeightRequest="85"
-                            HorizontalOptions="FillAndExpand">
+                                x:Name="imgUser"
+                                Grid.Row="0"
+                                Grid.RowSpan="3"
+                                Grid.Column="0"
+                                Aspect="AspectFit"
+                                HeightRequest="85"
+                                HorizontalOptions="FillAndExpand">
 
                                 <Image.Source>
-                                    <UriImageSource x:Name="ImgUserSrc" CachingEnabled="True" CacheValidity="30"/>
+                                    <UriImageSource
+                                        x:Name="ImgUserSrc"
+                                        CacheValidity="30"
+                                        CachingEnabled="True" />
                                 </Image.Source>
 
                             </CI:CircleImage>
 
                             <Label
-                            x:Name="lblUserName"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            FontAttributes="Bold"
-                            FontSize="20"
-                            HorizontalOptions="Start"
-
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="EndAndExpand" />
-
+                                x:Name="lblUserName"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                HorizontalOptions="Start"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="EndAndExpand" />
 
 
-                            <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Opacity=".7"
-                            Text="SD Pro Demo"
-                            TextColor="{StaticResource PrimaryTextColor}" />
 
                             <Label
-                            x:Name="lblUserEmail"
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Opacity=".7"
-                    
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Opacity=".7"
+                                Text="SD Pro Demo"
+                                TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label
+                                x:Name="lblUserEmail"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Opacity=".7"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
                         </Grid>
 
                     </StackLayout>
 
                     <!--  Application Settings  -->
-                    <StackLayout
-                    Grid.Row="1"
-                    VerticalOptions="Start">
+                    <StackLayout Grid.Row="1" VerticalOptions="Start">
 
                         <Frame BackgroundColor="{StaticResource FlyoutFooter}" HasShadow="False">
                             <Label
-                            
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            Text="APPLICATION SETTINGS"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="APPLICATION SETTINGS"
+                                TextColor="{StaticResource PrimaryTextColor}" />
                         </Frame>
 
                         <Grid
-                        
-                        Margin="30,0,15,0" CompressedLayout.IsHeadless="true"
-                        ColumnSpacing="15">
+                            Margin="30,0,15,0"
+                            ColumnSpacing="15"
+                            CompressedLayout.IsHeadless="true">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -181,63 +191,76 @@
 
                             <!--  RefreshRate  -->
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Refresh Rate"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Refresh Rate"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="End" VerticalOptions="End" Margin="5"
-                                     Grid.Row="0" Grid.Column="1">
-                                <Label x:Name="lblpckdPrefreshtime" TextColor="{StaticResource PrimaryTextColor}" FontSize="13"/>
-                                <Image Source="icoDropdown" Aspect="AspectFit" HeightRequest="5"/>
+                            <StackLayout
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="5"
+                                HorizontalOptions="End"
+                                Orientation="Horizontal"
+                                VerticalOptions="End">
+                                <Label
+                                    x:Name="lblpckdPrefreshtime"
+                                    FontSize="13"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="5"
+                                    Source="icoDropdown" />
 
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer x:Name="dropdownRefreshtime" Tapped="dropdownRefreshtime_Tapped"/>
+                                    <TapGestureRecognizer x:Name="dropdownRefreshtime" Tapped="dropdownRefreshtime_Tapped" />
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
 
                             <!--  Notifications  -->
                             <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Notifications"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Notifications"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <CSwitch:SDSwitch Grid.Row="1" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" x:Name="AppUpdate"
-                                    Toggled="AppUpdate_Toggled"/>
+                            <CSwitch:SDSwitch
+                                x:Name="AppUpdate"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="AppUpdate_Toggled"
+                                VerticalOptions="Center" />
 
                         </Grid>
 
                     </StackLayout>
 
                     <!--  APPEARANCE  -->
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Grid.Row="2"
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="2"
+                        CompressedLayout.IsHeadless="true"
+                        VerticalOptions="Start">
 
                         <Frame BackgroundColor="{StaticResource FlyoutFooter}" HasShadow="False">
 
                             <Label
-                            
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            Text="APPEARANCE"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="APPEARANCE"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
                         </Frame>
 
 
-                        <Grid
-                        
-                        Margin="30,0,15,0"
-                        ColumnSpacing="15">
+                        <Grid Margin="30,0,15,0" ColumnSpacing="15">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -252,23 +275,33 @@
 
                             <!--  Theme  -->
                             <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Theme"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Theme"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
 
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="End" VerticalOptions="End"
-                                             Grid.Row="1" Grid.Column="1"
-                                             Margin="5">
-                                <Label x:Name="lblpckdTheme" TextColor="{StaticResource PrimaryTextColor}" FontSize="13"/>
-                                <Image Source="icoDropdown" Aspect="AspectFit" HeightRequest="5"/>
+                            <StackLayout
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="5"
+                                HorizontalOptions="End"
+                                Orientation="Horizontal"
+                                VerticalOptions="End">
+                                <Label
+                                    x:Name="lblpckdTheme"
+                                    FontSize="13"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="5"
+                                    Source="icoDropdown" />
 
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer x:Name="dropdownTheme" Tapped="dropdownTheme_Tapped"/>
+                                    <TapGestureRecognizer x:Name="dropdownTheme" Tapped="dropdownTheme_Tapped" />
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
 
@@ -278,27 +311,24 @@
                     </StackLayout>
 
                     <!--  AirPorts  -->
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Grid.Row="3"
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="3"
+                        CompressedLayout.IsHeadless="true"
+                        VerticalOptions="Start">
 
 
 
                         <Frame BackgroundColor="{StaticResource FlyoutFooter}" HasShadow="False">
 
                             <Label
-                            
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            Text="AIRPORTS"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="AIRPORTS"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
                         </Frame>
 
-                        <Grid
-                        
-                        Margin="30,0,15,0"
-                        ColumnSpacing="15">
+                        <Grid Margin="30,0,15,0" ColumnSpacing="15">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -313,43 +343,66 @@
 
                             <!--  Automatic Airport Updates  -->
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Automatic Airport Updates"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Automatic Airport Updates"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <CSwitch:SDSwitch Grid.Row="0" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="True" x:Name="AutomaticAirports_Update"
-                                    Toggled="AutomaticAirports_Update_Toggled"/>
+                            <CSwitch:SDSwitch
+                                x:Name="AutomaticAirports_Update"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="True"
+                                Toggled="AutomaticAirports_Update_Toggled"
+                                VerticalOptions="Center" />
 
                             <!--  Last updated  -->
                             <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Text="Last updated:"
-                            TextColor="{StaticResource SubTitleColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Text="Last updated:"
+                                TextColor="{StaticResource SubTitleColor}"
+                                VerticalOptions="Center" />
 
                             <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FontSize="13"
-                            HorizontalOptions="End"
-                            Opacity=".7"
-                            Text="27 july 2021"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="13"
+                                HorizontalOptions="End"
+                                Opacity=".7"
+                                Text="27 july 2021"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <pv:PancakeView Grid.Row="1" Grid.Column="1" BackgroundColor="{StaticResource ButtonBackgroundColor}" HorizontalOptions="End" HeightRequest="25" CornerRadius="4" >
-                                <StackLayout Orientation="Horizontal" Margin="10,0,10,0" VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
+                            <pv:PancakeView
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                                CornerRadius="4"
+                                HeightRequest="25"
+                                HorizontalOptions="End">
+                                <StackLayout
+                                    Margin="10,0,10,0"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Orientation="Horizontal"
+                                    VerticalOptions="Center">
 
-                                    <Label Text="UPDATE" TextColor="{StaticResource PrimaryTextColor}" FontSize="11" VerticalOptions="CenterAndExpand" />
+                                    <Label
+                                        FontSize="11"
+                                        Text="UPDATE"
+                                        TextColor="{StaticResource PrimaryTextColor}"
+                                        VerticalOptions="CenterAndExpand" />
 
-                                    <Image Source="icoRefresh" Aspect="AspectFit" HeightRequest="13" VerticalOptions="CenterAndExpand" />
+                                    <Image
+                                        Aspect="AspectFit"
+                                        HeightRequest="13"
+                                        Source="icoRefresh"
+                                        VerticalOptions="CenterAndExpand" />
 
                                 </StackLayout>
 
@@ -360,22 +413,20 @@
                     </StackLayout>
 
                     <!--  PREFLIGHT  -->
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Grid.Row="4"
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="4"
+                        CompressedLayout.IsHeadless="true"
+                        VerticalOptions="Start">
 
                         <Frame BackgroundColor="{StaticResource FlyoutFooter}" HasShadow="False">
                             <Label
-                            
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            Text="PREFLIGHT"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="PREFLIGHT"
+                                TextColor="{StaticResource PrimaryTextColor}" />
                         </Frame>
 
-                        <Grid
-                        Margin="30,0,15,0"
-                        ColumnSpacing="15">
+                        <Grid Margin="30,0,15,0" ColumnSpacing="15">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -390,47 +441,65 @@
 
                             <!--  Past Events  -->
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Past Events"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Past Events"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <StackLayout Orientation="Horizontal" Margin="5"
-                                             HorizontalOptions="End" VerticalOptions="End"
-                                             Grid.Row="0"
-                                             Grid.Column="1">
-                                <Label x:Name="lblpckdPastEvnt" TextColor="{StaticResource PrimaryTextColor}" FontSize="13"/>
-                                <Image Source="icoDropdown" Aspect="AspectFit" HeightRequest="5"/>
+                            <StackLayout
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="5"
+                                HorizontalOptions="End"
+                                Orientation="Horizontal"
+                                VerticalOptions="End">
+                                <Label
+                                    x:Name="lblpckdPastEvnt"
+                                    FontSize="13"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="5"
+                                    Source="icoDropdown" />
 
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer x:Name="dropdownPastEvnt" Tapped="dropdownPastEvnt_Tapped"/>
+                                    <TapGestureRecognizer x:Name="dropdownPastEvnt" Tapped="dropdownPastEvnt_Tapped" />
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
 
 
-                            <!-- Future Events -->
+                            <!--  Future Events  -->
                             <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Future Events"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Future Events"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <StackLayout Orientation="Horizontal"
-                                             Grid.Row="1"
-                                             Grid.Column="1"
-                                             Margin="5"
-                                             HorizontalOptions="End" VerticalOptions="End">
-                                <Label x:Name="lblFutureEvent" TextColor="{StaticResource PrimaryTextColor}" FontSize="13"/>
-                                <Image Source="icoDropdown" Aspect="AspectFit" HeightRequest="5"/>
+                            <StackLayout
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="5"
+                                HorizontalOptions="End"
+                                Orientation="Horizontal"
+                                VerticalOptions="End">
+                                <Label
+                                    x:Name="lblFutureEvent"
+                                    FontSize="13"
+                                    Text="Present"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="5"
+                                    Source="icoDropdown" />
 
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer x:Name="dropdownFutureEvnt" Tapped="dropdownFutureEvnt_Tapped"/>
+                                    <TapGestureRecognizer x:Name="dropdownFutureEvnt" Tapped="dropdownFutureEvnt_Tapped" />
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
 
@@ -438,20 +507,19 @@
                     </StackLayout>
 
                     <!--  PREFLIGHT VISIBILITY  -->
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Grid.Row="5"
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="5"
+                        CompressedLayout.IsHeadless="true"
+                        VerticalOptions="Start">
 
                         <Label
-                        Margin="30,5,0,0"
-                        FontAttributes="Bold"
-                        FontSize="14"
-                        Text="PREFLIGHT VISIBILITY"
-                        TextColor="{StaticResource PrimaryTextColor}" />
+                            Margin="30,5,0,0"
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            Text="PREFLIGHT VISIBILITY"
+                            TextColor="{StaticResource PrimaryTextColor}" />
 
-                        <Grid
-                        Margin="35,0,15,0"
-                        ColumnSpacing="15">
+                        <Grid Margin="35,0,15,0" ColumnSpacing="15">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -465,40 +533,42 @@
 
 
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Show Subnavigation"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Show Subnavigation"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <CSwitch:SDSwitch x:Name="switchSubNavVisibility" Grid.Row="0" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="True"
-                                    Toggled="switchSubNavVisibility_Toggled"/>
+                            <CSwitch:SDSwitch
+                                x:Name="switchSubNavVisibility"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="True"
+                                Toggled="switchSubNavVisibility_Toggled"
+                                VerticalOptions="Center" />
 
                         </Grid>
                     </StackLayout>
 
                     <!--  POSTFLIGHT  -->
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Grid.Row="6"
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="6"
+                        CompressedLayout.IsHeadless="true"
+                        VerticalOptions="Start">
 
 
                         <Frame BackgroundColor="{StaticResource FlyoutFooter}" HasShadow="False">
                             <Label
-                            
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            Text="POSTFLIGHT"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="POSTFLIGHT"
+                                TextColor="{StaticResource PrimaryTextColor}" />
                         </Frame>
 
-                        <Grid
-                        Margin="30,0,15,0"
-
-                        ColumnSpacing="15">
+                        <Grid Margin="30,0,15,0" ColumnSpacing="15">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -512,24 +582,32 @@
 
                             <!--  past Flights  -->
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Past Flights"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Past Flights"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <StackLayout Orientation="Horizontal"
-                                             Grid.Row="0"
-                                             Grid.Column="1"
-                                             Margin="5"
-                                             HorizontalOptions="End" VerticalOptions="End">
-                                <Label x:Name="lblPostflightPastEvent" TextColor="{StaticResource PrimaryTextColor}" FontSize="13"/>
-                                <Image Source="icoDropdown" Aspect="AspectFit" HeightRequest="5"/>
+                            <StackLayout
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="5"
+                                HorizontalOptions="End"
+                                Orientation="Horizontal"
+                                VerticalOptions="End">
+                                <Label
+                                    x:Name="lblPostflightPastEvent"
+                                    FontSize="13"
+                                    TextColor="{StaticResource PrimaryTextColor}" />
+                                <Image
+                                    Aspect="AspectFit"
+                                    HeightRequest="5"
+                                    Source="icoDropdown" />
 
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer x:Name="dropdownPostflightPastEvnt" Tapped="dropdownPostflightPastEvnt_Tapped"/>
+                                    <TapGestureRecognizer x:Name="dropdownPostflightPastEvnt" Tapped="dropdownPostflightPastEvnt_Tapped" />
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
 
@@ -538,20 +616,22 @@
                     </StackLayout>
 
                     <!--  POSTFLIGHT VISIBILITY  -->
-                    <StackLayout CompressedLayout.IsHeadless="true"
-                    Grid.Row="7"
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="7"
+                        CompressedLayout.IsHeadless="true"
+                        VerticalOptions="Start">
 
-                        <Label Margin="30,5,0,0"
-                        FontAttributes="Bold"
-                        FontSize="14"
-                        Text="POSTFLIGHT VISIBILITY"
-                        TextColor="{StaticResource PrimaryTextColor}" />
+                        <Label
+                            Margin="30,5,0,0"
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            Text="POSTFLIGHT VISIBILITY"
+                            TextColor="{StaticResource PrimaryTextColor}" />
 
                         <Grid
-                        
-                        Margin="35,0,15,0" RowSpacing="15"
-                        ColumnSpacing="15">
+                            Margin="35,0,15,0"
+                            ColumnSpacing="15"
+                            RowSpacing="15">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -588,215 +668,274 @@
 
                             <!--  Show Sub Menus  -->
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Show Subnavigation"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="switchPostflightSubNav" Grid.Row="0" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="True"
-                                    Toggled="switchPostflightSubNav_Toggled"/>
-
-                            <!--OOOI-->
-                            <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="OOOI"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-                            <!--Crew-->
-                            <Label
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Crew"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-                            <!--Fuel-->
-                            <Label
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Fuel"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <!--Notes-->
-                            <Label
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Notes"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch Grid.Row="4" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" x:Name="NoteVSwitch"
-                                    Toggled="NoteVSwitch_Toggled"/>
-
-                            <!--Passengers-->
-                            <Label
-                            Grid.Row="5"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Passengers"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="PassengerVSwitch" Grid.Row="5" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="PassengerVSwitch_Toggled"/>
-
-                            <!--AdditionDetails-->
-                            <Label
-                            Grid.Row="6"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Additional Details"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="AdditionDetailsVSwitch" Grid.Row="6" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="AdditionDetails_Toggled"/>
-
-                            <!--Expenses-->
-                            <Label
-                            Grid.Row="7"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Expenses"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="ExpenseVSwitch" Grid.Row="7" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="ExpenseVSwitch_Toggled"/>
-
-                            <!--Documents-->
-                            <Label
-                            Grid.Row="8"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Documents"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="DocVSwitch" Grid.Row="8" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="DocVSwitch_Toggled"/>
-
-                            <!--De/Anti-Ice-->
-                            <Label
-                            Grid.Row="9"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="De/Anti-Ice"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="DeAntiIceVSwitch" Grid.Row="9" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="DeAntiIceVSwitch_Toggled"/>
-
-                            <!--APU & Custom Components-->
-                            <Label
-                            Grid.Row="10"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="APU &amp; Custom Components"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Show Subnavigation"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
                             <CSwitch:SDSwitch
-                                    IsToggled="False" x:Name="APUVSwitch" Grid.Row="10" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    Toggled="APUVSwitch_Toggled"/>
+                                x:Name="switchPostflightSubNav"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="True"
+                                Toggled="switchPostflightSubNav_Toggled"
+                                VerticalOptions="Center" />
 
-                            <!--OILSFLUIDS-->
+                            <!--  OOOI  -->
                             <Label
-                            Grid.Row="11"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Oils &amp; fluids"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="OilVSwitch" Grid.Row="11" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="OilVSwitch_Toggled"/>
-
-                            <!--SQUAWKS & DISCREPANCIES-->
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="OOOI"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+                            <!--  Crew  -->
                             <Label
-                            Grid.Row="12"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Squawks &amp; Discrepancies"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
-
-                            <CSwitch:SDSwitch x:Name="SquawkVswitch" Grid.Row="12" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    IsToggled="False" 
-                                    Toggled="SquawkVswitch_Toggled"/>
-
-                            <!--Duty Time-->
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Crew"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+                            <!--  Fuel  -->
                             <Label
-                            Grid.Row="14"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Duty Time"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Fuel"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <!--  Notes  -->
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Notes"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
                             <CSwitch:SDSwitch
-                                    IsToggled="False" x:Name="DutyTimeVSwitch" Grid.Row="14" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    Toggled="DutyTimeVSwitch_Toggled"/>
+                                x:Name="NoteVSwitch"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="NoteVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  Passengers  -->
+                            <Label
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Passengers"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="PassengerVSwitch"
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="PassengerVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  AdditionDetails  -->
+                            <Label
+                                Grid.Row="6"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Additional Details"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="AdditionDetailsVSwitch"
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="AdditionDetails_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  Expenses  -->
+                            <Label
+                                Grid.Row="7"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Expenses"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="ExpenseVSwitch"
+                                Grid.Row="7"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="ExpenseVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  Documents  -->
+                            <Label
+                                Grid.Row="8"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Documents"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="DocVSwitch"
+                                Grid.Row="8"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="DocVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  De/Anti-Ice  -->
+                            <Label
+                                Grid.Row="9"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="De/Anti-Ice"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="DeAntiIceVSwitch"
+                                Grid.Row="9"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="DeAntiIceVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  APU & Custom Components  -->
+                            <Label
+                                Grid.Row="10"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="APU &amp; Custom Components"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="APUVSwitch"
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="APUVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  OILSFLUIDS  -->
+                            <Label
+                                Grid.Row="11"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Oils &amp; fluids"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="OilVSwitch"
+                                Grid.Row="11"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="OilVSwitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  SQUAWKS & DISCREPANCIES  -->
+                            <Label
+                                Grid.Row="12"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Squawks &amp; Discrepancies"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="SquawkVswitch"
+                                Grid.Row="12"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="SquawkVswitch_Toggled"
+                                VerticalOptions="Center" />
+
+                            <!--  Duty Time  -->
+                            <Label
+                                Grid.Row="14"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Duty Time"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
+
+                            <CSwitch:SDSwitch
+                                x:Name="DutyTimeVSwitch"
+                                Grid.Row="14"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="DutyTimeVSwitch_Toggled"
+                                VerticalOptions="Center" />
 
                             <Label
-                            Grid.Row="15"
-                            Grid.Column="0"
-                            FontSize="13"
-                            Opacity=".7"
-                            Text="Checklists"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            VerticalOptions="Center" />
+                                Grid.Row="15"
+                                Grid.Column="0"
+                                FontSize="13"
+                                Opacity=".7"
+                                Text="Checklists"
+                                TextColor="{StaticResource PrimaryTextColor}"
+                                VerticalOptions="Center" />
 
-                            <CSwitch:SDSwitch IsToggled="False" x:Name="ChecklistsVSwitch" Grid.Row="15" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
-                                    Toggled="ChecklistsVSwitch_Toggled"/>
+                            <CSwitch:SDSwitch
+                                x:Name="ChecklistsVSwitch"
+                                Grid.Row="15"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="False"
+                                Toggled="ChecklistsVSwitch_Toggled"
+                                VerticalOptions="Center" />
 
                         </Grid>
                     </StackLayout>
 
                     <!--  Support Footer  -->
-                    <StackLayout 
-                    Grid.Row="8"
-                    BackgroundColor="{StaticResource FlyoutFooter}"
-
-                    VerticalOptions="Start">
+                    <StackLayout
+                        Grid.Row="8"
+                        BackgroundColor="{StaticResource FlyoutFooter}"
+                        VerticalOptions="Start">
 
                         <Grid
-                        Margin="15,0,15,15"
-                        
-                        HorizontalOptions="FillAndExpand"
-                        Opacity=".6"
-                        RowSpacing="20"
-                        VerticalOptions="Start">
+                            Margin="15,0,15,15"
+                            HorizontalOptions="FillAndExpand"
+                            Opacity=".6"
+                            RowSpacing="20"
+                            VerticalOptions="Start">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
@@ -812,53 +951,56 @@
 
 
                             <Label
-                            Grid.Row="0"
-                            Grid.Column="0" Margin="0,15,0,0"
-                            FontAttributes="Bold"
-                            FontSize="15"
-                            HorizontalOptions="Start"
-                            Text="SUPPORT"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="0,15,0,0"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                HorizontalOptions="Start"
+                                Text="SUPPORT"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
                             <Image
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Aspect="AspectFit"
-                            HeightRequest="14"
-                            HorizontalOptions="Start"
-                            Source="icoPhone.png" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Aspect="AspectFit"
+                                HeightRequest="14"
+                                HorizontalOptions="Start"
+                                Source="icoPhone.png" />
 
                             <Label
-                            Grid.Row="1" HorizontalOptions="StartAndExpand"
-                            Grid.Column="1"
-                            FontSize="14"
-                            Text="+1.321.777.3236"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontSize="14"
+                                HorizontalOptions="StartAndExpand"
+                                Text="+1.321.777.3236"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
                             <Image
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Aspect="AspectFit"
-                            HeightRequest="14"
-                            HorizontalOptions="Start"
-                            Source="icoMail.png" />
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Aspect="AspectFit"
+                                HeightRequest="14"
+                                HorizontalOptions="Start"
+                                Source="icoMail.png" />
 
                             <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            FontSize="14" HorizontalOptions="StartAndExpand"
-                            Text="support@satcomdirect.com"
-                            TextColor="{StaticResource PrimaryTextColor}" />
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                FontSize="14"
+                                HorizontalOptions="StartAndExpand"
+                                Text="support@satcomdirect.com"
+                                TextColor="{StaticResource PrimaryTextColor}" />
 
 
                             <Label
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            FontSize="14"
-                            HorizontalOptions="End"
-                            Text="SD Crew v2.8.23"
-                            TextColor="{StaticResource TabbarForeGround}"
-                            VerticalOptions="End" />
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                FontSize="14"
+                                HorizontalOptions="End"
+                                Text="SD Crew v2.8.23"
+                                TextColor="{StaticResource TabbarForeGround}"
+                                VerticalOptions="End" />
 
                         </Grid>
                     </StackLayout>

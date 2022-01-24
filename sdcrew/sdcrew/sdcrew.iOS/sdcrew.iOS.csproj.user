@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SelectedDevice>iPhone7 😁</SelectedDevice>
-    <ActiveDebugProfile>iPhone7 😁</ActiveDebugProfile>
+    <SelectedDevice>New iPhone X</SelectedDevice>
+    <ActiveDebugProfile>New iPhone X</ActiveDebugProfile>
     <DeveloperId>turasmimoo%40gmail.com</DeveloperId>
     <DevelopmentTeamId>G62G4W7UGG</DevelopmentTeamId>
   </PropertyGroup>

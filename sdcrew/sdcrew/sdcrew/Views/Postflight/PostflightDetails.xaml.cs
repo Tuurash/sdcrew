@@ -1,20 +1,16 @@
-﻿using System;
+﻿using ChoETL;
+using Rg.Plugins.Popup.Services;
+using sdcrew.Models;
+using sdcrew.Services.Data;
+using sdcrew.Views.Postflight.Modals.DropdownModals;
+using sdcrew.Views.Postflight.Popups;
+using sdcrew.Views.Postflight.SubViews;
+using sdcrew.Views.Settings;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Rg.Plugins.Popup.Services;
-
-using sdcrew.Models;
-
-using sdcrew.Services.Data;
-using sdcrew.Views.Postflight.Modals.DropdownModals;
-using sdcrew.Views.Postflight.SubViews;
-
-using Xamarin.CommunityToolkit;
-using Xamarin.CommunityToolkit.Extensions;
-using Xamarin.CommunityToolkit.UI.Views.Options;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -31,7 +27,7 @@ namespace sdcrew.Views.Postflight
         PostflightServices svm;
 
         bool IsRunning = false;
-        string SubNavItemString = "";
+        string SubNavItemString = ""; //Users/brotecs/Desktop/Misc/temp.json
 
         public PostflightDetails(dynamic flightObj)
         {
@@ -95,16 +91,16 @@ namespace sdcrew.Views.Postflight
             svm = new PostflightServices();
 
             FillNavbarInfo();
-            //Task.Run(() =>
-            //{
-            //    FillNavbarInfo();
-            //});
 
             FillOooiDetails();
             FillFuelDetails();
             FillCrews();
             FillPassengers();
+            FillAdditionalDetails();
+            FillOilsNFluids();
+            FillDeAntiIce();
 
+            #region messagingcenters
 
             MessagingCenter.Subscribe<AllAirports>(this, "airportSelectedData", (ob) =>
             {
@@ -123,8 +119,6 @@ namespace sdcrew.Views.Postflight
                 dropdownArriveOooi.Text = receivedData.airportCode;
             });
 
-
-
             MessagingCenter.Subscribe<string>(this, "CrewRemoved", async (ob) =>
              {
                  int CGR = int.Parse(ob);
@@ -142,9 +136,66 @@ namespace sdcrew.Views.Postflight
             {
                 ExpanderSquawk.ForceUpdateSize();
             });
+
+            #region dropdownPostbacks
+
+            MessagingCenter.Subscribe<string>(this, "BusinessCatagoryPicked", (ob) =>
+            {
+                lblBCatagory.Text = dropdownBCatagory.Text = ob;
+            });
+
+            MessagingCenter.Subscribe<string>(this, "DelaytypePicked", (ob) =>
+            {
+                lblDelayType.Text = dropdownDelayType.Text = ob;
+            });
+
+            MessagingCenter.Subscribe<string>(this, "DepartmentPicked", (ob) =>
+            {
+                lblChargeTo.Text = dropdownChargeTo.Text = ob;
+            });
+
+            MessagingCenter.Subscribe<string>(this, "mixTypeChanged", (ob) =>
+            {
+                dropdownMixRatio.Text = lblMixRatioDAIce.Text = dropdownChargeTo.Text = ob;
+            });
+
+            MessagingCenter.Subscribe<string>(this, "DAIceTypeChanged", (ob) =>
+            {
+                dropdownTypeDAIce.Text = lblTypeDAIce.Text = dropdownChargeTo.Text = ob;
+            });
+
+            #endregion
+
+            #endregion
         }
 
 
+
+        protected override async void OnAppearing()
+        {
+            //Should follow this https://stackoverflow.com/questions/67763091/xamarin-animation-causing-my-application-to-skip-many-frames
+            base.OnAppearing();
+
+            Device.BeginInvokeOnMainThread(() => Loader.IsVisible = false);
+
+            try
+            {
+                MessagingCenter.Subscribe<App>((App)Application.Current, "OnChecklistChanged", (sender) =>
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await CheckAllChecklistSStatus();
+                    });
+                });
+            }
+            catch { }
+
+            await Task.Run(async () =>
+            {
+                await svm.AddPreflight_Checklists(flight.tripId, 2);
+                await CheckAllChecklistSStatus();
+            }).ConfigureAwait(false);
+        }
 
         #region Navbar nd Tabs
 
@@ -215,6 +266,19 @@ namespace sdcrew.Views.Postflight
             lblArriveOooi.Text = dropdownArriveOooi.Text = flight.airportIcao;
 
             Oooi oooiDetails = svm.GetOooiDetails(flight.postedFlightId);
+
+            Task.Run(async () =>
+            {
+                int pFlightID = 0;
+
+                if (oooiDetails != null)
+                {
+                    pFlightID = flight.postedFlightId;
+                }
+                ApuNCustomComponents apuNCustomComponents = await svm.FetchApuNComponents(pFlightID, flight.aircraftProfileId, DateTime.Parse(flight.StartDate));
+                FillApuNCustomControls(apuNCustomComponents);
+            }).ConfigureAwait(false);
+
 
             if (oooiDetails.HasLocalModification == true)
             {
@@ -487,7 +551,8 @@ namespace sdcrew.Views.Postflight
 
         async void btnAddCrew_Tapped(System.Object sender, System.EventArgs e)
         {
-            await AddNewCrewAsync();
+            await PopupNavigation.Instance.PushAsync(new Crews("CrewSelected"));
+            //await AddNewCrewAsync();
         }
 
         public async Task AddNewCrewAsync()
@@ -517,6 +582,7 @@ namespace sdcrew.Views.Postflight
         #endregion
 
         #region Passengers
+
         private int passengerRowHeigtht;
         public int PassengerRowHeigtht
         {
@@ -569,6 +635,285 @@ namespace sdcrew.Views.Postflight
 
         #endregion
 
+        #region PostedflghtAdditional
+
+        private async void FillAdditionalDetails()
+        {
+            PostedFlightAdditional additionalDetails = await svm.PostedFlightAdditionalAsync(flight.postedFlightId);
+            if (additionalDetails != null)
+            {
+                if (additionalDetails.businessCategoryId != 0)
+                {
+                    lblBCatagory.Text = dropdownBCatagory.Text = svm.GetBusinessCatagoryAsync(additionalDetails.businessCategoryId).Result.Name;
+                }
+                else
+                {
+                    var bCatagory = await svm.GetBusinessCatagoriesAsync();
+                    dropdownBCatagory.Text = bCatagory.Select(x => x.Name).FirstOrDefault();
+                }
+                if (additionalDetails.delayTypeId != 0)
+                {
+                    lblDelayType.Text = dropdownDelayType.Text = svm.GetDelayTypeAsync(additionalDetails.delayTypeId).Result.Name;
+                }
+                else
+                {
+                    var dType = await svm.GetDelayTypesAsync();
+                    dropdownDelayType.Text = dType.Select(x => x.Name).FirstOrDefault();
+                }
+                if (additionalDetails.departmentId != 0)
+                {
+                    lblChargeTo.Text = dropdownChargeTo.Text = svm.GetDepartmentAsync(additionalDetails.departmentId).Result.Name;
+                }
+                else
+                {
+                    var dept = await svm.GetDepartmentsAsync();
+                    dropdownChargeTo.Text = dept.Select(x => x.Name).FirstOrDefault();
+                }
+
+                lblDelayDuration.Text = txtDelayDuration.Text = additionalDetails.delayDuration.ToString();
+                lblGoArounds.Text = txtGoArounds.Text = additionalDetails.goArounds.ToString();
+                lblRejectedTakeoffs.Text = txtRejectedTakeoffs.Text = additionalDetails.rejectedTakeoffs.ToString();
+            }
+        }
+
+        async void dropdownBCatagory_Tapped(System.Object sender, System.EventArgs e)
+        {
+            var businessTypes = await svm.GetBusinessCatagoriesAsync();
+
+            List<string> businessTypeNames = new List<string>();
+            foreach (var item in businessTypes)
+            {
+                businessTypeNames.Add(item.Name);
+            }
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(businessTypeNames, "BusinessCatagoryPicked")));
+        }
+
+        async void dropdownDelayType_Tapped(System.Object sender, System.EventArgs e)
+        {
+            var delayTypes = await svm.GetDelayTypesAsync();
+
+            List<string> delayTypeNames = new List<string>();
+            foreach (var item in delayTypes)
+            {
+                delayTypeNames.Add(item.Name);
+            }
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(delayTypeNames, "DelaytypePicked")));
+        }
+
+        async void dropdownChargeTo_Tapped(System.Object sender, System.EventArgs e)
+        {
+            var departments = await svm.GetDepartmentsAsync();
+
+            List<string> departmentNames = new List<string>();
+            foreach (var item in departments)
+            {
+                departmentNames.Add(item.Name);
+            }
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(departmentNames, "DepartmentPicked")));
+        }
+
+
+        async void txtAdditional_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            await Task.Delay(10);
+
+            lblDelayDuration.Text = txtDelayDuration.Text;
+            lblGoArounds.Text = txtGoArounds.Text;
+            lblRejectedTakeoffs.Text = txtRejectedTakeoffs.Text;
+        }
+
+        #endregion
+
+        #region Expenses
+
+        private async void btnAddExpense_Tapped(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new PopUpExpenseDetails());
+        }
+
+        #endregion
+
+        #region Documents
+
+        private async void btnAddDoc_Tapped(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new PopUpDocumentDetails());
+        }
+
+        #endregion
+
+        #region DeAnti_Ice
+
+        private async void FillDeAntiIce()
+        {
+            //oooiDetails.automatedOutTime.ToString("HH:mm") ?? "00:00"; 
+            var deIce = await svm.PostedFlightDeIceAsync(flight.postedFlightId);
+            if (deIce != null)
+            {
+                if (deIce.deIceStartDateTime != DateTime.MinValue)
+                {
+                    lblStartDAIce.Text = deIce.deIceStartDateTime.ToString("dd MMM yyyy");
+                    lblEndDAIce.Text = deIce.deIceEndDateTime.ToString("dd MMM yyyy");
+
+                    pickerStartDateDAIce.Date = deIce.deIceStartDateTime;
+                    pickerEndDateDAIce.Date = deIce.deIceEndDateTime;
+
+                    txtStartTimeDAIce.Text = deIce.deIceStartDateTime.ToString("HH:mm") ?? "00:00";
+                    txtEndTimeDAIce.Text = deIce.deIceEndDateTime.ToString("HH:mm") ?? "00:00";
+                }
+
+                var mixRatios = await svm.MixTypesAsync();
+                if (deIce.deIceMixRatioTypeId == 0)
+                {
+
+                    lblMixRatioDAIce.Text = dropdownMixRatio.Text = mixRatios.FirstOrDefault().name;
+                }
+                else
+                {
+                    lblMixRatioDAIce.Text = dropdownMixRatio.Text = mixRatios.FirstOrDefault(x => x.id == deIce.deIceMixRatioTypeId).name;
+                }
+
+                if (deIce.deIceTypeId == 1) { lblTypeDAIce.Text = dropdownTypeDAIce.Text = "I"; }
+                else if (deIce.deIceTypeId == 2) { lblTypeDAIce.Text = dropdownTypeDAIce.Text = "II"; }
+                else if (deIce.deIceTypeId == 3) { lblTypeDAIce.Text = dropdownTypeDAIce.Text = "III"; }
+                else if (deIce.deIceTypeId == 4) { lblTypeDAIce.Text = dropdownTypeDAIce.Text = "IV"; }
+                else { dropdownTypeDAIce.Text = "I"; }
+            }
+        }
+
+        private void pickerDAIce_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            lblStartDAIce.Text = pickerStartDateDAIce.Date.ToString("dd MMM yyyy");
+            lblEndDAIce.Text = pickerEndDateDAIce.Date.ToString("dd MMM yyyy");
+        }
+
+        private async void dropdownMixRatio_Tapped(object sender, EventArgs e)
+        {
+            var mixTypes = await svm.MixTypesAsync();
+
+            List<string> mixTypeNames = new List<string>();
+            foreach (var item in mixTypes)
+            {
+                mixTypeNames.Add(item.name);
+            }
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(mixTypeNames, "mixTypeChanged")));
+        }
+
+        private async void dropdownTypeDAIce_Tapped(object sender, EventArgs e)
+        {
+            List<string> DAIceType = new List<string>();
+            DAIceType.Add("I");
+            DAIceType.Add("II");
+            DAIceType.Add("III");
+            DAIceType.Add("IV");
+
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(DAIceType, "DAIceTypeChanged")));
+        }
+
+        #endregion
+
+        #region Apus & CustomComponents
+
+        bool ApuComponentChanged = false;
+
+        private void FillApuNCustomControls(ApuNCustomComponents apuNCustomComponents)
+        {
+
+            if (apuNCustomComponents != null)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    lblApuName.Text = lblApuName2.Text = apuNCustomComponents.Name;
+                    lblCarryOver.Text = (apuNCustomComponents.CarryOverMinutes / 60).ToString() + " HR";
+
+                    txtCarryOver.Text = (apuNCustomComponents.CarryOverMinutes / 60).ToString();
+
+                    lblCurrent.Text = txtCurrent.Text = (apuNCustomComponents.CurrentMinutes / 60).ToString();
+                    lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
+                });
+            }
+
+        }
+
+        async void APuComponents_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            //var txtbox = sender as Entry;
+            await Task.Delay(10);
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (int.Parse(txtCurrent.Text) >= int.Parse(txtCarryOver.Text))
+                {
+                    txtCarryOver.TextColor = txtCurrent.TextColor = Color.White;
+
+                    lblApuName.Text = lblApuName2.Text;
+                    lblCarryOver.Text = txtCarryOver.Text + " HR";
+                    lblCurrent.Text = txtCurrent.Text;
+                    lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
+                }
+                else
+                {
+                    txtCarryOver.TextColor = txtCurrent.TextColor = Color.Red;
+                    lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
+                }
+
+                if (txtCycle.Text != "")
+                {
+                    lblCycles.Text = txtCycle.Text;
+                }
+
+            });
+        }
+
+
+        #endregion
+
+        #region OilsnFluids
+
+        private async void FillOilsNFluids()
+        {
+            var fluids = await svm.GetFluidsAsync();
+
+            if (fluids != null)
+            {
+                if (fluids.Count != 0)
+                {
+                    lblFluidType1.Text = lblFluid1Body.Text = fluids.Select(x => x.type).First();
+                    if (fluids.Select(x => x.usage).First() != 0)
+                    {
+                        lblFuid1Usage.Text = txtFuid1Usage.Text = fluids.Select(x => x.usage).First().ToString();
+                    }
+
+                    if (fluids.Select(x => x.type).Skip(1).First() != null)
+                    {
+                        lblFluidType1.Text = lblFluid1Body.Text = fluids.Select(x => x.type).Skip(1).First();
+                        if (fluids.Select(x => x.usage).Skip(1).First() != 0)
+                        {
+                            lblFuid1Usage.Text = txtFuid1Usage.Text = fluids.Select(x => x.usage).Skip(1).First().ToString();
+                        }
+                    }
+
+                    if (fluids.Select(x => x.type).Skip(2).First() != null)
+                    {
+                        lblFluidType1.Text = lblFluid1Body.Text = fluids.Select(x => x.type).Skip(2).First();
+                        if (fluids.Select(x => x.usage).Skip(2).First() != 0)
+                        {
+                            lblFuid1Usage.Text = txtFuid1Usage.Text = fluids.Select(x => x.usage).Skip(2).First().ToString();
+                        }
+                    }
+                }
+            }
+        }
+
+        void txtFuidUsage_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            lblFuid1Usage.Text = txtFuid1Usage.Text;
+            lblFluid2Usage.Text = txtfluid2Usage.Text;
+            lblFluid3Usage.Text = txtfluid3Usage.Text;
+        }
+
+        #endregion
+
         #region SquawksNDiscripencies
 
         async void btnAddSquawk_Tapped(System.Object sender, System.EventArgs e)
@@ -588,11 +933,211 @@ namespace sdcrew.Views.Postflight
 
         #endregion
 
-        #region CheckLists
+        #region DutyTime
 
-        void btnCheckList_Tapped(System.Object sender, System.EventArgs e)
+        private void btnAddDutyTime_Tapped(object sender, EventArgs e)
         {
 
+        }
+
+        #endregion
+
+        #region CheckLists
+
+        async void btnCheckList_Tapped(System.Object sender, System.EventArgs e)
+        {
+            if (IsRunning == false)
+            {
+                IsRunning = true;
+
+                HapticFeedback.Perform(HapticFeedbackType.Click);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    pfDetailControls.IsEnabled = false;
+                    Loader.IsVisible = true;
+
+                });
+                await Task.Delay(1);
+
+                await Task.Run(() => PopupNavigation.Instance.PushAsync(new Checklist(flight.tripId)))
+                    .ContinueWith(x =>
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            pfDetailControls.IsEnabled = true;
+                            Loader.IsVisible = false;
+
+                        });
+                    })
+                    .ConfigureAwait(false);
+
+                await Task.Run(() => IsRunning = false);
+            }
+        }
+
+
+        private async Task CheckAllChecklistSStatus()
+        {
+            MainThread.BeginInvokeOnMainThread(() => lblChecklistUpdatingStatus.IsVisible = true);
+
+            await Task.WhenAll(FillPilotStatus(), FillMaintenaceStatus(), FillSchedulingStatus())
+                .ContinueWith(x =>
+                {
+                    MainThread.BeginInvokeOnMainThread(() => lblChecklistUpdatingStatus.IsVisible = false);
+                });
+        }
+
+        private async Task FillPilotStatus()
+        {
+            //Scheduling, Maintenance, Pilot
+            var pilotStatus = await svm.CheckStatusChecklist(flight, "Pilot");
+
+            // &#xf11a; => \uf11a  \uE80d;  "\uE80f;  \uE80e;
+            if (pilotStatus == 3)
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    lblpilotStatus.Text = "N/A";
+                    lblpilotStatus.FontSize = 14;
+                    lblpilotStatus.TextColor = Color.White;
+                });
+            }
+            else
+            {
+                lblpilotStatus.FontSize = 22;
+
+                if (pilotStatus == 0)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        lblpilotStatus.Text = "\uE80d";
+                        lblpilotStatus.TextColor = Color.FromHex("FF646A");
+                    });
+                }
+                else
+                {
+                    if (pilotStatus == 1)
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            lblpilotStatus.Text = "\uE80e"; //uE80e
+                            lblpilotStatus.TextColor = Color.FromHex("33E850");
+                        });
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            lblpilotStatus.Text = "\uE80f";
+                            lblpilotStatus.TextColor = Color.FromHex("FFFF6C");
+                        });
+                    }
+                }
+            }
+
+        }
+
+        private async Task FillMaintenaceStatus()
+        {
+            //Scheduling, Maintenance, Pilot
+
+            var MaintenanceStatus = await svm.CheckStatusChecklist(flight, "Maintenance");
+
+            // &#xf11a; => \uf11a  \uE80d;  "\uE80f;  \uE80e;
+            if (MaintenanceStatus == 3)
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    lblMaintenanceStatus.Text = "N/A";
+                    lblMaintenanceStatus.FontSize = 14;
+                    lblMaintenanceStatus.TextColor = Color.White;
+                });
+            }
+            else
+            {
+                if (MaintenanceStatus == 0)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        lblMaintenanceStatus.Text = "\uE80d";
+                        lblMaintenanceStatus.TextColor = Color.FromHex("FF646A");
+                    });
+
+                }
+                else
+                {
+                    if (MaintenanceStatus == 1)
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            lblMaintenanceStatus.Text = "\uE80e";
+                            lblMaintenanceStatus.TextColor = Color.FromHex("33E850");
+                        });
+
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            lblMaintenanceStatus.Text = "\uE80f";
+                            lblMaintenanceStatus.TextColor = Color.FromHex("FFFF6C");
+                        });
+                    }
+                }
+            }
+        }
+
+        private async Task FillSchedulingStatus()
+        {
+
+            var SchedulingStatus = await svm.CheckStatusChecklist(flight, "Scheduling");
+
+            // &#xf11a; => \uf11a  \uE80d;  "\uE80f;  \uE80e;
+            if (SchedulingStatus == 3)
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    lblSchedulingStatus.Text = "N/A";
+                    lblSchedulingStatus.FontSize = 14;
+                    lblSchedulingStatus.TextColor = Color.White;
+                });
+            }
+            else
+            {
+                if (SchedulingStatus == 0)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        lblSchedulingStatus.Text = "\uE80d";
+                        lblSchedulingStatus.TextColor = Color.FromHex("FF646A");
+                    });
+
+
+                }
+                else
+                {
+                    if (SchedulingStatus == 1)
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            lblSchedulingStatus.Text = "\uE80e";
+                            lblSchedulingStatus.TextColor = Color.FromHex("33E850");
+                        });
+
+
+                    }
+                    else
+                    {
+
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            lblSchedulingStatus.Text = "\uE80f";
+                            lblSchedulingStatus.TextColor = Color.FromHex("FFFF6C");
+                        });
+
+                    }
+                }
+            }
         }
 
         #endregion
@@ -696,7 +1241,13 @@ namespace sdcrew.Views.Postflight
         }
 
 
+
+
+
+
         #endregion
+
+
     }
 
 

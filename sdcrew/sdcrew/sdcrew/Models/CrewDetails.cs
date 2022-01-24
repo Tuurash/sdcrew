@@ -159,6 +159,8 @@ namespace sdcrew.Models
         [JsonProperty("lastName")]
         public string LastName { get; set; }
 
+        public string FullName { get; set; }
+
         [JsonProperty("initials")]
         public string Initials { get; set; }
 

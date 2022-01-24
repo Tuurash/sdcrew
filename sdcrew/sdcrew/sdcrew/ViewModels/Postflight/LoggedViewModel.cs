@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using sdcrew.Models;
 using sdcrew.Services.Data;
 
@@ -56,7 +57,7 @@ namespace sdcrew.ViewModels.Postflight
                         getEndDate = "N/A";
                         getEndTime = "N/A";
                     }
-                    else { getEndDate = flight.flightStopDateTime.GetValueOrDefault().ToString("dd MMM yyyy"); getEndTime=flight.flightStopDateTime.GetValueOrDefault().ToString("hh:mm tt"); }
+                    else { getEndDate = flight.flightStopDateTime.GetValueOrDefault().ToString("dd MMM yyyy"); getEndTime = flight.flightStopDateTime.GetValueOrDefault().ToString("hh:mm tt"); }
 
                     var flightSingle = new PostFlightVM
                     {
@@ -114,7 +115,7 @@ namespace sdcrew.ViewModels.Postflight
                 }
             }
 
-            var FlightObservableCollection = new ObservableCollection<PostFlightVM>(flightList);
+            var FlightObservableCollection = new ObservableCollection<PostFlightVM>(flightList.OrderByDescending(x => x.StartDate));
             return FlightObservableCollection;
         }
     }

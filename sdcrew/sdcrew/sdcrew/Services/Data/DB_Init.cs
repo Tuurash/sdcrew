@@ -105,7 +105,7 @@ namespace sdcrew.Services.Data
                 db.CreateTable<PostFlightPassenger>();
                 db.CreateTable<Fluid>();
                 db.CreateTable<Oooi>();
-
+                db.CreateTable<ApuNCustomComponents>();
                 db.CreateTable<Fuel>();
                 db.CreateTable<AutomatedFlightData>();
                 db.CreateTable<PostFlight>();
@@ -118,6 +118,11 @@ namespace sdcrew.Services.Data
                 #region Others
 
                 db.CreateTable<CrewDetailsVM>();
+                db.CreateTable<BusinessCatagory>();
+                //db.CreateTable<ExtendedProperties>();
+                db.CreateTable<DelayType>();
+                db.CreateTable<Department>();
+                db.CreateTable<MixType>();
 
                 #endregion
 

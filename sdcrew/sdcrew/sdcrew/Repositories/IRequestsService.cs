@@ -17,6 +17,8 @@ namespace sdcrew.Repositories
 
         Task<string> PostAsync<TRequest, TResult>(string uri, TRequest data, string token = "");
 
+        Task<bool> Post_Custom(dynamic obj, string url);
+
         Task<TResult> PutAsync<TResult>(string uri, TResult data, string token = "");
 
         Task<TResult> PutAsync<TRequest, TResult>(string uri, TRequest data, string token = "");

@@ -72,7 +72,7 @@ namespace sdcrew.Views.Postflight
 
         async void btnSynch_Tapped(System.Object sender, System.EventArgs e)
         {
-            string action = await DisplayActionSheet(null, "Cancel", null, "Push Updates to Server", "Clear and Resync o Server");
+            string action = await DisplayActionSheet(null, "Cancel", null, "Push Updates to Server", "Clear and Resync to Server");
             if (action == "Push Updates to Server")
             {
 
