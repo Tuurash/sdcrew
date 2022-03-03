@@ -417,7 +417,6 @@ namespace sdcrew.Services.Data
             var delete = db.Table<ChecklistVM>().Delete(x => x.tripId == SchAircraftID);
         }
 
-
         public async Task<int> CheckStatusChecklist(PreflightVM flight, string v)
         {
             var AllChecklist = db.Table<ChecklistVM>().Where(x => x.checklistRoleTypeName == v & x.tripId == flight.scheduledAircraftTripId & x.legNumber == flight.legNumber).ToList(); //& x.checkListTypeId == CheckListTypeId

@@ -101,7 +101,6 @@ namespace sdcrew.Views.Postflight
         {
             if (IsRefreshing == false)
             {
-
                 IsRefreshing = true;
                 try
                 {
@@ -111,11 +110,10 @@ namespace sdcrew.Views.Postflight
                     {
                         Loader.IsVisible = true;
 
-                        await Navigation.PushAsync(new PostflightDetails(flightObj))
+                        await Navigation.PushAsync(new PostflightDetails(flightObj, "Logged"))
                              .ContinueWith(x =>
                              { Device.BeginInvokeOnMainThread(() => Loader.IsVisible = false); });
                     });
-
                 }
                 catch { }
 

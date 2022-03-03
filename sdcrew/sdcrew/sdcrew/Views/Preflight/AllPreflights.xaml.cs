@@ -112,6 +112,7 @@ namespace sdcrew.Views.Preflight
         int refreshFlag = 0;
         private async Task PopulateData()
         {
+
             _allGroups = viewModel.getAllPreflightsList();
             if (_allGroups.Count > 0)
             {

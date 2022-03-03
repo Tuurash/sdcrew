@@ -49,6 +49,42 @@ namespace sdcrew.Repositories.PostflightRepos
             }
         }
 
+        public async Task<string> FetchAllAirports()
+        {
+            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.AIRPORTS;
+            await Task.Delay(2);
+
+            var Jsonresult = _requestService.GetJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            return JString;
+        }
+
+        public async Task<List<FuelQuantityType>> FetchFuelQuantityTypesAsync()
+        {
+            string url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_FUELQUANTITYTYPE;
+
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            await Task.Delay(2);
+            string JString = Jsonresult.ToString();
+
+            var types = new List<FuelQuantityType>();
+            try
+            {
+                types = JsonConvert.DeserializeObject<List<FuelQuantityType>>(JString);
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+            return types;
+        }
+
+
+
+        #region Crews
+
         public async Task<List<CrewDetailsVM>> FetchAllCrews()
         {
             preflightEndPoints = new PreflightEndPoints();
@@ -70,17 +106,50 @@ namespace sdcrew.Repositories.PostflightRepos
             return crews;
         }
 
-        public async Task<string> FetchAllAirports()
+        public async Task<List<CrewMember_Type>> FetchCrewMember_TypesAsync()
         {
-            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.AIRPORTS;
-            await Task.Delay(2);
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_CREWMEMBERtYPE;
 
-            var Jsonresult = _requestService.GetJsonResult(url);
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
             string JString = Jsonresult.ToString();
 
-            return JString;
+            var crewMember_Types = new List<CrewMember_Type>();
+            try
+            {
+                crewMember_Types = JsonConvert.DeserializeObject<IEnumerable<CrewMember_Type>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return crewMember_Types;
         }
 
+        public async Task<List<ApproachType>> FetchApproachTypesAsync()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_APPROACHTYPE;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var approachTypes = new List<ApproachType>();
+            try
+            {
+                approachTypes = JsonConvert.DeserializeObject<IEnumerable<ApproachType>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return approachTypes;
+        }
+
+
+        #endregion
+
+        //ApuNCustomComponents
         public async Task<ApuNCustomComponents> FetchApuNCustomComponentsAsync(int PostedFlightId, int AircraftProfileId, DateTime FlightStartDateTime)
         {
             string url = String.Empty;
@@ -328,6 +397,172 @@ namespace sdcrew.Repositories.PostflightRepos
             }
             catch (Exception exc) { Crashes.TrackError(exc); return false; }
 
+        }
+
+        #endregion
+
+        #region Expense Document
+
+        public async Task<List<ExpenseCatagory>> FetchExpenseCategoriesAsync()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_EXPENSECATAGORY;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var expenseCatagories = new List<ExpenseCatagory>();
+            try
+            {
+                expenseCatagories = JsonConvert.DeserializeObject<IEnumerable<ExpenseCatagory>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return expenseCatagories;
+        }
+
+        public async Task<List<PaymentType>> FetchPaymentTypesAsync()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_PAYMENTYPE;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var paymentTypes = new List<PaymentType>();
+            try
+            {
+                paymentTypes = JsonConvert.DeserializeObject<IEnumerable<PaymentType>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+            return paymentTypes;
+        }
+
+        public async Task<List<QuantityType>> FetchQuantityTypesAsync()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_QUANTITYTYPE;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var quantityTypes = new List<QuantityType>();
+            try
+            {
+                quantityTypes = JsonConvert.DeserializeObject<IEnumerable<QuantityType>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+            return quantityTypes;
+        }
+
+        public async Task<List<DocumentType>> FetchDocumentTypes()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_DOCUMENTTYPES;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var docs = new List<DocumentType>();
+            try
+            {
+                docs = JsonConvert.DeserializeObject<IEnumerable<DocumentType>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return docs;
+        }
+
+        #endregion
+
+        #region squawks&Discrepancies
+
+        public async Task<List<ATACode>> FetchAtaCodesAsync()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_ATA_CODES;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var aTAs = new List<ATACode>();
+            try
+            {
+                aTAs = JsonConvert.DeserializeObject<IEnumerable<ATACode>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return aTAs;
+        }
+
+        public async Task<List<SquawkCatagory>> FetchSquawkCategories()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_SQUAWK_CATAGORIES;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var squawkCatagories = new List<SquawkCatagory>();
+            try
+            {
+                squawkCatagories = JsonConvert.DeserializeObject<IEnumerable<SquawkCatagory>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return squawkCatagories;
+        }
+
+        public async Task<List<SquawkTypes>> FetchSquawkTypes()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_SQUAWK_TYPES;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var squawkTypes = new List<SquawkTypes>();
+            try
+            {
+                squawkTypes = JsonConvert.DeserializeObject<IEnumerable<SquawkTypes>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return squawkTypes;
+        }
+
+        public async Task<List<SquawkStatus>> FetchSquawkStatus()
+        {
+            var url = postflightEndPoints.PROFILE_REQUEST_URL + postflightEndPoints.FETCH_SQUAWK_STATUS;
+
+            var Jsonresult = await _requestService.GetAsyncJsonResult(url);
+            string JString = Jsonresult.ToString();
+
+            var squawkStatuses = new List<SquawkStatus>();
+            try
+            {
+                squawkStatuses = JsonConvert.DeserializeObject<IEnumerable<SquawkStatus>>(JString).ToList();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+
+            return squawkStatuses;
         }
 
         #endregion

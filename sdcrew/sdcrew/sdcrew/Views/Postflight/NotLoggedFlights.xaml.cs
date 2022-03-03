@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 using sdcrew.Models;
@@ -76,11 +77,11 @@ namespace sdcrew.Views.Postflight
 
         int refreshFlag = 0;
 
-        ObservableCollection<PostFlightVM> notLoggedList = new ObservableCollection<PostFlightVM>();
+        List<PostFlightVM> notLoggedList = new List<PostFlightVM>();
 
         private async Task PopulateData()
         {
-            notLoggedList = NotLoggedViewmodel.getNotLogged_Postflights();
+            notLoggedList = NotLoggedViewmodel.getNotLogged_Postflights().OrderByDescending(x=>x.flightStartDateTime).ToList();
             await Task.Delay(1);
 
             if (notLoggedList.Count > 0)
@@ -88,6 +89,7 @@ namespace sdcrew.Views.Postflight
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     NotLoggedListView.ItemsSource = null;
+                    Task.Delay(1);
                     NotLoggedListView.ItemsSource = notLoggedList;
                     Loader.IsVisible = false;
                 });
@@ -117,76 +119,17 @@ namespace sdcrew.Views.Postflight
         {
             await PerformRefresh();
         }
-
         public async Task ClearAndReSyncFlights()
         {
             if (IsRefreshing == false)
             {
                 IsRefreshing = true;
 
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    AContentControl.IsEnabled = false;
-                    Loader.IsVisible = true;
-                });
-
-
                 Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = false);
 
                 await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
                 await postflightServices.InsertDatas();
-                await PopulateData();
 
-                RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
-                Services.Settings.GetRefreshTime = RefreshTime;
-
-                Device.BeginInvokeOnMainThread(() => lblRefreshTime.Text = RefreshTime);
-                NotLoggedListView.EndRefresh();
-
-                IsRefreshing = false;
-
-                await Task.Delay(2);
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Loader.IsVisible = false;
-                    AContentControl.IsEnabled = true;
-                });
-
-                refreshFlag++;
-            }
-        }
-
-        public async Task PerformInsertion()
-        {
-            if (IsRefreshing == false)
-            {
-                IsRefreshing = true;
-
-                await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
-                await postflightServices.InsertDatas();
-                await PopulateData();
-
-                RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
-                Services.Settings.GetRefreshTime = RefreshTime;
-
-                Device.BeginInvokeOnMainThread(() => lblRefreshTime.Text = RefreshTime);
-                NotLoggedListView.EndRefresh();
-
-                IsRefreshing = false;
-                refreshFlag++;
-            }
-        }
-
-        public async Task PerformRefresh()
-        {
-            if (IsRefreshing == false)
-            {
-                IsRefreshing = true;
-
-                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = false);
-
-                await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
-                await postflightServices.RefreshDatas();
                 await PopulateData();
 
                 RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
@@ -199,9 +142,66 @@ namespace sdcrew.Views.Postflight
 
                 await Task.Delay(2);
                 Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = true);
+
                 refreshFlag++;
             }
-            else { }
+        }
+
+        public async Task PerformInsertion()
+        {
+            if (IsRefreshing == false)
+            {
+                IsRefreshing = true;
+
+                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = false);
+
+                await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
+                await postflightServices.InsertDatas();
+
+                await PopulateData();
+
+                RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
+                Services.Settings.GetRefreshTime = RefreshTime;
+
+                Device.BeginInvokeOnMainThread(() => lblRefreshTime.Text = RefreshTime);
+                NotLoggedListView.EndRefresh();
+
+                IsRefreshing = false;
+
+                await Task.Delay(2);
+                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = true);
+
+                refreshFlag++;
+            }
+        }
+
+
+        public async Task PerformRefresh()
+        {
+            if (IsRefreshing == false)
+            {
+                IsRefreshing = true;
+
+                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = false);
+
+                await Task.Delay(TimeSpan.FromSeconds(RefreshDuration));
+                await postflightServices.RefreshDatas();
+
+                await PopulateData();
+
+                RefreshTime = DateTime.Now.ToString("dd MMM yyyy - hh:mm");
+                Services.Settings.GetRefreshTime = RefreshTime;
+
+                Device.BeginInvokeOnMainThread(() => lblRefreshTime.Text = RefreshTime);
+                NotLoggedListView.EndRefresh();
+
+                IsRefreshing = false;
+
+                await Task.Delay(2);
+                Device.BeginInvokeOnMainThread(() => AContentControl.IsEnabled = true);
+
+                refreshFlag++;
+            }
         }
 
         public async Task PerformBackgroundRefresh()
@@ -224,16 +224,13 @@ namespace sdcrew.Views.Postflight
 
         void FlightGetDetails_Tapped(System.Object sender, System.EventArgs e)
         {
+            Loader.IsVisible = true;
+            Task.Delay(100);
             dynamic flightObj = ((TappedEventArgs)e).Parameter;
 
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                Loader.IsVisible = true;
-
-                await Navigation.PushAsync(new PostflightDetails(flightObj))
-                     .ContinueWith(x =>
-                     { Device.BeginInvokeOnMainThread(() => Loader.IsVisible = false); });
-            });
+            Navigation.PushAsync(new PostflightDetails(flightObj, "NotLogged"))
+                 .ContinueWith(x =>
+                 { Device.BeginInvokeOnMainThread(() => Loader.IsVisible = false); });
         }
 
     }

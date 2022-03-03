@@ -179,9 +179,8 @@
     <Compile Include="Renderers\DashedFrameRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Roboto-Regular.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AndroidAsset>
+    <AndroidAsset Include="Assets\Roboto_Regular.ttf" />
+    <AndroidAsset Include="Assets\Roboto-Regular.ttf" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
@@ -541,6 +540,12 @@
       </Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\xml\appcenter_backup_rule.xml">
+      <SubType>
+      </SubType>
+      <Generator>
+      </Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\bars.png">
       <SubType>
       </SubType>
       <Generator>

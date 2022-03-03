@@ -23,8 +23,6 @@ namespace sdcrew.Droid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            //default font
-
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;

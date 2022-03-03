@@ -86,7 +86,7 @@
                 <!--  Navbar  -->
                 <StackLayout
                     BackgroundColor="{StaticResource TabviewBg}"
-                    HeightRequest="250"
+                    HeightRequest="177"
                     Orientation="Horizontal"
                     Spacing="8"
                     VerticalOptions="End">
@@ -214,7 +214,7 @@
                     Margin="0,-10,0,0"
                     BackgroundColor="{StaticResource NavigationBarColor}"
                     HeightRequest="60"
-                    VerticalOptions="StartAndExpand">
+                    VerticalOptions="Start">
 
                     <StackLayout Margin="0,0,10,0" Orientation="Horizontal">
 
@@ -305,6 +305,7 @@
                             BackgroundColor="{StaticResource CardBGColor}"
                             BorderColor="{StaticResource TransparentColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -425,6 +426,7 @@
                                                         x:Name="lblOooiOut"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                 </StackLayout>
@@ -466,6 +468,7 @@
                                                         x:Name="lblOooiIn"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                 </StackLayout>
@@ -487,6 +490,7 @@
                                                         x:Name="lblOooiOff"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                 </StackLayout>
@@ -528,6 +532,7 @@
                                                         x:Name="lblOooiOn"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                 </StackLayout>
@@ -982,7 +987,6 @@
                             </Grid>
                         </Frame>
 
-
                         <!--  FUEL  -->
                         <Frame
                             x:Name="FUEL"
@@ -990,6 +994,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -1064,6 +1069,7 @@
                                                         x:Name="lblFuelOut"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                     <Label
@@ -1101,6 +1107,7 @@
                                                         x:Name="lblFuelIn"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                     <Label
@@ -1127,6 +1134,7 @@
                                                         x:Name="lblFuelOff"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                     <Label
@@ -1144,6 +1152,7 @@
                                                     Grid.Column="1"
                                                     FontSize="12"
                                                     HorizontalOptions="CenterAndExpand"
+                                                    Text="N/A"
                                                     TextColor="{StaticResource PrimaryTextColor}" />
 
                                                 <!--  Col2  On  -->
@@ -1163,6 +1172,7 @@
                                                         x:Name="lblFuelOn"
                                                         Margin="5,0,0,0"
                                                         FontSize="10"
+                                                        Text="N/A"
                                                         TextColor="{StaticResource GreenTextColor}" />
 
                                                     <Label
@@ -1522,6 +1532,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <StackLayout>
@@ -1622,6 +1633,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -1760,11 +1772,12 @@
 
                         <!--  ADDDITIONAL DETAILS  -->
                         <Frame
-                            x:Name="ADDDITIONALDETAILS"
+                            x:Name="ADDITIONALDETAILS"
                             Margin="5"
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -2127,7 +2140,13 @@
                                             BackgroundColor="DarkCyan"
                                             CornerRadius="5,5,0,0">
 
-                                            <StackLayout Margin="5,5,5,0" Orientation="Horizontal">
+                                            <StackLayout Margin="5,5,5,0">
+
+                                                <Label
+                                                    FontSize="10" TextColor="{StaticResource PrimaryTextColor}"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="Delay Duration" />
+
                                                 <CC:BorderlessEntry
                                                     x:Name="txtDelayDuration"
                                                     FontSize="15"
@@ -2138,6 +2157,11 @@
                                                     VerticalOptions="End"
                                                     WidthRequest="120" />
 
+
+                                                <BoxView
+                                                    HeightRequest="1"
+                                                    VerticalOptions="End"
+                                                    Color="{StaticResource SecondaryTextColor}" />
                                             </StackLayout>
 
                                         </pv:PancakeView>
@@ -2153,12 +2177,12 @@
                                             <StackLayout Margin="5,5,5,0">
 
                                                 <Label
-                                                    FontSize="10"
+                                                    FontSize="10" TextColor="{StaticResource PrimaryTextColor}"
                                                     HorizontalOptions="StartAndExpand"
                                                     Text="Go Arounds" />
 
-                                                <StackLayout Orientation="Horizontal">
-                                                    <CC:BorderlessEntry
+
+                                                <CC:BorderlessEntry
                                                         x:Name="txtGoArounds"
                                                         FontSize="15"
                                                         HorizontalOptions="StartAndExpand"
@@ -2167,7 +2191,7 @@
                                                         TextColor="{StaticResource PrimaryTextColor}"
                                                         VerticalOptions="End"
                                                         WidthRequest="120" />
-                                                </StackLayout>
+
 
                                                 <BoxView
                                                     HeightRequest="1"
@@ -2187,12 +2211,11 @@
 
                                                 <Label
                                                     FontSize="10"
-                                                    HorizontalOptions="StartAndExpand"
+                                                    HorizontalOptions="StartAndExpand" TextColor="{StaticResource PrimaryTextColor}"
                                                     Text="Rejected Takeoffs" />
 
 
-                                                <StackLayout Orientation="Horizontal">
-                                                    <CC:BorderlessEntry
+                                                <CC:BorderlessEntry
                                                         x:Name="txtRejectedTakeoffs"
                                                         FontSize="15"
                                                         HorizontalOptions="StartAndExpand"
@@ -2202,7 +2225,6 @@
                                                         VerticalOptions="End"
                                                         WidthRequest="120" />
 
-                                                </StackLayout>
 
                                                 <BoxView
                                                     HeightRequest="1"
@@ -2228,6 +2250,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -2258,7 +2281,7 @@
 
 
                                     <StackLayout BackgroundColor="{StaticResource CardBGColor}">
-                                        <CC:BorderlessEditor
+                                        <CC:BorderlessEditor x:Name="txtNote"
                                             AutoSize="TextChanges"
                                             BackgroundColor="Transparent"
                                             FontSize="12"
@@ -2276,11 +2299,13 @@
                         </Frame>
 
                         <!--  EXPENSES  -->
-                        <pv:PancakeView
+                        <Frame
                             x:Name="EXPENSES"
                             Margin="5"
+                            Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <StackLayout>
@@ -2307,7 +2332,7 @@
                                                             FontFamily="{StaticResource customfonts}"
                                                             FontSize="17"
                                                             HorizontalOptions="StartAndExpand"
-                                                            Text="ESPENSES"
+                                                            Text="EXPENSES"
                                                             TextColor="{StaticResource PrimaryTextColor}"
                                                             VerticalOptions="CenterAndExpand" />
 
@@ -2347,6 +2372,7 @@
                                             <!--  Body  -->
                                             <Grid
                                                 x:Name="ExpenseGrid"
+                                                Margin="0,10,0,0"
                                                 HorizontalOptions="FillAndExpand"
                                                 RowSpacing="0"
                                                 VerticalOptions="StartAndExpand">
@@ -2380,14 +2406,16 @@
 
                             </StackLayout>
 
-                        </pv:PancakeView>
+                        </Frame>
 
                         <!--  DOCUMENTS  -->
-                        <pv:PancakeView
+                        <Frame
                             x:Name="DOCUMENTS"
                             Margin="5"
+                            Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <StackLayout>
@@ -2448,6 +2476,7 @@
                                             <!--  Body  -->
                                             <Grid
                                                 x:Name="DocumentGrid"
+                                                Margin="0,10,0,0"
                                                 HorizontalOptions="FillAndExpand"
                                                 RowSpacing="0"
                                                 VerticalOptions="StartAndExpand">
@@ -2481,7 +2510,7 @@
 
                             </StackLayout>
 
-                        </pv:PancakeView>
+                        </Frame>
 
                         <!--  DE/ANTI-ICE  -->
                         <Frame
@@ -2490,6 +2519,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -2852,7 +2882,7 @@
                                                         x:Name="dropdownMixRatio"
                                                         FontSize="15"
                                                         HorizontalOptions="StartAndExpand"
-                                                        Text="N/A"
+                                                        Text="1:1"
                                                         TextColor="{StaticResource PrimaryTextColor}" />
                                                     <Image
                                                         Aspect="AspectFit"
@@ -2932,7 +2962,6 @@
 
                         </Frame>
 
-
                         <!--  APU&CUSTOMCOMPONENTS  -->
                         <Frame
                             x:Name="APUCUSTOMCOMPONENTS"
@@ -2940,6 +2969,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -3276,6 +3306,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -3629,6 +3660,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <StackLayout>
@@ -3636,7 +3668,6 @@
                                 <behaviors:Expander x:Name="ExpanderSquawk" IsExpanded="False">
                                     <!--  Header  -->
                                     <behaviors:Expander.Header>
-
                                         <StackLayout Margin="10" HorizontalOptions="FillAndExpand">
                                             <!--  Card Name  -->
                                             <StackLayout
@@ -3728,11 +3759,13 @@
                         </Frame>
 
                         <!--  DUTY TIME  -->
-                        <pv:PancakeView
+                        <Frame
                             x:Name="DUTYTIME"
                             Margin="5"
+                            Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
 
                             <StackLayout>
@@ -3759,7 +3792,7 @@
                                                             FontFamily="{StaticResource customfonts}"
                                                             FontSize="17"
                                                             HorizontalOptions="StartAndExpand"
-                                                            Text="ESPENSES"
+                                                            Text="DUTY TIME"
                                                             TextColor="{StaticResource PrimaryTextColor}"
                                                             VerticalOptions="CenterAndExpand" />
 
@@ -3792,6 +3825,7 @@
                                             <!--  Body  -->
                                             <Grid
                                                 x:Name="DutyTimeGrid"
+                                                Margin="0,10,0,0"
                                                 HorizontalOptions="FillAndExpand"
                                                 RowSpacing="0"
                                                 VerticalOptions="StartAndExpand">
@@ -3825,7 +3859,7 @@
 
                             </StackLayout>
 
-                        </pv:PancakeView>
+                        </Frame>
 
 
                         <!--  CHECKLISTS  -->
@@ -3835,6 +3869,7 @@
                             Padding="0"
                             BackgroundColor="{StaticResource CardBGColor}"
                             CornerRadius="10"
+                            IsVisible="false"
                             VerticalOptions="FillAndExpand">
                             <StackLayout Margin="10">
 

@@ -119,10 +119,19 @@ namespace sdcrew.Services.Data
 
                 db.CreateTable<CrewDetailsVM>();
                 db.CreateTable<BusinessCatagory>();
-                //db.CreateTable<ExtendedProperties>();
                 db.CreateTable<DelayType>();
                 db.CreateTable<Department>();
                 db.CreateTable<MixType>();
+                db.CreateTable<DocumentType>();
+                db.CreateTable<ATACode>();
+                db.CreateTable<SquawkCatagory>();
+                db.CreateTable<SquawkTypes>();
+                db.CreateTable<SquawkStatus>();
+                db.CreateTable<CrewMember_Type>();
+                db.CreateTable<QuantityType>();
+                db.CreateTable<ExpenseCatagory>();
+                db.CreateTable<PaymentType>();
+                db.CreateTable<ApproachType>();
 
                 #endregion
 

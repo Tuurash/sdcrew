@@ -57,7 +57,7 @@
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>None</MtouchLink>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignProvision>iOS Team Provisioning Profile: *</CodesignProvision>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -248,6 +248,7 @@
     <BundleResource Include="Resources\imgKnob.png" />
     <BundleResource Include="Resources\imgKnobDActive.png" />
     <BundleResource Include="Resources\icoTrash.png" />
+    <BundleResource Include="Resources\bars.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

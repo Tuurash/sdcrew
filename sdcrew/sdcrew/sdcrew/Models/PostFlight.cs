@@ -435,6 +435,32 @@ namespace sdcrew.Models
 
     }
 
+    #region Fuel
+
+    public class FuelQuantityType
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+
+    }
+
+    #endregion
+
     #region BusinessCatagories
 
     public class BusinessCatagory
@@ -518,6 +544,239 @@ namespace sdcrew.Models
         [JsonProperty("deleted")]
         public bool Deleted { get; set; }
 
+    }
+
+    #endregion
+
+    #region Document Type
+
+    public class DocumentType
+    {
+        public int id { get; set; }
+        public int customerId { get; set; }
+        public bool isOverride { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public bool active { get; set; }
+        public bool deleted { get; set; }
+    }
+
+    #endregion
+
+    #region Squawk dropdowns
+
+    public class ATACode
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    public class SquawkCatagory
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    public class SquawkTypes
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    public class SquawkStatus
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+
+    #endregion
+
+    #region CrewMembertypes
+
+    public class CrewMember_Type
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("controlId")]
+        public int ControlId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    public class ApproachType
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+
+    }
+
+    #endregion
+
+    #region Expense
+
+    public class ExpenseCatagory
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    public class PaymentType
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("customerId")]
+        public int CustomerId { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
+    public class QuantityType
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("isOverride")]
+        public bool IsOverride { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
     }
 
     #endregion

@@ -12,6 +12,7 @@ using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 
 using sdcrew.Models;
+using sdcrew.Repositories;
 using sdcrew.Repositories.PostflightRepos;
 using sdcrew.Repositories.PreflightRepos;
 
@@ -27,6 +28,10 @@ namespace sdcrew.Services.Data
         PostflightRepository postflightRepo;
         PreflightRepository _preflightRepo;
 
+        //For Posting Avoiding Repository
+        RequestsService requestsService;
+        PostflightEndPoints postflightEndPoints = new PostflightEndPoints();
+
         string colorString = "";
 
         string AllAirportsJsonfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"MobilePostFlightAirport_Prod.json");
@@ -35,6 +40,7 @@ namespace sdcrew.Services.Data
         {
             _keygen.CheckKey();
             postflightRepo = new PostflightRepository();
+            requestsService = new RequestsService();
         }
 
         bool IsBusy = false;
@@ -45,16 +51,23 @@ namespace sdcrew.Services.Data
             {
                 IsBusy = true;
 
-                await AddPostflight_AircraftProfileDTos()
-                    .ContinueWith(async x =>
-                    {
-                        await InsertBusinessCatagoriesAsync();
-                        await InsertDepartmentsAsync();
-                        await InsertDelayTypesAsync();
-                        await InsertMixRatioTypes();
-                        await InsertCrews();
-                        await AddAllPostflights();
-                    });
+                //await InsertFuelTypeAsync();
+                await AddPostflight_AircraftProfileDTos();
+                await InsertQuantityTypesAsync();
+                await InsertPaymentTypesAsync();
+                await InsertExpenseCategoriesAsync();
+                await InsertApproachTypesAAsync();
+                await InsertCrewTypesAAsync();
+                await InsertAtas();
+                await InsertSquawkCategories();
+                await InsertSquawkTypes();
+                await InsertDocumentTypes();
+                await InsertBusinessCatagoriesAsync();
+                await InsertDepartmentsAsync();
+                await InsertDelayTypesAsync();
+                await InsertMixRatioTypes();
+                await InsertCrews();
+                await AddAllPostflights();
 
                 IsBusy = false;
             }
@@ -65,17 +78,22 @@ namespace sdcrew.Services.Data
             if (IsBusy == false)
             {
                 IsBusy = true;
-
-                await AddPostflight_AircraftProfileDTos()
-                    .ContinueWith(async x =>
-                    {
-                        await InsertCrews();
-                        await InsertBusinessCatagoriesAsync();
-                        await InsertDelayTypesAsync();
-                        await InsertMixRatioTypes();
-                        await RefreshPostflights();
-
-                    });
+                //await InsertFuelTypeAsync();
+                await AddPostflight_AircraftProfileDTos();
+                await InsertQuantityTypesAsync();
+                await InsertPaymentTypesAsync();
+                await InsertExpenseCategoriesAsync();
+                await InsertApproachTypesAAsync();
+                await InsertCrewTypesAAsync();
+                await InsertAtas();
+                await InsertSquawkCategories();
+                await InsertSquawkTypes();
+                await InsertDocumentTypes();
+                await InsertCrews();
+                await InsertBusinessCatagoriesAsync();
+                await InsertDelayTypesAsync();
+                await InsertMixRatioTypes();
+                await RefreshPostflights();
 
 
                 IsBusy = false;
@@ -172,6 +190,13 @@ namespace sdcrew.Services.Data
             }
         }
 
+        //public List<CrewDetailsVM> GetCrews()
+        //{
+        //    Init();
+        //    var crews = db.Table<CrewDetailsVM>().ToList();
+        //    return crews;
+        //}
+
         public async Task<List<FlightCrewMember>> GetFlightCrewMembersAsync(int FlightId)
         {
             await Init();
@@ -184,6 +209,46 @@ namespace sdcrew.Services.Data
             await Init();
             var logbook = db.Table<Logbook>().FirstOrDefault(x => x.flightCrewMemberId == FlightCrewMemberId);
             return logbook;
+        }
+
+        public async Task InsertCrewTypesAAsync()
+        {
+            await Init();
+
+            var crewMemberTypes = await postflightRepo.FetchCrewMember_TypesAsync();
+            if (crewMemberTypes != null)
+            {
+                db.Table<CrewMember_Type>().Delete(x => x.Id != 0);
+                foreach (var item in crewMemberTypes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+        public async Task<List<CrewMember_Type>> CrewMember_TypesAsync()
+        {
+            await Init();
+            return db.Table<CrewMember_Type>().ToList();
+        }
+
+        public async Task InsertApproachTypesAAsync()
+        {
+            await Init();
+
+            var approachTypes = await postflightRepo.FetchApproachTypesAsync();
+            if (approachTypes != null)
+            {
+                db.Table<ApproachType>().Delete(x => x.Id != 0);
+                foreach (var item in approachTypes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+        public async Task<List<ApproachType>> ApproachTypesAsync()
+        {
+            await Init();
+            return db.Table<ApproachType>().ToList();
         }
 
         #endregion
@@ -219,6 +284,22 @@ namespace sdcrew.Services.Data
             {
                 db.Insert(oooi);
             }
+        }
+
+        public async Task<int> PostOooiAsync(OooiPostModel model)
+        {
+            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.POST_OOOI;
+
+            var resultVal = await requestsService.PostAsyncWithReturnValue(model, url);
+            return int.Parse(resultVal);
+        }
+
+        public async Task<bool> PutOooiAsync(OooiPostModel model,int PostedFlightId)
+        {
+            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.POST_OOOI+"/"+ PostedFlightId;
+
+            var resultVal = await requestsService.PutAsync(model, url);
+            return resultVal;
         }
 
         #endregion
@@ -257,6 +338,36 @@ namespace sdcrew.Services.Data
             }
         }
 
+        public async Task InsertFuelTypeAsync()
+        {
+            await Init();
+
+            var fuelTypes = await postflightRepo.FetchFuelQuantityTypesAsync();
+            if (fuelTypes != null)
+            {
+                db.Table<BusinessCatagory>().Delete(x => x.Id != 0);
+                foreach (var item in fuelTypes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<FuelQuantityType>> GetQuantityTypesAsync()
+        {
+            await Init();
+            return db.Table<FuelQuantityType>().ToList();
+        }
+
+        public async Task<bool> PutFuelAsync(FuelPostingModel model, int PostedFlightId)
+        {
+            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.PUT_FUEL + "/" + PostedFlightId;
+
+            var resultVal = await requestsService.PutAsync(model, url);
+            return resultVal;
+        }
+
+
 
         #endregion
 
@@ -270,8 +381,17 @@ namespace sdcrew.Services.Data
             return passengers;
         }
 
+        #endregion
 
+        #region Additional
 
+        public async Task<bool> PutAdditionalAsync(AdditionalPostingModel model, int PostedFlightId)
+        {
+            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.PUT_ADDITIONALDETAILS + "/" + PostedFlightId;
+
+            var resultVal = await requestsService.PutAsync(model, url);
+            return resultVal;
+        }
 
         #endregion
 
@@ -348,6 +468,106 @@ namespace sdcrew.Services.Data
                 db.Insert(Apu);
                 return Apu;
             }
+        }
+
+        #endregion
+
+        #region Expense N Documents
+
+        //Expense Category
+        public async Task InsertExpenseCategoriesAsync()
+        {
+            await Init();
+
+            var expenseCatagories = await postflightRepo.FetchExpenseCategoriesAsync();
+            if (expenseCatagories != null)
+            {
+                db.Table<ExpenseCatagory>().Delete(x => x.Id != 0);
+                foreach (var item in expenseCatagories)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<ExpenseCatagory>> ExpenseCategoriesAsync()
+        {
+            await Init();
+            return db.Table<ExpenseCatagory>().ToList();
+        }
+
+        //Payment Types
+        public async Task InsertPaymentTypesAsync()
+        {
+            await Init();
+
+            var paymentTypes = await postflightRepo.FetchPaymentTypesAsync();
+            if (paymentTypes != null)
+            {
+                db.Table<PaymentType>().Delete(x => x.Id != 0);
+                foreach (var item in paymentTypes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<PaymentType>> PaymentTypesAsync()
+        {
+            await Init();
+            return db.Table<PaymentType>().ToList();
+        }
+
+        //Quantity Types
+        public async Task InsertQuantityTypesAsync()
+        {
+            await Init();
+
+            var quantityTypes = await postflightRepo.FetchQuantityTypesAsync();
+
+            try
+            {
+                if (quantityTypes != null)
+                {
+                    db.Table<QuantityType>().Delete(x => x.Id != 0);
+                    foreach (var item in quantityTypes)
+                    {
+                        db.Insert(item);
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+            }
+        }
+
+        public async Task<List<QuantityType>> QuantityTypesAsync()
+        {
+            await Init();
+            return db.Table<QuantityType>().ToList();
+        }
+
+        //Docs
+        public async Task InsertDocumentTypes()
+        {
+            await Init();
+
+            var documentTypes = await postflightRepo.FetchDocumentTypes();
+            if (documentTypes != null)
+            {
+                db.Table<DocumentType>().Delete(x => x.id != 0);
+                foreach (var item in documentTypes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<DocumentType>> DocumentTypesAsync()
+        {
+            await Init();
+            return db.Table<DocumentType>().ToList();
         }
 
         #endregion
@@ -710,8 +930,103 @@ namespace sdcrew.Services.Data
             return db.Table<PostedFlightDeIce>().FirstOrDefault(x => x.postedFlightId == PostedFlightId);
         }
 
+        public async Task<bool> PutDeIceAsync(DeIcePostingModel model, int PostedFlightId)
+        {
+            var url = postflightEndPoints.POST_FLIGHT_REQUEST_URL + postflightEndPoints.PUT_DEICE + "/" + PostedFlightId;
+
+            var resultVal = await requestsService.PutAsync(model, url);
+            return resultVal;
+        }
+
         #endregion
 
+        #region SquawksDiscrepancies
+
+        public async Task InsertAtas()
+        {
+            await Init();
+
+            var aTACodes = await postflightRepo.FetchAtaCodesAsync();
+            if (aTACodes != null)
+            {
+                db.Table<ATACode>().Delete(x => x.Id != 0);
+                foreach (var item in aTACodes)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<ATACode>> ATACodesAsync()
+        {
+            await Init();
+            return db.Table<ATACode>().ToList();
+        }
+
+        public async Task InsertSquawkCategories()
+        {
+            await Init();
+
+            var squawkCatagories = await postflightRepo.FetchSquawkCategories();
+            if (squawkCatagories != null)
+            {
+                db.Table<SquawkCatagory>().Delete(x => x.Id != 0);
+                foreach (var item in squawkCatagories)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<SquawkCatagory>> SquawkCategoriesAsync()
+        {
+            await Init();
+            return db.Table<SquawkCatagory>().ToList();
+        }
+
+        public async Task InsertSquawkTypes()
+        {
+            await Init();
+
+            var squawkCatagories = await postflightRepo.FetchSquawkTypes();
+            if (squawkCatagories != null)
+            {
+                db.Table<SquawkTypes>().Delete(x => x.Id != 0);
+                foreach (var item in squawkCatagories)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<SquawkTypes>> SquawkTypesAsync()
+        {
+            await Init();
+            return db.Table<SquawkTypes>().ToList();
+        }
+
+        public async Task InsertSquawkStatus()
+        {
+            await Init();
+
+            var squawkStatuses = await postflightRepo.FetchSquawkStatus();
+            if (squawkStatuses != null)
+            {
+                db.Table<SquawkStatus>().Delete(x => x.Id != 0);
+                foreach (var item in squawkStatuses)
+                {
+                    db.Insert(item);
+                }
+            }
+        }
+
+        public async Task<List<SquawkStatus>> SquawkStatusesAsync()
+        {
+            await Init();
+            return db.Table<SquawkStatus>().ToList();
+        }
+
+        #endregion
 
         #region AllPostFlights
 
@@ -736,10 +1051,10 @@ namespace sdcrew.Services.Data
                             serialNumber = profile.serialNumber,
                         };
                         db.Insert(dto);
-
-                        //Console.WriteLine("added Profile profileID " + profile.aircraftProfileId);
                     }
                 }
+
+                Console.WriteLine("Aircraft profile InsertionComplete");
             }
             catch (Exception exc)
             { Crashes.TrackError(exc); }

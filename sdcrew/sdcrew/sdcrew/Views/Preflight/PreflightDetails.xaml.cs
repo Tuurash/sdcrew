@@ -58,8 +58,6 @@ namespace sdcrew.Views.Preflight
                 stackSubNav.IsVisible = true;
             }
 
-
-
             MessagingCenter.Subscribe<string>(this, "PreflightSubviewUpdated", (ob) =>
              {
                  stackSubNav.IsVisible = bool.Parse(Services.Settings.PreflightSubviewVisibility);

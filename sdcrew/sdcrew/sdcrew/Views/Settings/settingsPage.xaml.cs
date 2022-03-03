@@ -444,6 +444,8 @@ namespace sdcrew.Views.Settings
         {
             tabVal = "NOTES";
 
+            Task.Delay(1000);
+
             if (!NoteVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -464,7 +466,7 @@ namespace sdcrew.Views.Settings
         void PassengerVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "PASSENGERS";
-
+            Task.Delay(1000);
             if (!PassengerVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -485,7 +487,7 @@ namespace sdcrew.Views.Settings
         void AdditionDetails_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "ADDITIONAL DETAILS";
-
+            Task.Delay(1000);
             if (!AdditionDetailsVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -506,7 +508,7 @@ namespace sdcrew.Views.Settings
         void ExpenseVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "EXPENSES";
-
+            Task.Delay(1000);
             if (!ExpenseVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -526,7 +528,7 @@ namespace sdcrew.Views.Settings
         void DocVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "DOCUMENTS";
-
+            Task.Delay(1000);
             if (!DocVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -546,7 +548,7 @@ namespace sdcrew.Views.Settings
         void DeAntiIceVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "DE/ANTI-ICE";
-
+            Task.Delay(1000);
             if (!DeAntiIceVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -565,7 +567,7 @@ namespace sdcrew.Views.Settings
         void APUVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "APU & CUSTOM COMPONENT(S)";
-
+            Task.Delay(1000);
             if (!APUVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -584,7 +586,7 @@ namespace sdcrew.Views.Settings
         void OilVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "OILS & FLUIDS";
-
+            Task.Delay(1000);
             if (!OilVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -603,7 +605,7 @@ namespace sdcrew.Views.Settings
         void SquawkVswitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "SQUAWKS & DISCREPANCIES";
-
+            Task.Delay(1000);
             if (!SquawkVswitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -623,7 +625,7 @@ namespace sdcrew.Views.Settings
         void DutyTimeVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "DUTY TIME";
-
+            Task.Delay(1000);
             if (!DutyTimeVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -642,7 +644,7 @@ namespace sdcrew.Views.Settings
         void ChecklistsVSwitch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
             tabVal = "CHECKLISTS";
-
+            Task.Delay(1000);
             if (!ChecklistsVSwitch.IsToggled)
             {
                 Services.Settings.PostflightSubNavItems = Services.Settings.PostflightSubNavItems.Replace("," + tabVal, "");
@@ -663,10 +665,12 @@ namespace sdcrew.Views.Settings
 
         void AutomaticAirports_Update_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
         {
+
         }
 
         void btnBack_Tapped(System.Object sender, System.EventArgs e)
         {
+
         }
 
     }

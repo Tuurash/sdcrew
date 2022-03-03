@@ -127,7 +127,7 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <!--  Expensse Type  -->
+                                <!--  Expense Type  -->
                                 <pv:PancakeView
                                     Grid.Row="0"
                                     BackgroundColor="DarkCyan"
@@ -150,7 +150,7 @@
                                                 x:Name="dropdownExpenseType"
                                                 FontSize="15"
                                                 HorizontalOptions="StartAndExpand"
-                                                Text="N/A"
+                                                Text="01-Fuel"
                                                 TextColor="{StaticResource PrimaryTextColor}" />
                                             <Image
                                                 Aspect="AspectFit"
@@ -165,6 +165,10 @@
                                             HeightRequest="1"
                                             VerticalOptions="End"
                                             Color="{StaticResource SecondaryTextColor}" />
+
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="dropdownExpenseType_Tapped" />
+                                        </StackLayout.GestureRecognizers>
 
                                     </StackLayout>
                                 </pv:PancakeView>
@@ -232,6 +236,7 @@
                                                 WidthRequest="80">
 
                                                 <Image
+                                                    x:Name="imgfileReciept"
                                                     Aspect="AspectFit"
                                                     AutomationProperties.Name="File"
                                                     HeightRequest="40"
@@ -250,11 +255,11 @@
                                                 VerticalOptions="EndAndExpand" />
 
                                         </Grid>
-
-
-
-
                                     </pv:PancakeView>
+
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="fileReciept_Tapped" />
+                                    </StackLayout.GestureRecognizers>
 
                                 </StackLayout>
 
@@ -345,7 +350,7 @@
                                                 x:Name="dropdownPaymentType"
                                                 FontSize="15"
                                                 HorizontalOptions="StartAndExpand"
-                                                Text="N/A"
+                                                Text="AMEX"
                                                 TextColor="{StaticResource PrimaryTextColor}" />
                                             <Image
                                                 Aspect="AspectFit"
@@ -361,9 +366,9 @@
                                             VerticalOptions="End"
                                             Color="{StaticResource SecondaryTextColor}" />
 
-                                        <!--<StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="dropdownTypeDAIce_Tapped" />
-                </StackLayout.GestureRecognizers>-->
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="dropdownPaymentType_Tapped" />
+                                        </StackLayout.GestureRecognizers>
 
                                     </StackLayout>
 
@@ -456,7 +461,11 @@
                                 </pv:PancakeView>
 
                                 <!--  Row 8 Fuel Coditional retail Price  -->
-                                <StackLayout Grid.Row="8" Spacing="10">
+                                <StackLayout
+                                    x:Name="FuelExpenseDetails"
+                                    Grid.Row="8"
+                                    IsVisible="false"
+                                    Spacing="10">
 
                                     <!--  retail Price  -->
                                     <pv:PancakeView BackgroundColor="DarkCyan" CornerRadius="5,5,0,0">
@@ -530,9 +539,9 @@
                                                 VerticalOptions="End"
                                                 Color="{StaticResource SecondaryTextColor}" />
 
-                                            <!--<StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="dropdownTypeDAIce_Tapped" />
-                </StackLayout.GestureRecognizers>-->
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="dropdownUnit_Tapped" />
+                                            </StackLayout.GestureRecognizers>
 
                                         </StackLayout>
 

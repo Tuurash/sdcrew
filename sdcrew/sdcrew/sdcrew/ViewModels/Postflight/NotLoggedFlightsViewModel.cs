@@ -109,6 +109,9 @@ namespace sdcrew.ViewModels.Postflight
                         StartDate = flight.flightStartDateTime.ToString("dd MMM yyyy"),
                         EndDate = getEndDate,
 
+                        flightStartDateTime = flight.flightStartDateTime,
+                        flightStopDateTime=flight.flightStopDateTime,
+
                         tripId = flight.tripId,
                         //avoid using result
                         //TailNumber = postflightServices.FetchTailNumber(flight.aircraftProfileId).Result,
@@ -121,7 +124,7 @@ namespace sdcrew.ViewModels.Postflight
                 }
             }
 
-            var FlightObservableCollection = new ObservableCollection<PostFlightVM>(flightList.OrderByDescending(x => x.StartDate));
+            var FlightObservableCollection = new ObservableCollection<PostFlightVM>(flightList);//.OrderByDescending(x => x.StartDate)
             return FlightObservableCollection;
         }
 

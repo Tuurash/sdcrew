@@ -1,16 +1,22 @@
 ﻿using ChoETL;
+
+using Microsoft.AppCenter.Crashes;
+
 using Rg.Plugins.Popup.Services;
+
 using sdcrew.Models;
 using sdcrew.Services.Data;
 using sdcrew.Views.Postflight.Modals.DropdownModals;
 using sdcrew.Views.Postflight.Popups;
 using sdcrew.Views.Postflight.SubViews;
 using sdcrew.Views.Settings;
+using sdcrew.Views.ViewHelpers.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -21,18 +27,31 @@ namespace sdcrew.Views.Postflight
     [DesignTimeVisible(false)]
     public partial class PostflightDetails : ContentPage, INotifyPropertyChanged
     {
+
+        int GeneratedPostedFlightId = 0;
+
         public List<Tab> AllTabs { get; set; }
         dynamic flight = new PostFlightVM();
+
+        string Block_Time = String.Empty;
+        string Flight_Time = String.Empty;
+
+        //Oooi TempVals
+        int OooiArrivalAirportId = 0;
+        int OooiDepartAirportId = 0;
 
         PostflightServices svm;
 
         bool IsRunning = false;
         string SubNavItemString = ""; //Users/brotecs/Desktop/Misc/temp.json
 
-        public PostflightDetails(dynamic flightObj)
+        string CallbackPage = String.Empty;
+
+        public PostflightDetails(dynamic flightObj, string callBackFrom)
         {
             InitializeComponent();
             BindingContext = this;
+            CallbackPage = callBackFrom;
 
             #region SubNavVisibility
 
@@ -111,18 +130,20 @@ namespace sdcrew.Views.Postflight
             {
                 AllAirports receivedData = ob;
                 dropdownDepartOooi.Text = receivedData.airportCode;
+                OooiDepartAirportId = ob.airportId;
             });
 
             MessagingCenter.Subscribe<AllAirports>(this, "OooiArrive", (ob) =>
             {
                 AllAirports receivedData = ob;
                 dropdownArriveOooi.Text = receivedData.airportCode;
+                OooiArrivalAirportId = ob.airportId;
             });
 
+            //Crew
             MessagingCenter.Subscribe<string>(this, "CrewRemoved", async (ob) =>
              {
                  int CGR = int.Parse(ob);
-                 //Console.WriteLine("Rowwwwwww" + CrewGridRow);
                  await RemoveCrewGridRow(CGR);
                  expanderCrew.ForceUpdateSize();
              });
@@ -132,44 +153,103 @@ namespace sdcrew.Views.Postflight
                 expanderCrew.ForceUpdateSize();
             });
 
+            //Squawk
             MessagingCenter.Subscribe<App>((App)Application.Current, "SquawkUpdated", (sender) =>
             {
                 ExpanderSquawk.ForceUpdateSize();
             });
 
+            MessagingCenter.Subscribe<string>(this, "SquawkRemoved", async (ob) =>
+            {
+                int SGR = int.Parse(ob);
+                await RemoveSquawkGridRow(SGR);
+                ExpanderSquawk.ForceUpdateSize();
+            });
+
+            //Expense N Doc
+            MessagingCenter.Subscribe<string>(this, "ExpenseRemoved", async (ob) =>
+            {
+                int EGR = int.Parse(ob);
+                await RemoveExpenseGridRow(EGR);
+                expanderExpense.ForceUpdateSize();
+            });
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "ExpenseAdded", async (sender) =>
+            {
+                await AddNewExpense();
+            });
+
+            //Doc
+            MessagingCenter.Subscribe<string>(this, "DocRemoved", async (ob) =>
+            {
+                int DGR = int.Parse(ob);
+                await RemoveDocGridRow(DGR);
+                expanderDocuments.ForceUpdateSize();
+            });
+
+            MessagingCenter.Subscribe<TempDoc>(this, "DocAdded", async (ob) =>
+            {
+                TempDoc savedDoc = ob;
+                await AddNewDoc(savedDoc);
+                expanderDocuments.IsExpanded = true;
+            });
+
+            //Duty Time
+            MessagingCenter.Subscribe<CrewDetailsVM>(this, "DutyTimeSelected", async (ob) =>
+            {
+                await Task.Delay(100);
+                CrewDetailsVM crewDetails = ob;
+                await AddNewDutyTime(crewDetails);
+            });
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "DutyUpdated", (sender) =>
+            {
+                expanderDutyTime.ForceUpdateSize();
+            });
+
             #region dropdownPostbacks
 
-            MessagingCenter.Subscribe<string>(this, "BusinessCatagoryPicked", (ob) =>
+            MessagingCenter.Subscribe<DropdownObj>(this, "BusinessCatagoryPicked", (ob) =>
             {
-                lblBCatagory.Text = dropdownBCatagory.Text = ob;
+                lblBCatagory.Text = dropdownBCatagory.Text = ob.ObjName;
+                selectedBCategoryId = ob.ObjId;
             });
 
-            MessagingCenter.Subscribe<string>(this, "DelaytypePicked", (ob) =>
+            MessagingCenter.Subscribe<DropdownObj>(this, "DelaytypePicked", (ob) =>
             {
-                lblDelayType.Text = dropdownDelayType.Text = ob;
+                lblDelayType.Text = dropdownDelayType.Text = ob.ObjName;
+                selectedDelayTypeId = ob.ObjId;
             });
 
-            MessagingCenter.Subscribe<string>(this, "DepartmentPicked", (ob) =>
+            MessagingCenter.Subscribe<DropdownObj>(this, "DepartmentPicked", (ob) =>
             {
-                lblChargeTo.Text = dropdownChargeTo.Text = ob;
+                lblChargeTo.Text = dropdownChargeTo.Text = ob.ObjName;
+                selectedDepartmentId = ob.ObjId;
+
             });
 
-            MessagingCenter.Subscribe<string>(this, "mixTypeChanged", (ob) =>
+            MessagingCenter.Subscribe<DropdownObj>(this, "mixTypeChanged", (ob) =>
             {
-                dropdownMixRatio.Text = lblMixRatioDAIce.Text = dropdownChargeTo.Text = ob;
+                dropdownMixRatio.Text = lblMixRatioDAIce.Text = dropdownChargeTo.Text = ob.ObjName;
+                selectedDeIceMixRatioTypeId = ob.ObjId;
             });
 
-            MessagingCenter.Subscribe<string>(this, "DAIceTypeChanged", (ob) =>
+            MessagingCenter.Subscribe<DropdownObj>(this, "DAIceTypeChanged", (ob) =>
             {
-                dropdownTypeDAIce.Text = lblTypeDAIce.Text = dropdownChargeTo.Text = ob;
+                dropdownTypeDAIce.Text = lblTypeDAIce.Text = dropdownChargeTo.Text = ob.ObjName;
+                selectedDeIceType = ob.ObjId;
             });
+
+            MessagingCenter.Subscribe<CrewDetailsVM>(this, "CrewSelected", async (ob) =>
+             {
+                 CrewDetailsVM crewDetails = ob;
+                 await AddNewCrewAsync(crewDetails);
+             });
 
             #endregion
 
             #endregion
         }
-
-
 
         protected override async void OnAppearing()
         {
@@ -220,8 +300,21 @@ namespace sdcrew.Views.Postflight
             var fliteredTabs = Tabs.Get().Where(x => navItems.Contains(x.TabHeader)).OrderBy(x => x.TabIndex).ToList();
 
             AllTabs = fliteredTabs;
+            try
+            {
 
-            collectionViewListHorizontal.ItemsSource = AllTabs;
+                foreach (var tab in AllTabs)
+                {
+                    var Frame = this.FindByName<Frame>(tab.TabName);
+                    Device.BeginInvokeOnMainThread(() => Frame.IsVisible = true);
+                }
+                Device.BeginInvokeOnMainThread(() => collectionViewListHorizontal.ItemsSource = AllTabs);
+            }
+            catch (Exception exc)
+            {
+
+                Crashes.TrackError(exc);
+            }
         }
 
         //HeaderCollecionView
@@ -243,7 +336,17 @@ namespace sdcrew.Views.Postflight
             }
 
             var param = ((TappedEventArgs)e).Parameter;
-            var FrameName = this.FindByName<Frame>(param.ToString());
+
+            string p2 = param.ToString().Trim(' ', '/', '&', '-', '(', ')');
+            string p3 = p2.Replace(" ", "");
+            string p4 = p3.Replace(@"&", "");
+            p4 = p4.Replace(@"-", "");
+            p4 = p4.Replace(@"(", "");
+            p4 = p4.Replace(@")", "");
+            p4 = p4.Replace(@"/", "");
+            p4 = p4.Replace(" ", "");
+
+            var FrameName = this.FindByName<Frame>(p4);
             DetailTabs.ScrollToAsync((Element)FrameName, position: ScrollToPosition.Center, animated: true);
         }
 
@@ -257,85 +360,110 @@ namespace sdcrew.Views.Postflight
 
         #endregion
 
+        //Oooi Completed with issues
         #region Oooi
 
         private void FillOooiDetails()
         {
-            //HeaderFields
-            lblDepartOooi.Text = dropdownDepartOooi.Text = flight.departureIcao;
-            lblArriveOooi.Text = dropdownArriveOooi.Text = flight.airportIcao;
-
-            Oooi oooiDetails = svm.GetOooiDetails(flight.postedFlightId);
-
-            Task.Run(async () =>
+            try
             {
-                int pFlightID = 0;
+                //HeaderFields
+                lblDepartOooi.Text = dropdownDepartOooi.Text = flight.departureIcao;
+                lblArriveOooi.Text = dropdownArriveOooi.Text = flight.airportIcao;
+
+                OooiDepartAirportId = flight.departureAirportId;
+                OooiArrivalAirportId = flight.arrivalAirportId;
+
+                Oooi oooiDetails = svm.GetOooiDetails(flight.postedFlightId);
+
+                //apuComponents
+                Task.Run(async () =>
+                {
+                    int pFlightID = 0;
+
+                    if (oooiDetails != null)
+                    {
+                        pFlightID = flight.postedFlightId;
+                    }
+                    ApuNCustomComponents apuNCustomComponents = await svm.FetchApuNComponents(pFlightID, flight.aircraftProfileId, DateTime.Parse(flight.StartDate));
+                    FillApuNCustomControls(apuNCustomComponents);
+                }).ConfigureAwait(false);
 
                 if (oooiDetails != null)
                 {
-                    pFlightID = flight.postedFlightId;
+                    if (oooiDetails.HasLocalModification == true)
+                    {
+                        txtOooiIn.TextColor = txtOooiOff.TextColor = txtOooiOn.TextColor = txtOooiOut.TextColor = lblOooiIn.TextColor = lblOooiOff.TextColor = lblOooiOn.TextColor = lblOooiOut.TextColor = Color.White;
+                    }
+
+                    lblOooiOut.Text = txtOooiOut.Text = oooiDetails.automatedOutTime.ToString("HH:mm") ?? "00:00";
+                    lblOooiIn.Text = txtOooiIn.Text = oooiDetails.automatedInTime.ToString("HH:mm") ?? "00:00";
+
+                    var genBlockTime = oooiDetails.automatedInTime - oooiDetails.automatedOutTime;
+                    lblOooiBlockTime.Text = genBlockTime.ToString(@"hh\:mm") + "/" + ((genBlockTime.TotalMinutes / 60)).ToString("0.0");
+
+                    lblOooiOff.Text = txtOooiOff.Text = oooiDetails.automatedOffTime.ToString("HH:mm") ?? "00:00";
+                    lblOooiOn.Text = txtOooiOn.Text = oooiDetails.automatedOnTime.ToString("HH:mm") ?? "00:00";
+
+                    var genFlightTime = oooiDetails.automatedOnTime - oooiDetails.automatedOffTime;
+                    lblOooiFlightTime.Text = genFlightTime.ToString(@"hh\:mm") + "/" + ((genFlightTime.TotalMinutes / 60)).ToString("0.0");
+
+                    var genTaxiTime = oooiDetails.automatedOffTime - oooiDetails.automatedOutTime;
+                    lblTaxiTime.Text = genTaxiTime.ToString(@"hh\:mm") + "/" + ((genTaxiTime.TotalMinutes / 60)).ToString("0.0");
+
+                    var genOnInTaxiTime = oooiDetails.automatedInTime - oooiDetails.automatedOnTime;
+                    lblOooiOnInTaxi.Text = genOnInTaxiTime.ToString(@"hh\:mm") + "/" + ((genOnInTaxiTime.TotalMinutes / 60)).ToString("0.0");
+
                 }
-                ApuNCustomComponents apuNCustomComponents = await svm.FetchApuNComponents(pFlightID, flight.aircraftProfileId, DateTime.Parse(flight.StartDate));
-                FillApuNCustomControls(apuNCustomComponents);
-            }).ConfigureAwait(false);
+                else
+                {
+                    txtOooiOut.Text = txtOooiIn.Text = txtOooiOff.Text = txtOooiOn.Text = "";
+                    lblOooiOut.Text = lblOooiIn.Text = lblOooiOff.Text = lblOooiOn.Text = "N/A";
+                    lblOooiBlockTime.Text = lblTaxiTime.Text = lblOooiOnInTaxi.Text = lblOooiFlightTime.Text = "";
+                }
+
+                if (flight.StartDate != "N/A" & flight.EndDate != "N/A")
+                {
+                    pickerDepartDateOooi.Date = DateTime.Parse(flight.StartDate);
+                    pickerArriveDateOooi.Date = DateTime.Parse(flight.EndDate);
+                }
+
+                restoreOooiData1.IsVisible = restoreOooiData2.IsVisible = restoreOooiData3.IsVisible = restoreOooiData4.IsVisible = false;
 
 
-            if (oooiDetails.HasLocalModification == true)
-            {
-                txtOooiIn.TextColor = txtOooiOff.TextColor = txtOooiOn.TextColor = txtOooiOut.TextColor = lblOooiIn.TextColor = lblOooiOff.TextColor = lblOooiOn.TextColor = lblOooiOut.TextColor = Color.White;
             }
-
-            lblOooiOut.Text = txtOooiOut.Text = oooiDetails.automatedOutTime.ToString("HH:mm") ?? "00:00";
-            lblOooiIn.Text = txtOooiIn.Text = oooiDetails.automatedInTime.ToString("HH:mm") ?? "00:00";
-
-            var genBlockTime = oooiDetails.automatedInTime - oooiDetails.automatedOutTime;
-            lblOooiBlockTime.Text = genBlockTime.ToString(@"hh\:mm") + "/" + ((genBlockTime.TotalMinutes / 60)).ToString("0.0");
-
-            lblOooiOff.Text = txtOooiOff.Text = oooiDetails.automatedOffTime.ToString("HH:mm") ?? "00:00";
-            lblOooiOn.Text = txtOooiOn.Text = oooiDetails.automatedOnTime.ToString("HH:mm") ?? "00:00";
-
-            var genFlightTime = oooiDetails.automatedOnTime - oooiDetails.automatedOffTime;
-            lblOooiFlightTime.Text = genFlightTime.ToString(@"hh\:mm") + "/" + ((genFlightTime.TotalMinutes / 60)).ToString("0.0");
-
-            var genTaxiTime = oooiDetails.automatedOffTime - oooiDetails.automatedOutTime;
-            lblTaxiTime.Text = genTaxiTime.ToString(@"hh\:mm") + "/" + ((genTaxiTime.TotalMinutes / 60)).ToString("0.0");
-
-            var genOnInTaxiTime = oooiDetails.automatedInTime - oooiDetails.automatedOnTime;
-            lblOooiOnInTaxi.Text = genOnInTaxiTime.ToString(@"hh\:mm") + "/" + ((genOnInTaxiTime.TotalMinutes / 60)).ToString("0.0");
-
-            if (flight.StartDate != "N/A" & flight.EndDate != "N/A")
-            {
-                pickerDepartDateOooi.Date = DateTime.Parse(flight.StartDate);
-                pickerArriveDateOooi.Date = DateTime.Parse(flight.EndDate);
-            }
-
-            restoreOooiData1.IsVisible = restoreOooiData2.IsVisible = restoreOooiData3.IsVisible = restoreOooiData4.IsVisible = false;
-
+            catch { }
         }
 
         int OooiChangeCount = 0;
 
         async void OooiTextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
-            //var txtbox = sender as Entry;
+            var txtbox = sender as Entry;
             await Task.Delay(10);
             OooiChangeCount++;
             if (OooiChangeCount > 4)
             {
                 txtOooiIn.TextColor = txtOooiOff.TextColor = txtOooiOn.TextColor = txtOooiOut.TextColor = lblOooiIn.TextColor = lblOooiOff.TextColor = lblOooiOn.TextColor = lblOooiOut.TextColor = Color.White;
+                restoreOooiData1.IsVisible = restoreOooiData2.IsVisible = restoreOooiData3.IsVisible = restoreOooiData4.IsVisible = true;
             }
+
+            //Changed Values todo:Time Input Check
+            lblOooiOut.Text = txtOooiOut.Text;
+            lblOooiIn.Text = txtOooiIn.Text;
+            lblOooiOff.Text = txtOooiOff.Text;
+            lblOooiOn.Text = txtOooiOn.Text;
+
 
             if (DateTime.TryParse(txtOooiOut.Text, out DateTime TempOut) == true && DateTime.TryParse(txtOooiIn.Text, out DateTime TempIn) == true
                 && DateTime.TryParse(txtOooiOff.Text, out DateTime TempOff) == true && DateTime.TryParse(txtOooiOn.Text, out DateTime TempOn) == true)
             {
-                lblOooiOut.Text = TempOut.ToString("HH:mm");
-                lblOooiIn.Text = TempIn.ToString("HH:mm");
+
 
                 var genBlockTime = (TempIn - TempOut).Duration();
                 lblOooiBlockTime.Text = genBlockTime.ToString(@"hh\:mm") + "/" + ((genBlockTime.TotalMinutes / 60)).ToString("0.0");
 
-                lblOooiOff.Text = TempOff.ToString("HH:mm");
-                lblOooiOn.Text = TempOn.ToString("HH:mm");
+
 
                 var genFlightTime = (TempOn - TempOff).Duration();
                 if (TempOff > TempOn)
@@ -361,7 +489,7 @@ namespace sdcrew.Views.Postflight
                 lblOooiOnInTaxi.Text = genOnInTaxiTime.ToString(@"hh\:mm") + "/" + ((genOnInTaxiTime.TotalMinutes / 60)).ToString("0.0");
             }
 
-            restoreOooiData1.IsVisible = restoreOooiData2.IsVisible = restoreOooiData3.IsVisible = restoreOooiData4.IsVisible = true;
+
         }
 
         void dropdwnOooiDepart_Tapped(System.Object sender, System.EventArgs e)
@@ -376,11 +504,49 @@ namespace sdcrew.Views.Postflight
 
         void restoreOooiData_Tapped(System.Object sender, System.EventArgs e)
         {
-
             FillOooiDetails();
             txtOooiIn.TextColor = txtOooiOff.TextColor = txtOooiOn.TextColor = txtOooiOut.TextColor = lblOooiIn.TextColor = lblOooiOff.TextColor = lblOooiOn.TextColor = lblOooiOut.TextColor = Color.FromHex("#52E580");
         }
 
+        public async Task PostOooiAsync()
+        {
+            //On=> Flight Stop ; Off=>Flight Start  ; In=> blockStart ; Out=> blockstop
+            if (flight.postedFlightId != 0)
+            {
+                //Put method to Update
+                OooiPostModel oooiPostModel = new OooiPostModel
+                {
+                    PostedFlightId = flight.postedFlightId,
+                    AircraftProfileId = flight.aircraftProfileId,
+                    ArrivalAirportId = OooiArrivalAirportId,
+                    DepartureAirportId = OooiDepartAirportId,
+                    BlockStartDateTime = DateTime.Parse(lblOooiIn.Text),
+                    BlockStopDateTime = DateTime.Parse(lblOooiOut.Text),
+                    FlightStartDateTime = DateTime.Parse(lblOooiOff.Text),
+                    FlightStopDateTime = DateTime.Parse(lblOooiOn.Text),
+                    ScheduledFlightId = flight.scheduledFlightId,
+                };
+
+                var UpdateResponse = await svm.PutOooiAsync(oooiPostModel, oooiPostModel.PostedFlightId);
+            }
+            else
+            {
+                //Post and will return PostedFlightId
+                OooiPostModel oooiPostModel = new OooiPostModel
+                {
+                    AircraftProfileId = flight.aircraftProfileId,
+                    ArrivalAirportId = OooiArrivalAirportId,
+                    DepartureAirportId = OooiDepartAirportId,
+                    BlockStartDateTime = DateTime.Parse(lblOooiIn.Text),
+                    BlockStopDateTime = DateTime.Parse(lblOooiOut.Text),
+                    FlightStartDateTime = DateTime.Parse(lblOooiOff.Text),
+                    FlightStopDateTime = DateTime.Parse(lblOooiOn.Text),
+                    ScheduledFlightId = flight.scheduledFlightId,
+                };
+
+                GeneratedPostedFlightId = await svm.PostOooiAsync(oooiPostModel);
+            }
+        }
 
         #endregion
 
@@ -445,7 +611,6 @@ namespace sdcrew.Views.Postflight
         {
             FillFuelDetails();
         }
-
 
         async void txtFuel_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
@@ -513,6 +678,31 @@ namespace sdcrew.Views.Postflight
             FillFuelDetails();
         }
 
+
+        public async Task PutFuelAsync()
+        {
+            if (CurrentPostedFlightId != 0)
+            {
+                //Put method to Save
+                FuelPostingModel model = new FuelPostingModel
+                {
+                    PostedFlightId = CurrentPostedFlightId,
+                    FuelOut = int.Parse(txtFuelOut.Text ?? "0"),
+                    FuelOff = int.Parse(txtFuelOff.Text ?? "0"),
+                    FuelOn = int.Parse(txtFuelOn.Text ?? "0"),
+                    FuelIn = int.Parse(txtFuelIn.Text ?? "0"),
+                    FuelBurn = int.Parse(lblFuelBurn.Text ?? "0"),
+                    //QuantityTypeId
+                    //PlannedUp 
+                    //actualup
+                    //UpliftQuantityTypeId
+                };
+
+                var UpdateResponse = await svm.PutFuelAsync(model, CurrentPostedFlightId);
+            }
+        }
+
+
         #endregion
 
         #region Crews
@@ -537,13 +727,16 @@ namespace sdcrew.Views.Postflight
 
         public async Task FillCrews()
         {
+            Block_Time = lblOooiBlockTime.Text;
+            Flight_Time = lblOooiFlightTime.Text;
+
             var FlightCrewInfo = await svm.GetFlightCrewMembersAsync(flight.flightId);
 
             lblTotalCrews.Text = "Total Crews: " + FlightCrewInfo.Count().ToString();
 
             foreach (var crew in FlightCrewInfo)
             {
-                CrewGrid.Children.Add(new NewCrewCard(crew, CrewGridRow), 0, 2, CrewGridRow, CrewGridRow + 1);
+                CrewGrid.Children.Add(new NewCrewCard(crew, CrewGridRow, Block_Time, Flight_Time), 0, 2, CrewGridRow, CrewGridRow + 1);
                 CrewGridRow++;
                 expanderCrew.ForceUpdateSize();
             }
@@ -551,16 +744,19 @@ namespace sdcrew.Views.Postflight
 
         async void btnAddCrew_Tapped(System.Object sender, System.EventArgs e)
         {
-            await PopupNavigation.Instance.PushAsync(new Crews("CrewSelected"));
-            //await AddNewCrewAsync();
+            var crews = await svm.GetCrewsAsync();
+            await PopupNavigation.Instance.PushAsync(new CrewListDropdown("CrewSelected"));
         }
 
-        public async Task AddNewCrewAsync()
+        public async Task AddNewCrewAsync(CrewDetailsVM crew)
         {
+            Block_Time = lblOooiBlockTime.Text;
+            Flight_Time = lblOooiFlightTime.Text;
             await Task.Delay(1);
-            CrewGrid.Children.Add(new NewCrewCard(CrewGridRow), 0, 2, CrewGridRow, CrewGridRow + 1);
+            CrewGrid.Children.Add(new NewCrewCard(crew, CrewGridRow, Block_Time, Flight_Time), 0, 2, CrewGridRow, CrewGridRow + 1);
             CrewGridRow++;
             expanderCrew.ForceUpdateSize();
+            expanderCrew.IsExpanded = true;
         }
 
         private async Task RemoveCrewGridRow(int cGR)
@@ -635,7 +831,7 @@ namespace sdcrew.Views.Postflight
 
         #endregion
 
-        #region PostedflghtAdditional
+        #region PostedflghtAdditional Nd Notes
 
         private async void FillAdditionalDetails()
         {
@@ -680,38 +876,56 @@ namespace sdcrew.Views.Postflight
         {
             var businessTypes = await svm.GetBusinessCatagoriesAsync();
 
-            List<string> businessTypeNames = new List<string>();
+            List<DropdownObj> bTypes = new List<DropdownObj>();
             foreach (var item in businessTypes)
             {
-                businessTypeNames.Add(item.Name);
+                var obj = new DropdownObj
+                {
+                    ObjId = item.Id,
+                    ObjName = item.Name
+                };
+
+                bTypes.Add(obj);
             }
-            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(businessTypeNames, "BusinessCatagoryPicked")));
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new DropdownModal(bTypes, "BusinessCatagoryPicked")));
         }
 
         async void dropdownDelayType_Tapped(System.Object sender, System.EventArgs e)
         {
             var delayTypes = await svm.GetDelayTypesAsync();
 
-            List<string> delayTypeNames = new List<string>();
+            List<DropdownObj> dTypes = new List<DropdownObj>();
             foreach (var item in delayTypes)
             {
-                delayTypeNames.Add(item.Name);
+                var obj = new DropdownObj
+                {
+                    ObjId = item.Id,
+                    ObjName = item.Name
+                };
+
+                dTypes.Add(obj);
             }
-            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(delayTypeNames, "DelaytypePicked")));
+
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new DropdownModal(dTypes, "DelaytypePicked")));
         }
 
         async void dropdownChargeTo_Tapped(System.Object sender, System.EventArgs e)
         {
             var departments = await svm.GetDepartmentsAsync();
 
-            List<string> departmentNames = new List<string>();
+            List<DropdownObj> ChargeTos = new List<DropdownObj>();
             foreach (var item in departments)
             {
-                departmentNames.Add(item.Name);
-            }
-            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(departmentNames, "DepartmentPicked")));
-        }
+                var obj = new DropdownObj
+                {
+                    ObjId = item.Id,
+                    ObjName = item.Name
+                };
 
+                ChargeTos.Add(obj);
+            }
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new DropdownModal(ChargeTos, "DepartmentPicked")));
+        }
 
         async void txtAdditional_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
@@ -722,23 +936,111 @@ namespace sdcrew.Views.Postflight
             lblRejectedTakeoffs.Text = txtRejectedTakeoffs.Text;
         }
 
+        int selectedBCategoryId = 300;
+        int selectedDelayTypeId = 147;
+        int selectedDepartmentId = 283;
+
+        public async Task PutAdditionalAsync()
+        {
+            string lNote = "";
+
+            if (!String.IsNullOrEmpty(txtNote.Text))
+            {
+                lNote = txtNote.Text;
+            }
+            else { lNote = ""; }
+
+            if (CurrentPostedFlightId != 0)
+            {
+                //Put method to Save
+                AdditionalPostingModel model = new AdditionalPostingModel
+                {
+                    PostedFlightId = CurrentPostedFlightId,
+                    DelayTypeId = selectedDelayTypeId,
+                    DelayDuration = int.Parse(txtDelayDuration.Text),
+                    GoArounds = int.Parse(txtGoArounds.Text),
+                    RejectedTakeoffs = int.Parse(txtRejectedTakeoffs.Text),
+                    LegNotes = lNote,
+                    DepartmentId = selectedDepartmentId,
+                    BusinessCategoryId = selectedBCategoryId,
+                };
+
+                var UpdateResponse = await svm.PutAdditionalAsync(model, model.PostedFlightId);
+            }
+        }
+
         #endregion
 
         #region Expenses
 
+        int ExpenseGridRow = 0;
+
         private async void btnAddExpense_Tapped(object sender, EventArgs e)
         {
+            //await AddNewExpense();
             await PopupNavigation.Instance.PushAsync(new PopUpExpenseDetails());
+        }
+
+        public async Task AddNewExpense()
+        {
+            await Task.Delay(1000);
+            ExpenseGrid.Children.Add(new NewExpense(ExpenseGridRow), 0, 2, ExpenseGridRow, ExpenseGridRow + 1);
+            ExpenseGridRow++;
+            expanderExpense.ForceUpdateSize();
+        }
+
+        private async Task RemoveExpenseGridRow(int cGR)
+        {
+
+            var children = ExpenseGrid.Children.ToList();
+            foreach (var child in children.Where(child => Grid.GetRow(child) == cGR))
+            {
+                ExpenseGrid.Children.Remove(child);
+            }
+            await Task.Delay(1);
+            children = ExpenseGrid.Children.ToList();
+            if (children.Count < 1)
+            {
+                ExpenseGridRow = 0;
+            }
         }
 
         #endregion
 
         #region Documents
 
+        int DocGridRow = 0;
+
         private async void btnAddDoc_Tapped(object sender, EventArgs e)
         {
+            //await AddNewDoc();
             await PopupNavigation.Instance.PushAsync(new PopUpDocumentDetails());
         }
+
+        public async Task AddNewDoc(TempDoc doc)
+        {
+            await Task.Delay(1000);
+            DocumentGrid.Children.Add(new NewDoc(DocGridRow, doc), 0, 2, DocGridRow, DocGridRow + 1);
+            DocGridRow++;
+            expanderDocuments.ForceUpdateSize();
+        }
+
+        private async Task RemoveDocGridRow(int cGR)
+        {
+
+            var children = DocumentGrid.Children.ToList();
+            foreach (var child in children.Where(child => Grid.GetRow(child) == cGR))
+            {
+                DocumentGrid.Children.Remove(child);
+            }
+            await Task.Delay(1);
+            children = DocumentGrid.Children.ToList();
+            if (children.Count < 1)
+            {
+                DocGridRow = 0;
+            }
+        }
+
 
         #endregion
 
@@ -791,23 +1093,48 @@ namespace sdcrew.Views.Postflight
         {
             var mixTypes = await svm.MixTypesAsync();
 
-            List<string> mixTypeNames = new List<string>();
+            List<DropdownObj> mxTypes = new List<DropdownObj>();
             foreach (var item in mixTypes)
             {
-                mixTypeNames.Add(item.name);
+                var obj = new DropdownObj
+                {
+                    ObjId = item.id,
+                    ObjName = item.name
+                };
+                mxTypes.Add(obj);
             }
-            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(mixTypeNames, "mixTypeChanged")));
+            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new DropdownModal(mxTypes, "mixTypeChanged")));
         }
 
-        private async void dropdownTypeDAIce_Tapped(object sender, EventArgs e)
+        private void dropdownTypeDAIce_Tapped(object sender, EventArgs e)
         {
-            List<string> DAIceType = new List<string>();
-            DAIceType.Add("I");
-            DAIceType.Add("II");
-            DAIceType.Add("III");
-            DAIceType.Add("IV");
+            List<DropdownObj> DAIceType = new List<DropdownObj>();
+            DAIceType.Add(new DropdownObj { ObjId = 1, ObjName = "I" });
+            DAIceType.Add(new DropdownObj { ObjId = 2, ObjName = "II" });
+            DAIceType.Add(new DropdownObj { ObjId = 3, ObjName = "III" });
+            DAIceType.Add(new DropdownObj { ObjId = 4, ObjName = "IV" });
 
-            await Task.Run(async () => await PopupNavigation.Instance.PushAsync(new popupDropdown(DAIceType, "DAIceTypeChanged")));
+            PopupNavigation.Instance.PushAsync(new DropdownModal(DAIceType, "DAIceTypeChanged"));
+        }
+
+        int selectedDeIceMixRatioTypeId = 1;
+        int selectedDeIceType = 1;
+
+        public async Task PutDeIceAsync()
+        {
+            if (CurrentPostedFlightId != 0)
+            {
+                //Put method to Save
+                DeIcePostingModel model = new DeIcePostingModel
+                {
+                    DeIceStartDateTime = pickerStartDateDAIce.Date,
+                    DeIceEndDateTime = pickerEndDateDAIce.Date,
+                    DeIceMixRatioTypeId = selectedDeIceMixRatioTypeId,
+                    DeIceTypeId = selectedDeIceType
+                };
+
+                var UpdateResponse = await svm.PutDeIceAsync(model, CurrentPostedFlightId);
+            }
         }
 
         #endregion
@@ -839,30 +1166,32 @@ namespace sdcrew.Views.Postflight
         {
             //var txtbox = sender as Entry;
             await Task.Delay(10);
-
-            Device.BeginInvokeOnMainThread(() =>
+            if (!String.IsNullOrEmpty(txtCurrent.Text) & !String.IsNullOrEmpty(txtCarryOver.Text))
             {
-                if (int.Parse(txtCurrent.Text) >= int.Parse(txtCarryOver.Text))
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    txtCarryOver.TextColor = txtCurrent.TextColor = Color.White;
+                    if (int.Parse(txtCurrent.Text) >= int.Parse(txtCarryOver.Text))
+                    {
+                        txtCarryOver.TextColor = txtCurrent.TextColor = Color.White;
 
-                    lblApuName.Text = lblApuName2.Text;
-                    lblCarryOver.Text = txtCarryOver.Text + " HR";
-                    lblCurrent.Text = txtCurrent.Text;
-                    lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
-                }
-                else
-                {
-                    txtCarryOver.TextColor = txtCurrent.TextColor = Color.Red;
-                    lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
-                }
+                        lblApuName.Text = lblApuName2.Text;
+                        lblCarryOver.Text = txtCarryOver.Text + " HR";
+                        lblCurrent.Text = txtCurrent.Text;
+                        lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
+                    }
+                    else
+                    {
+                        txtCarryOver.TextColor = txtCurrent.TextColor = Color.Red;
+                        lblDuration.Text = txtDuration.Text = (int.Parse(txtCurrent.Text) - int.Parse(txtCarryOver.Text)).ToString();
+                    }
 
-                if (txtCycle.Text != "")
-                {
-                    lblCycles.Text = txtCycle.Text;
-                }
+                    if (txtCycle.Text != "")
+                    {
+                        lblCycles.Text = txtCycle.Text;
+                    }
 
-            });
+                });
+            }
         }
 
 
@@ -929,15 +1258,46 @@ namespace sdcrew.Views.Postflight
             SquawkGrid.Children.Add(new NewSquawk(SquawkGridRow), 0, 2, SquawkGridRow, SquawkGridRow + 1);
             SquawkGridRow++;
             ExpanderSquawk.ForceUpdateSize();
+            ExpanderSquawk.IsExpanded = true;
+        }
+
+        private async Task RemoveSquawkGridRow(int cGR)
+        {
+
+            var children = SquawkGrid.Children.ToList();
+            foreach (var child in children.Where(child => Grid.GetRow(child) == cGR))
+            {
+                SquawkGrid.Children.Remove(child);
+            }
+            await Task.Delay(1);
+            children = SquawkGrid.Children.ToList();
+            if (children.Count < 1)
+            {
+                SquawkGridRow = 0;
+            }
         }
 
         #endregion
 
         #region DutyTime
 
-        private void btnAddDutyTime_Tapped(object sender, EventArgs e)
+        private async void btnAddDutyTime_Tapped(object sender, EventArgs e)
         {
+            //var crews = await svm.GetCrewsAsync();
+            await PopupNavigation.Instance.PushAsync(new CrewListDropdown("DutyTimeSelected"));
 
+            //await AddNewDutyTime();
+        }
+
+        int DutyTimeGridRow = 0;
+
+        public async Task AddNewDutyTime(CrewDetailsVM crewDetails)
+        {
+            await Task.Delay(1000);
+            DutyTimeGrid.Children.Add(new NewDutyTime(DutyTimeGridRow, crewDetails), 0, 2, DutyTimeGridRow, DutyTimeGridRow + 1);
+            DutyTimeGridRow++;
+            expanderDutyTime.ForceUpdateSize();
+            expanderDutyTime.IsExpanded = true;
         }
 
         #endregion
@@ -1144,16 +1504,28 @@ namespace sdcrew.Views.Postflight
 
         #region SaveNsync
 
+        int CurrentPostedFlightId = 0;
+
         async void FABSavePostflight_Clicked(System.Object sender, System.EventArgs e)
         {
-            string action = await DisplayActionSheet(null, "Cancel", null, "Save Only", "Save & Log Flight");
+            string action = String.Empty;
+            if (!String.IsNullOrEmpty(CallbackPage))
+            {
+                if (CallbackPage == "Logged")
+                {
+                    action = await DisplayActionSheet(null, "Cancel", null, "ESign", "Save Only");
+                }
+                else if (CallbackPage == "NotLogged")
+                {
+                    action = await DisplayActionSheet(null, "Cancel", null, "Save Only", "Save & Log Flight");
+                }
+            }
+
             if (action == "Save Only")
             {
                 Device.BeginInvokeOnMainThread(() => Loader.IsVisible = true);
 
-                await SaveLocalOooiData();
-                await SaveLocalFuelData();
-
+                await SaveLocallyAll();
 
                 Services.Settings.HasLocalUpdates = "True";
                 MessagingCenter.Send<App>((App)Application.Current, "OnLocalModification");
@@ -1163,8 +1535,34 @@ namespace sdcrew.Views.Postflight
             }
             else if (action == "Save & Log Flight")
             {
+                await PostOooiAsync();
+                await Task.Delay(10);
+                await PutFuelAsync();
+
+                await PutAdditionalAsync();
+                await PutDeIceAsync();
+
+                await SaveLocallyAll();
+
+                if (flight.postedFlightId != 0)
+                {
+                    CurrentPostedFlightId = flight.postedFlightId;
+                }
+                else
+                {
+                    CurrentPostedFlightId = GeneratedPostedFlightId;
+                }
+            }
+            else if (action == "ESign")
+            {
 
             }
+        }
+
+        private async Task SaveLocallyAll()
+        {
+            await SaveLocalOooiData();
+            await SaveLocalFuelData();
         }
 
         private async Task SaveLocalFuelData()
@@ -1239,24 +1637,17 @@ namespace sdcrew.Views.Postflight
 
 
         }
-
-
-
-
-
-
         #endregion
-
 
     }
 
-
+    #region Helpers
 
     public class Tab
     {
         public string TabHeader { get; set; }
         public int TabIndex { get; set; }
-
+        public string TabName { get; set; }
         public string TabColor { get; set; }
     }
 
@@ -1268,20 +1659,20 @@ namespace sdcrew.Views.Postflight
 
             List<Tab> Tablist = new List<Tab>();
 
-            Tablist.Add(new Tab() { TabHeader = "OOOI", TabIndex = 1, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "FUEL", TabIndex = 2, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "CREW", TabIndex = 3, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "PASSENGERS", TabIndex = 4, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "ADDITIONAL DETAILS", TabIndex = 5, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "NOTES", TabIndex = 6, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "EXPENSES", TabIndex = 7, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "DOCUMENTS", TabIndex = 8, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "DE/ANTI-ICE", TabIndex = 9, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "APU & CUSTOM COMPONENT(S)", TabIndex = 10, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "OILS & FLUIDS", TabIndex = 11, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "SQUAWKS & DISCREPANCIES", TabIndex = 12, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "DUTY TIME", TabIndex = 13, TabColor = color });
-            Tablist.Add(new Tab() { TabHeader = "CHECKLISTS", TabIndex = 14, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "OOOI", TabName = "OOOI", TabIndex = 1, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "FUEL", TabName = "FUEL", TabIndex = 2, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "CREW", TabName = "CREW", TabIndex = 3, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "PASSENGERS", TabName = "PASSENGERS", TabIndex = 4, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "ADDITIONAL DETAILS", TabName = "ADDITIONALDETAILS", TabIndex = 5, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "NOTES", TabName = "NOTES", TabIndex = 6, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "EXPENSES", TabName = "EXPENSES", TabIndex = 7, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "DOCUMENTS", TabName = "DOCUMENTS", TabIndex = 8, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "DE/ANTI-ICE", TabName = "DEANTIICE", TabIndex = 9, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "APU & CUSTOM COMPONENT(S)", TabName = "APUCUSTOMCOMPONENTS", TabIndex = 10, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "OILS & FLUIDS", TabName = "OILSFLUIDS", TabIndex = 11, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "SQUAWKS & DISCREPANCIES", TabName = "SQUAWKSDISCREPANCIES", TabIndex = 12, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "DUTY TIME", TabName = "DUTYTIME", TabIndex = 13, TabColor = color });
+            Tablist.Add(new Tab() { TabHeader = "CHECKLISTS", TabName = "CHECKLISTS", TabIndex = 14, TabColor = color });
 
             return Tablist;
         }
@@ -1301,4 +1692,11 @@ namespace sdcrew.Views.Postflight
         public string FullName { get; set; }
     }
 
+    public class DropdownObj
+    {
+        public int ObjId { get; set; }
+        public string ObjName { get; set; }
+    }
+
+    #endregion
 }

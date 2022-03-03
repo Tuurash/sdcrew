@@ -4,9 +4,7 @@
              x:Class="sdcrew.Views.Notification.notificationPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button BackgroundColor="Red" Text="TestOOOI" Clicked="Button_Clicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

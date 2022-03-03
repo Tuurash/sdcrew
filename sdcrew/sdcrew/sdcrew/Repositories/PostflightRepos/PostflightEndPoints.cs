@@ -36,6 +36,40 @@ namespace sdcrew.Repositories.PostflightRepos
 
         public readonly string FETCH_MIXRATIOTYPES = @"api/Reference/mixRatioType?activeOnly=false&includeSystem=false";
 
+        public readonly string FETCH_DOCUMENTTYPES = @"api/Reference/DocumentType?activeOnly=false&includeSystem=true";
+
+        public readonly string FETCH_ATA_CODES = @"api/Reference/DocumentType?activeOnly=false&includeSystem=true";
+
+        public readonly string FETCH_SQUAWK_CATAGORIES = @"api/Reference/squawkCategory?activeOnly=true&includeSystem=false";
+
+        public readonly string FETCH_SQUAWK_TYPES = @"api/Reference/squawkType?activeOnly=true&includeSystem=false";
+
+        public readonly string FETCH_SQUAWK_STATUS = @"api/Reference/squawkStatus?activeOnly=true&includeSystem=false";
+
+        public readonly string FETCH_CREWMEMBERtYPE = @"api/Reference/crewMemberType";
+
+        public readonly string FETCH_APPROACHTYPE = @"api/Reference/approachType";
+
+        public readonly string FETCH_EXPENSECATAGORY = @"api/Reference/expenseCategory";
+
+        public readonly string FETCH_PAYMENTYPE = @"api/Reference/approachType";
+
+        public readonly string FETCH_QUANTITYTYPE = @"api/Reference/approachType";
+
+        public readonly string FETCH_FUELQUANTITYTYPE = @"api/Reference/approachType";
+
+
+        //Post
+        public readonly string POST_OOOI = @"api/Reference/approachType";
+
+        public readonly string PUT_ADDITIONALDETAILS = @"api/Reference/approachType";
+
+        public readonly string PUT_DEICE = @"api/Reference/approachType";
+
+        public readonly string PUT_FUEL = @"api/MobilePostFlightFuel";
+
+
+
 
     }
 }

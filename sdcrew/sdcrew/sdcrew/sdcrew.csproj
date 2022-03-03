@@ -106,17 +106,16 @@
     <Folder Include="Repositories\PostflightRepos\" />
     <Folder Include="ViewModels\Postflight\" />
     <Folder Include="Views\Postflight\SubViews\" />
-    <Folder Include="Views\ViewHelpers\CustomControls\" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\Postflight\Modals\DropdownModals\Crews.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\Postflight\Popups\PopUpDocumentDetails.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Postflight\Popups\PopUpExpenseDetails.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ViewHelpers\CustomControls\DropdownModal.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

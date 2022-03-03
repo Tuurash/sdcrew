@@ -44,26 +44,8 @@ namespace sdcrew.Views.ViewHelpers.CustomControls
         }
         public StepperWithEntry()
         {
-            PlusBtn = new Button { Text = "+", WidthRequest = 20, HeightRequest = 10, FontAttributes = FontAttributes.Bold, FontSize = 16, TextColor = Color.White, Margin = new Thickness(5, 0, 0, 0) };
-            MinusBtn = new Button { Text = "-", WidthRequest = 20, HeightRequest = 10, FontAttributes = FontAttributes.Bold, FontSize = 16, TextColor = Color.White, Margin = new Thickness(0, 0, 5, 0) };
-            switch (Device.RuntimePlatform)
-            {
-
-                case Device.UWP:
-                case Device.Android:
-                    {
-                        PlusBtn.BackgroundColor = Color.Transparent;
-                        MinusBtn.BackgroundColor = Color.Transparent;
-                        break;
-                    }
-                case Device.iOS:
-                    {
-                        PlusBtn.BackgroundColor = Color.Transparent;
-                        MinusBtn.BackgroundColor = Color.Transparent;
-                        break;
-                    }
-            }
-
+            PlusBtn = new Button { Text = "+", WidthRequest = 20, HeightRequest = 12, FontAttributes = FontAttributes.Bold, FontSize = 11, BackgroundColor = Color.Transparent, TextColor = Color.White, HorizontalOptions = LayoutOptions.FillAndExpand };
+            MinusBtn = new Button { Text = "-", WidthRequest = 20, HeightRequest = 12, FontAttributes = FontAttributes.Bold, FontSize = 11, BackgroundColor = Color.Transparent, TextColor = Color.White, HorizontalOptions = LayoutOptions.FillAndExpand };
             Orientation = StackOrientation.Horizontal;
             PlusBtn.Clicked += PlusBtn_Clicked;
             MinusBtn.Clicked += MinusBtn_Clicked;
@@ -130,4 +112,5 @@ namespace sdcrew.Views.ViewHelpers.CustomControls
         }
 
     }
+
 }

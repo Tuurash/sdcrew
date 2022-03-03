@@ -136,7 +136,7 @@
                                                             VerticalOptions="FillAndExpand" />
 
                                                         <Label
-                                                            Margin="5,0,0,0"
+                                                            Margin="5,0,0,0" FontFamily="Roboto_Regular"
                                                             FontSize="15"
                                                             HorizontalOptions="FillAndExpand"
                                                             Text="{Binding TailNumber}"

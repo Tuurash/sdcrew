@@ -1,254 +1,339 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
+    x:Class="sdcrew.Views.Postflight.SubViews.NewSquawk"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
     xmlns:CC="clr-namespace:sdcrew.Views.ViewHelpers.Renderers"
-    x:Class="sdcrew.Views.Postflight.SubViews.NewSquawk">
+    xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Start">
 
-        <Label Text="ATA CODE" x:Name="lblAtaCode"
-                                                   HorizontalOptions="StartAndExpand" VerticalOptions="Start"
-                                                   TextColor="{StaticResource PrimaryTextColor}" FontSize="14"/>
+        <Label
+            x:Name="lblAtaCode"
+            FontSize="14"
+            HorizontalOptions="StartAndExpand"
+            TextColor="{StaticResource PrimaryTextColor}"
+            VerticalOptions="Start" />
 
-        <StackLayout Orientation="Horizontal">
+        <StackLayout Orientation="Horizontal" VerticalOptions="Start">
 
-            <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd MMMM yyyy}'}" x:Name="lblSquawkDate"
-                                                   HorizontalOptions="Start" VerticalOptions="CenterAndExpand"
-                                                   TextColor="{StaticResource PrimaryTextColor}" FontSize="12"/>
+            <Label
+                x:Name="lblSquawkDate"
+                FontSize="12"
+                HorizontalOptions="Start"
+                Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd MMMM yyyy}'}"
+                TextColor="{StaticResource PrimaryTextColor}"
+                VerticalOptions="CenterAndExpand" />
 
-            <Label Text="Squawk Catagory" x:Name="lblSquawkCatagory"
-                                                   HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"
-                                                   TextColor="{StaticResource PrimaryTextColor}" FontSize="12"/>
+            <Label
+                x:Name="lblSquawkCatagory"
+                FontSize="12"
+                HorizontalOptions="StartAndExpand"
+                Text="Squawk Catagory"
+                TextColor="{StaticResource PrimaryTextColor}"
+                VerticalOptions="CenterAndExpand" />
 
-            <StackLayout HeightRequest="30" Margin="0,5,0,0" Orientation="Horizontal" BackgroundColor="{StaticResource ButtonBackgroundColor}"
-                                                             HorizontalOptions="End"  VerticalOptions="CenterAndExpand">
 
-                <Label Text="EDIT" TextColor="{StaticResource ButtonTextColor}" FontSize="12" Margin="10,0,0,0" VerticalOptions="Center"/>
-
-                <Image Source="icoPen" HeightRequest="14" Aspect="AspectFit" behaviors:IconTintColorEffect.TintColor="{StaticResource ButtonTextColor}" Margin="0,0,10,0"/>
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer x:Name="EditSquawk" Tapped="EditSquawk_Tapped"/>
-                </StackLayout.GestureRecognizers>
-            </StackLayout>
         </StackLayout>
 
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Start" x:Name="editSquawkForm" IsVisible="false">
+        <StackLayout
+            Grid.Row="5"
+            Grid.Column="1"
+            HorizontalOptions="End"
+            Orientation="Horizontal">
 
-            <!--Date-->
-            <pv:PancakeView Margin="0,10,0,0"
-                                                                    BackgroundColor="DarkCyan"
-                                                                    CornerRadius="5,5,0,0">
+            <!--  Edit  -->
+            <StackLayout
+                Margin="0,5,0,0"
+                BackgroundColor="{StaticResource ButtonBackgroundColor}"
+                HeightRequest="30"
+                HorizontalOptions="End"
+                Orientation="Horizontal"
+                VerticalOptions="CenterAndExpand">
+
+                <Label
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="EDIT"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+
+                <Image
+                    Margin="0,0,10,0"
+                    behaviors:IconTintColorEffect.TintColor="White"
+                    Aspect="AspectFit"
+                    AutomationProperties.Name="edit"
+                    HeightRequest="14"
+                    Source="icoPen" />
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="EditSquawk_Tapped" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <!--  Delete  -->
+            <StackLayout
+                Margin="0,5,0,0"
+                BackgroundColor="#CB3A41"
+                HeightRequest="30"
+                HorizontalOptions="End"
+                Orientation="Horizontal"
+                VerticalOptions="CenterAndExpand">
+
+                <Label
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="DELETE"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+
+                <Image
+                    Margin="0,0,10,0"
+                    behaviors:IconTintColorEffect.TintColor="White"
+                    Aspect="AspectFit"
+                    AutomationProperties.Name="delete"
+                    HeightRequest="14"
+                    Source="icoDustbin" />
+
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer x:Name="delete" Tapped="delete_Tapped" />
+                </StackLayout.GestureRecognizers>
+
+            </StackLayout>
+
+
+        </StackLayout>
+
+        <StackLayout
+            x:Name="editSquawkForm"
+            HorizontalOptions="FillAndExpand"
+            IsVisible="false"
+            VerticalOptions="Start">
+
+            <!--  Date  -->
+            <pv:PancakeView
+                Margin="0,10,0,0"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
 
                 <StackLayout Margin="5,5,5,0">
 
-                    <Label FontSize="9"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    Text="Date"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label
+                        FontSize="9"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Date"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
 
                     <CC:BorderlessDatePicker
-                                                                    x:Name="pickerSquawkDate"
-                                                                    FontSize="15" HorizontalOptions="FillAndExpand"
-                                                                    Format="D"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                        x:Name="pickerSquawkDate"
+                        FontSize="15"
+                        Format="D"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
                     <BoxView
-                                                                    HeightRequest="1"
-                                                                    VerticalOptions="End" 
-                                                                    Color="{StaticResource SecondaryTextColor}" />
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
 
                 </StackLayout>
 
             </pv:PancakeView>
 
-            <!--ATA Code-->
+            <!--  ATA Code  -->
             <pv:PancakeView
-                                                                    Grid.Row="0"
-                                                                    Grid.Column="0"
-                                                                    BackgroundColor="DarkCyan"
-                                                                    CornerRadius="5,5,0,0">
+                Grid.Row="0"
+                Grid.Column="0"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
 
                 <StackLayout Margin="5,5,5,0">
 
                     <Label
-                                                                    FontSize="9"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    Text="ATA Code"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                        FontSize="9"
+                        HorizontalOptions="StartAndExpand"
+                        Text="ATA Code"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
 
                     <StackLayout Orientation="Horizontal">
 
                         <Label
-                                                                    FontSize="15"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    x:Name="dropdownSquawkAtaCode"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                            x:Name="dropdownSquawkAtaCode"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Unknown"
+                            TextColor="{StaticResource PrimaryTextColor}" />
                         <Image
-                                                                    Aspect="AspectFit"
-                                                                    HeightRequest="7"
-                                                                    HorizontalOptions="EndAndExpand"
-                                                                    Source="arrow_a"
-                                                                    VerticalOptions="Center" />
+                            Aspect="AspectFit"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
                     </StackLayout>
 
                     <BoxView
-                                                                    HeightRequest="1"
-                                                                    VerticalOptions="End"
-                                                                    Color="{StaticResource SecondaryTextColor}" />
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
 
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer />
+                        <TapGestureRecognizer Tapped="dropdownSquawkAtaCode_Tapped" />
                     </StackLayout.GestureRecognizers>
 
                 </StackLayout>
             </pv:PancakeView>
 
-            <!--Discrepency Type-->
+            <!--  Discrepency Type  -->
             <pv:PancakeView
-                                                                    Grid.Row="0"
-                                                                    Grid.Column="0"
-                                                                    BackgroundColor="DarkCyan"
-                                                                    CornerRadius="5,5,0,0">
+                Grid.Row="0"
+                Grid.Column="0"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
 
                 <StackLayout Margin="5,5,5,0">
 
                     <Label
-                                                                    FontSize="9"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    Text="Discrepency Type"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                        FontSize="9"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Discrepency Type"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
 
                     <StackLayout Orientation="Horizontal">
 
                         <Label
-                                                                    FontSize="15"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    x:Name="dropdownSquawkDiscrepencyType"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                            x:Name="dropdownSquawkDiscrepencyType"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Emergency"
+                            TextColor="{StaticResource PrimaryTextColor}" />
                         <Image
-                                                                    Aspect="AspectFit"
-                                                                    HeightRequest="7"
-                                                                    HorizontalOptions="EndAndExpand"
-                                                                    Source="arrow_a"
-                                                                    VerticalOptions="Center" />
+                            Aspect="AspectFit"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
                     </StackLayout>
 
                     <BoxView
-                                                                    HeightRequest="1"
-                                                                    VerticalOptions="End"
-                                                                    Color="{StaticResource SecondaryTextColor}" />
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
 
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer />
+                        <TapGestureRecognizer Tapped="dropdownSquawkType_Tapped" />
                     </StackLayout.GestureRecognizers>
 
                 </StackLayout>
             </pv:PancakeView>
 
-            <!--Reported By-->
+            <!--  Reported By  -->
             <pv:PancakeView
-                                                                    Grid.Row="0"
-                                                                    Grid.Column="0"
-                                                                    BackgroundColor="DarkCyan"
-                                                                    CornerRadius="5,5,0,0">
+                Grid.Row="0"
+                Grid.Column="0"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
 
                 <StackLayout Margin="5,5,5,0">
 
                     <Label
-                                                                    FontSize="9"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    Text="Reported By"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                        FontSize="9"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Reported By"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
 
                     <StackLayout Orientation="Horizontal">
 
                         <Label
-                                                                    FontSize="15"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    x:Name="dropdownSquawkReportedBy"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
+                            x:Name="dropdownSquawkReportedBy"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="21, sdp"
+                            TextColor="{StaticResource PrimaryTextColor}" />
                         <Image
-                                                                    Aspect="AspectFit"
-                                                                    HeightRequest="7"
-                                                                    HorizontalOptions="EndAndExpand"
-                                                                    Source="arrow_a"
-                                                                    VerticalOptions="Center" />
+                            Aspect="AspectFit"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
                     </StackLayout>
 
                     <BoxView
-                                                                    HeightRequest="1"
-                                                                    VerticalOptions="End"
-                                                                    Color="{StaticResource SecondaryTextColor}" />
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
 
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer />
-                    </StackLayout.GestureRecognizers>
-
-                </StackLayout>
-
-            </pv:PancakeView>
-
-            <!--Catagory-->
-            <pv:PancakeView
-                                                                    Grid.Row="0"
-                                                                    Grid.Column="0"
-                                                                    BackgroundColor="DarkCyan"
-                                                                    CornerRadius="5,5,0,0">
-
-                <StackLayout Margin="5,5,5,0">
-
-                    <Label
-                                                                    FontSize="9"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    Text="Catagory"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
-
-
-                    <StackLayout Orientation="Horizontal">
-
-                        <Label
-                                                                    FontSize="15"
-                                                                    HorizontalOptions="StartAndExpand"
-                                                                    x:Name="dropdownSquawkCatagory"
-                                                                    TextColor="{StaticResource PrimaryTextColor}" />
-                        <Image
-                                                                    Aspect="AspectFit"
-                                                                    HeightRequest="7"
-                                                                    HorizontalOptions="EndAndExpand"
-                                                                    Source="arrow_a"
-                                                                    VerticalOptions="Center" />
-
-                    </StackLayout>
-
-                    <BoxView
-                                                                    HeightRequest="1"
-                                                                    VerticalOptions="End"
-                                                                    Color="{StaticResource SecondaryTextColor}" />
-
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer />
+                        <TapGestureRecognizer Tapped="dropdownSquawkReportedBy_Tapped" />
                     </StackLayout.GestureRecognizers>
 
                 </StackLayout>
 
             </pv:PancakeView>
 
-            <!--Note-->
-            <pv:PancakeView BackgroundColor="{StaticResource PrimaryTextColor}" Padding="1" Grid.Row="1" >
+            <!--  Catagory  -->
+            <pv:PancakeView
+                Grid.Row="0"
+                Grid.Column="0"
+                BackgroundColor="DarkCyan"
+                CornerRadius="5,5,0,0">
+
+                <StackLayout Margin="5,5,5,0">
+
+                    <Label
+                        FontSize="9"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Catagory"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
 
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label
+                            x:Name="dropdownSquawkCatagory"
+                            FontSize="15"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Deferred Watchlist"
+                            TextColor="{StaticResource PrimaryTextColor}" />
+                        <Image
+                            Aspect="AspectFit"
+                            HeightRequest="7"
+                            HorizontalOptions="EndAndExpand"
+                            Source="arrow_a"
+                            VerticalOptions="Center" />
+
+                    </StackLayout>
+
+                    <BoxView
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="{StaticResource SecondaryTextColor}" />
+
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="dropdownSquawkCatagory_Tapped" />
+                    </StackLayout.GestureRecognizers>
+
+                </StackLayout>
+
+            </pv:PancakeView>
+
+            <!--  Note  -->
+            <pv:PancakeView
+                Grid.Row="1"
+                Padding="1"
+                BackgroundColor="{StaticResource PrimaryTextColor}">
                 <StackLayout BackgroundColor="{StaticResource CardBGColor}">
-                    <CC:BorderlessEditor MinimumHeightRequest="20"
-                                                                                 BackgroundColor="Transparent" HorizontalOptions="FillAndExpand"
-                                                                                 FontSize="12"  AutoSize="TextChanges" TextColor="{StaticResource PrimaryTextColor}" />
+                    <CC:BorderlessEditor
+                        AutoSize="TextChanges"
+                        BackgroundColor="Transparent"
+                        FontSize="12"
+                        HorizontalOptions="FillAndExpand"
+                        MinimumHeightRequest="20"
+                        TextColor="{StaticResource PrimaryTextColor}" />
 
                     <BoxView HeightRequest="30" />
                 </StackLayout>
@@ -259,5 +344,6 @@
         </StackLayout>
 
     </StackLayout>
+
 
 </ContentView>

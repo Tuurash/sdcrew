@@ -58,6 +58,8 @@ namespace sdcrew.Repositories
             }
         }
 
+        #region Gets
+
         public async Task<TResult> GetAsync<TResult>(string uri, string token = "")
         {
             setupHttpClient();
@@ -120,6 +122,10 @@ namespace sdcrew.Repositories
             return serialized;
         }
 
+        #endregion
+
+        #region Puts
+
         public Task<TResult> PutAsync<TResult>(string uri, TResult data, string token = "")
         {
             return PutAsync<TResult, TResult>(uri, data, token);
@@ -142,6 +148,35 @@ namespace sdcrew.Repositories
 
             return await Task.Run(() => JsonConvert.DeserializeObject<TResult>(responseData));
         }
+
+        public async Task<bool> PutAsync(dynamic obj, string url)
+        {
+            var client = new RestClient(url);
+            client.Timeout = -1;
+
+            var request = new RestRequest(Method.PUT);
+            request.AddHeader("Authorization", "Bearer " + Services.Settings.StoreAccessToken);
+            request.AddHeader("Content-Type", "application/json");
+
+            string body = JsonConvert.SerializeObject(obj);
+
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            await Task.Delay(1);
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                return true;
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Posts
 
         public Task<string> PostAsync<TResult>(string uri, TResult data, string token = "")
         {
@@ -194,6 +229,31 @@ namespace sdcrew.Repositories
             }
         }
 
+        public async Task<string> PostAsyncWithReturnValue(dynamic obj, string url)
+        {
+            var client = new RestClient(url);
+            client.Timeout = -1;
+
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "Bearer " + Services.Settings.StoreAccessToken);
+            request.AddHeader("Content-Type", "application/json");
+
+            string body = JsonConvert.SerializeObject(obj);
+
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            await Task.Delay(1);
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                return response.Content.ToString();
+            }
+            catch (Exception exc)
+            {
+                Crashes.TrackError(exc);
+                return null;
+            }
+        }
+
         public async Task<MemoryStream> PostAsyncPDF(string uri, dynamic data, string getIteneraryName, string token = "")
         {
             setupHttpClient();
@@ -227,6 +287,7 @@ namespace sdcrew.Repositories
             }
         }
 
+        #endregion
     }
 
 
